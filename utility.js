@@ -44,7 +44,7 @@ window.requestAnimFrame = (function () {
 function drawHitbox(object){
     let point1 = object.findMin();
     let point2 = object.findMax();
-    const color = new Color(0,0.25,0.75);
+    const color = new Color(130,140,255);
 
     const hitBoxVertices = [
         new Point(point1.x, point1.y), 

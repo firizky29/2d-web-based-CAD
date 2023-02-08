@@ -22,8 +22,10 @@ const fragmentShaderText = `
 var objects = [];
 var hitboxes = [];
 var selectedShapes = [];
-var hoveredShapeId = 0;
-var selectedShapeId = 0;
+var hoveredShapeId = undefined;
+var selectedShapeId = undefined;
+var relativePosition = [];
+var color = new Color(180,40,80); //make it input from user
 
 // Canvas purposes
 const canvas = document.getElementById('gl-canvas');
@@ -56,6 +58,7 @@ canvas.addEventListener('mousedown', (e) => {
         else if(hoveredShapeId == undefined){
             console.log("no object selected");
             selectedShapes = [];
+            selectedShapeId = undefined;
         }
     }
     
@@ -68,7 +71,6 @@ canvas.addEventListener('mousedown', (e) => {
         // Input startitng point
         let x = -1 + 2 * (e.clientX - canvas.offsetLeft)/canvas.width;
         let y = 1 - 2  *(e.clientY - canvas.offsetTop)/canvas.height;
-        let color = new Color(0,0.45,0.25);
         let vertices = [];
 
         // Menggambar line
@@ -82,12 +84,23 @@ canvas.addEventListener('mousedown', (e) => {
     }
     
     isDown = true;
+    relativePosition = [e.clientX, e.clientY]
+    // console.log(relativePosition)
     console.log(objects);
 })
 
 canvas.mouseMoveListener = (e) => { 
+    // Moving tool
+    if (isSelect  && isDown && selectedShapeId != undefined){
+        let object = objects[selectedShapeId];
+        object.moveShape(e, relativePosition);
+        selectedShapes[0] = drawHitbox(object);
+        hitboxes = [];
+        relativePosition = [e.clientX, e.clientY];
+    }
+
     // Selection tool   
-    if (isSelect){
+    else if (isSelect){
         hoveredShapeId = hoverObject(e, objects)
 
         // if hitboxes is empty and hoveredshape is defines
@@ -112,11 +125,11 @@ canvas.mouseMoveListener = (e) => {
     }
 }
 
+/* APPS */
 // Mouse Up
 canvas.addEventListener('mouseup', (e) => {
     isDown = false;
 })
-
 // Buttons
 isSelect = false;
 lineShape = true;
@@ -132,8 +145,10 @@ shapeButton.lineShape = (e) => {
     console.log("using line tool")
     isSelect = false;
     lineShape = true;
-}
 
+    hitboxes = []
+    selectedShapes = []
+}
 // change length on input
 const lengthInput = document.getElementById('line-length');
 document.getElementById("line-length").addEventListener("keyup", updateLength);
@@ -142,6 +157,7 @@ function updateLength() {
     object = objects[selectedShapeId];
     object.setNewLength(lengthInput.value);
 }
+/* */
 
 
 

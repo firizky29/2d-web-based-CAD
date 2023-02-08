@@ -24,10 +24,7 @@ class Shape{
     constructor(gl, points, color, GL_SHAPE){
         this.gl = gl;               // WebGL context
         this.points = points;       // Array of points
-        this.color = 
-            new Color(color.red, 
-                color.green, 
-                color.blue);        // Color of the shape
+        this.color = color          // Color of the shape
         this.GL_SHAPE = GL_SHAPE;   // GL Shape
     }
 
@@ -80,6 +77,19 @@ class Shape{
         return new Point((min.x + max.x) / 2, (min.y + max.y) / 2);
     }
 
+    moveShape(e, relativePosition){
+        // update vertex
+        let x = 2*(e.clientX - relativePosition[0])/canvas.width;
+        let y = -2*(e.clientY - relativePosition[1])/canvas.height;
+
+        // update all points
+        for (let point of this.points) {
+            point.x += x;
+            point.y += y;
+        }
+
+    }
+
 
 }
 
@@ -106,7 +116,7 @@ class Line extends Shape{
         if (length <=0){
             return;
         }
-        
+
         this.calculateDistance();
         let centroid = this.findCentroid();
         let lambdaX = (newLength/this.length) * (this.points[0].x - this.points[1].x) / 2;
