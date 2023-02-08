@@ -73,6 +73,14 @@ class Shape{
         return new Point(max_x, max_y);
     }
 
+    // find centroid
+    findCentroid(){
+        let min = this.findMin();
+        let max = this.findMax();
+        return new Point((min.x + max.x) / 2, (min.y + max.y) / 2);
+    }
+
+
 }
 
 
@@ -81,13 +89,41 @@ class Line extends Shape{
     // parameter: gl, points, color
     constructor(gl, points, color){
         super(gl, points, color, gl.LINES);
+        this.calculateDistance();
+    }
+
+    // setter points
+    setPoints(points){
+        this.points = points;
+        this.calculateDistance();
+    }
+
+    calculateDistance(){
+        this.length = Math.sqrt(Math.pow(this.points[0].x - this.points[1].x, 2) + Math.pow(this.points[0].y - this.points[1].y, 2));
+    }
+
+    setNewLength(newLength){
+        if (length <=0){
+            return;
+        }
+        
+        this.calculateDistance();
+        let centroid = this.findCentroid();
+        let lambdaX = (newLength/this.length) * (this.points[0].x - this.points[1].x) / 2;
+        let lambdaY = (newLength/this.length) * (this.points[0].y - this.points[1].y) / 2;
+
+        this.points[0] = new Point(centroid.x - lambdaX, centroid.y - lambdaY);
+        this.points[1] = new Point(centroid.x + lambdaX, centroid.y + lambdaY);
+        
+        this.calculateDistance();    
     }
 }
 
-class Rectangle extends Shape{
+class Hitbox extends Shape{
     // Kelas Rectangle
     // parameter: gl, points, color
     constructor(gl, points, color){
         super(gl, points, color, gl.LINE_LOOP);
     }
 }
+

@@ -21,6 +21,8 @@ const fragmentShaderText = `
 // create array of shape
 var objects = [];
 var hitboxes = [];
+var hoveredShapeId = 0;
+var selectedShapeId = 0;
 
 // Canvas purposes
 const canvas = document.getElementById('gl-canvas');
@@ -34,6 +36,19 @@ if(!gl) {
 // Mouse Input
 var isDown = false;
 canvas.addEventListener('mousedown', (e) => {
+    // Selection tool
+    if (hitboxes.length != 0){
+        selectedShapeId = hoveredShapeId;
+        console.log("selected shape id: " + selectedShapeId);
+        //update length to screen
+        let object = objects[selectedShapeId];
+        document.getElementById("line-length").value = object.length;
+        
+        // console.log(object)
+        // console.log(object.length);
+    }
+
+    // Drawing tool
     if (!isSelect){
         // New object
         // Input startitng point
@@ -42,32 +57,43 @@ canvas.addEventListener('mousedown', (e) => {
         let color = new Color(0,0.45,0.25);
         let vertices = [];
 
-        // Line cuman ada dua vertex
-        for(let i = 0; i < 2; i++) {
-            vertices.push(new Point(x,y));
-            
+        // Menggambar line
+        if (lineShape){
+            for(let i = 0; i < 2; i++) {
+                vertices.push(new Point(x,y));
+                
+            }
+            objects.push(new Line(gl, vertices, color));
         }
-        objects.push(new Line(gl, vertices, color));
     }
     
     isDown = true;
     console.log(objects);
 })
 
-canvas.mouseMoveListener = (e) => {    
+canvas.mouseMoveListener = (e) => { 
+    // Selection tool   
     if (isSelect){
         // update vertex
         let x = -1 + 2 * (e.clientX - canvas.offsetLeft)/canvas.width;
         let y = 1 - 2  *(e.clientY - canvas.offsetTop)/canvas.height;
+        let min, max, object;
 
         for (let i = 0;i<objects.length;i++){
-            let object = objects[i];
-            let min = object.findMin();
-            let max = object.findMax();
+            if (hitboxes.length == 0){
+                object = objects[i];
+            }
+            else{
+                object = objects[hoveredShapeId];
+            }
+
+            min = object.findMin();
+            max = object.findMax();
 
             if (x >= min.x && x <= max.x && y >= min.y && y <= max.y){
-                console.log("object " + i + " selected");
+                // console.log("object " + i + " selected");
                 if (hitboxes.length == 0){
+                    hoveredShapeId = i;
                     hitboxes.push(drawHitbox(min, max))
                 }
             }
@@ -75,40 +101,53 @@ canvas.mouseMoveListener = (e) => {
                 hitboxes.pop();
             }
         }
+        // console.log(hitboxes)
     }
 
-    // Kalkulasi posisi mouse
+    // Drawing tool
     else if (isDown){
         // update vertex
         let x = -1 + 2 * (e.clientX - canvas.offsetLeft)/canvas.width;
         let y = 1 - 2  *(e.clientY - canvas.offsetTop)/canvas.height;
 
-        let objectPoints = objects[objects.length - 1].points;
-        objects[objects.length - 1].points = [objectPoints[0], new Point(x,y)];
+        if (lineShape){
+            let objectPoints = objects[objects.length - 1].points;
+            objects[objects.length - 1].setPoints( [objectPoints[0], new Point(x,y)]);
+        }
     }
-
-
 }
-
-
 
 // Mouse Up
 canvas.addEventListener('mouseup', (e) => {
     isDown = false;
 })
 
-// Selection tool
+// Buttons
 isSelect = false;
+lineShape = true;
 const selectButton = document.getElementById('select-button');
 selectButton.selectButton = (e) => {
     console.log("selection tool activated")
     isSelect = true;
+    lineShape = false;
 }
-const shapeButton = document.getElementById('shape-button');
-shapeButton.shapeButton = (e) => {
-    console.log("selection tool dactivated")
+const shapeButton = document.getElementById('line-shape');
+shapeButton.lineShape = (e) => {
+    console.log("selection tool deactivated")
+    console.log("using line tool")
     isSelect = false;
+    lineShape = true;
 }
+
+// change length on input
+const lengthInput = document.getElementById('line-length');
+document.getElementById("line-length").addEventListener("keyup", updateLength);
+function updateLength() {
+    length = document.getElementById("line-length").value;
+    object = objects[selectedShapeId];
+    object.setNewLength(lengthInput.value);
+}
+
 
 
 // Set ukuran canvas

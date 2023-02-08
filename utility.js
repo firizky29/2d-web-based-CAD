@@ -56,8 +56,7 @@ function drawHitbox(point1, point2){
         new Point(point2.x, point2.y), 
         new Point(point2.x, point1.y)
     ];
-
-    let hitbox = new Rectangle(gl, hitBoxVertices, color);
-
+    let hitbox = new Hitbox(gl, hitBoxVertices, color);
+    // console.log(hitbox)
     return hitbox;
 }
