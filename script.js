@@ -148,6 +148,7 @@ shapeButton.lineShape = (e) => {
 
     hitboxes = []
     selectedShapes = []
+    selectedShapeId = undefined;
 }
 // change length on input
 const lengthInput = document.getElementById('line-length');
@@ -157,6 +158,17 @@ function updateLength() {
     object = objects[selectedShapeId];
     object.setNewLength(lengthInput.value);
 }
+// slider rotation input
+const rotationSlider = document.getElementById('rotation-slider');
+document.getElementById("rotation-slider").addEventListener("input", updateRotation);
+function updateRotation() {
+    rotation = document.getElementById("rotation-slider").value;
+    if (selectedShapeId != undefined){
+        object = objects[selectedShapeId];
+        object.rotate(rotation);
+    }
+}
+
 /* */
 
 

@@ -26,6 +26,7 @@ class Shape{
         this.points = points;       // Array of points
         this.color = color          // Color of the shape
         this.GL_SHAPE = GL_SHAPE;   // GL Shape
+        this.theta = 0;
     }
 
     // rendering
@@ -88,6 +89,25 @@ class Shape{
             point.y += y;
         }
 
+    }
+
+    rotate(currRotation){
+        rotation = -1 * (currRotation-this.theta); //reverse rotation
+        this.theta = currRotation;
+
+        let centroid = this.findCentroid();
+        rotation = rotation/ 180 * Math.PI ;
+        for (let point of this.points) {
+            //euclidien distance
+            let dis = euclideanDistance(centroid, point);
+
+            // angle
+            let arg = norm(Math.atan2(point.y - centroid.y, point.x - centroid.x) + rotation);
+            
+            // new point
+            point.x = centroid.x + dis * Math.cos(arg);
+            point.y = centroid.y + dis * Math.sin(arg);
+        }
     }
 
 
