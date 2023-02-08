@@ -18,8 +18,9 @@ const fragmentShaderText = `
     }
 `;
 
-var vertices = [];
-var colors = [];
+// create array of shape
+var objects = [];
+var hitboxes = [];
 
 // Canvas purposes
 const canvas = document.getElementById('gl-canvas');
@@ -33,38 +34,82 @@ if(!gl) {
 // Mouse Input
 var isDown = false;
 canvas.addEventListener('mousedown', (e) => {
-    // Input startitng point
-    let x = -1 + 2 * (e.clientX - canvas.offsetLeft)/canvas.width;
-    let y = 1 - 2  *(e.clientY - canvas.offsetTop)/canvas.height;
+    if (!isSelect){
+        // New object
+        // Input startitng point
+        let x = -1 + 2 * (e.clientX - canvas.offsetLeft)/canvas.width;
+        let y = 1 - 2  *(e.clientY - canvas.offsetTop)/canvas.height;
+        let color = new Color(0,0.45,0.25);
+        let vertices = [];
 
-    // Line cuman ada dua vertex
-    for(let i = 0; i < 2; i++) {
-        vertices.push([x,y]);
-        colors.push([0,0,0,1]);
+        // Line cuman ada dua vertex
+        for(let i = 0; i < 2; i++) {
+            vertices.push(new Point(x,y));
+            
+        }
+        objects.push(new Line(gl, vertices, color));
     }
+    
     isDown = true;
-
-    console.log(vertices);
-    console.log(x,y)
+    console.log(objects);
 })
 
-canvas.mouseMoveListener = (e) => {
-    // Kalkulasi posisi mouse
-    if (isDown){
+canvas.mouseMoveListener = (e) => {    
+    if (isSelect){
         // update vertex
         let x = -1 + 2 * (e.clientX - canvas.offsetLeft)/canvas.width;
         let y = 1 - 2  *(e.clientY - canvas.offsetTop)/canvas.height;
 
-        vertices[vertices.length - 1] = [x,y];
-        // colors[colors.length - 1] = [0,0,0,1];
+        for (let i = 0;i<objects.length;i++){
+            let object = objects[i];
+            let min = object.findMin();
+            let max = object.findMax();
+
+            if (x >= min.x && x <= max.x && y >= min.y && y <= max.y){
+                console.log("object " + i + " selected");
+                if (hitboxes.length == 0){
+                    hitboxes.push(drawHitbox(min, max))
+                }
+            }
+            else{
+                hitboxes.pop();
+            }
+        }
     }
 
+    // Kalkulasi posisi mouse
+    else if (isDown){
+        // update vertex
+        let x = -1 + 2 * (e.clientX - canvas.offsetLeft)/canvas.width;
+        let y = 1 - 2  *(e.clientY - canvas.offsetTop)/canvas.height;
+
+        let objectPoints = objects[objects.length - 1].points;
+        objects[objects.length - 1].points = [objectPoints[0], new Point(x,y)];
+    }
+
+
 }
+
+
 
 // Mouse Up
 canvas.addEventListener('mouseup', (e) => {
     isDown = false;
 })
+
+// Selection tool
+isSelect = false;
+const selectButton = document.getElementById('select-button');
+selectButton.selectButton = (e) => {
+    console.log("selection tool activated")
+    isSelect = true;
+}
+const shapeButton = document.getElementById('shape-button');
+shapeButton.shapeButton = (e) => {
+    console.log("selection tool dactivated")
+    isSelect = false;
+}
+
 
 // Set ukuran canvas
 gl.viewport(0, 0, canvas.width, canvas.height);
@@ -77,26 +122,45 @@ render();
 
 function render(){
     gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer()); 
 
-    // Vertex Rendering
-    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices.flat()), gl.STATIC_DRAW);
+    //get attribute location
+    let positionAttLoc = gl.getAttribLocation(program, "vertPosition");
+    let colorAttLoc = gl.getAttribLocation(program, "vertColor");
 
-    const vertPosition = gl.getAttribLocation(program, "vertPosition");
-    gl.vertexAttribPointer(vertPosition, 2, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(vertPosition);
+    // tell WebGL how to read raw data
+    gl.vertexAttribPointer(
+        positionAttLoc, //Attribute location
+        2, // number of elements per attribute
+        gl.FLOAT, //type of elements
+        gl.FALSE,
+        5 * Float32Array.BYTES_PER_ELEMENT, // Size of an individual vertex
+        0 // Offset from the beginning of a single vertex to this attribute
+    );
 
-    // Color Rendering
-    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors.flat()), gl.STATIC_DRAW);
+    gl.vertexAttribPointer(
+        colorAttLoc, //Attribute location
+        3, // number of elements per attribute
+        gl.FLOAT, //type of elements
+        gl.FALSE,
+        5 * Float32Array.BYTES_PER_ELEMENT, // Size of an individual vertex
+        2 * Float32Array.BYTES_PER_ELEMENT // Offset from the beginning of a single vertex to this attribute
+    );
 
-    const vertColor = gl.getAttribLocation(program, "vertColor");
-    gl.vertexAttribPointer(vertColor, 4, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(vertColor);
+    gl.enableVertexAttribArray(positionAttLoc);
+    gl.enableVertexAttribArray(colorAttLoc);
 
-    for(let i=0; i < vertices.length; i+=2) {
-        gl.drawArrays(gl.LINES, i, 2);
+    gl.useProgram(program);
+
+    
+    for (let object of objects) {
+        object.draw();
+    }
+
+    for (let hitbox of hitboxes) {
+        hitbox.draw();
     }
 
     window.requestAnimFrame(render);
 }
+

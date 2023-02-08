@@ -40,3 +40,24 @@ window.requestAnimFrame = (function () {
         }
     );
 })();
+
+function drawHitbox(point1, point2){
+    // if vert1 and vert2 empty
+    if (point1 == undefined || point2 == undefined) {
+        return;
+    }
+    const vert1 = [point1.x, point1.y];
+    const vert2 = [point2.x, point2.y];
+    const color = new Color(0,0.25,0.75);
+
+    const hitBoxVertices = [
+        new Point(point1.x, point1.y), 
+        new Point(point1.x, point2.y), 
+        new Point(point2.x, point2.y), 
+        new Point(point2.x, point1.y)
+    ];
+
+    let hitbox = new Rectangle(gl, hitBoxVertices, color);
+
+    return hitbox;
+}

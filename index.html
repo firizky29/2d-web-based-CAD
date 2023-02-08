@@ -5,6 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <script type="text/javascript" src="utility.js"></script>
+        <script type="text/javascript" src="shape.js"></script>
         <title>WebGL Keren Abiez</title>
     </head>
     
@@ -12,6 +13,13 @@
         <canvas id="gl-canvas" onmousemove="mouseMoveListener(event)" width="500" height="500">
             Your browser does not support the HTML5 canvas element.
         </canvas>
+        <div class="container">
+            <button onclick="selectButton()" id="select-button">
+              Select
+            </button>
+            <button onclick="shapeButton()" id="shape-button">
+              Shape
+            </button>
     </body>
 
     <script type="text/javascript" src="script.js"></script>
