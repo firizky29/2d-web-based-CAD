@@ -21,6 +21,7 @@ const fragmentShaderText = `
 // create array of shape
 var objects = [];
 var hitboxes = [];
+var selectedShapes = [];
 var hoveredShapeId = 0;
 var selectedShapeId = 0;
 
@@ -37,16 +38,29 @@ if(!gl) {
 var isDown = false;
 canvas.addEventListener('mousedown', (e) => {
     // Selection tool
-    if (hitboxes.length != 0){
-        selectedShapeId = hoveredShapeId;
-        console.log("selected shape id: " + selectedShapeId);
-        //update length to screen
-        let object = objects[selectedShapeId];
-        document.getElementById("line-length").value = object.length;
-        
-        // console.log(object)
-        // console.log(object.length);
+    if (isSelect){
+        hoveredShapeId = hoverObject(e, objects);
+        if (hoveredShapeId != undefined && hoveredShapeId != selectedShapeId){
+            // add hitbox and update selected shape id
+            selectedShapeId = hoveredShapeId;
+            let object = objects[selectedShapeId];
+            selectedShapes = [drawHitbox(object)];
+            console.log("selected shape id: " + selectedShapeId);
+    
+            //update length to screen
+            document.getElementById("line-length").value = object.length;
+    
+            // console.log(object)
+            // console.log(object.length);
+        }
+        else if(hoveredShapeId == undefined){
+            console.log("no object selected");
+            selectedShapes = [];
+        }
     }
+    
+
+    console.log(hitboxes)
 
     // Drawing tool
     if (!isSelect){
@@ -74,34 +88,15 @@ canvas.addEventListener('mousedown', (e) => {
 canvas.mouseMoveListener = (e) => { 
     // Selection tool   
     if (isSelect){
-        // update vertex
-        let x = -1 + 2 * (e.clientX - canvas.offsetLeft)/canvas.width;
-        let y = 1 - 2  *(e.clientY - canvas.offsetTop)/canvas.height;
-        let min, max, object;
+        hoveredShapeId = hoverObject(e, objects)
 
-        for (let i = 0;i<objects.length;i++){
-            if (hitboxes.length == 0){
-                object = objects[i];
-            }
-            else{
-                object = objects[hoveredShapeId];
-            }
-
-            min = object.findMin();
-            max = object.findMax();
-
-            if (x >= min.x && x <= max.x && y >= min.y && y <= max.y){
-                // console.log("object " + i + " selected");
-                if (hitboxes.length == 0){
-                    hoveredShapeId = i;
-                    hitboxes.push(drawHitbox(min, max))
-                }
-            }
-            else{
-                hitboxes.pop();
-            }
+        // if hitboxes is empty and hoveredshape is defines
+        if (hitboxes.length == 0 && hoveredShapeId != undefined){
+            hitboxes.push(drawHitbox(objects[hoveredShapeId]));
         }
-        // console.log(hitboxes)
+        else if (hoveredShapeId == undefined){
+            hitboxes = [];   
+        }
     }
 
     // Drawing tool
@@ -198,6 +193,10 @@ function render(){
 
     for (let hitbox of hitboxes) {
         hitbox.draw();
+    }
+
+    for (let selectedShape of selectedShapes) {
+        selectedShape.draw();
     }
 
     window.requestAnimFrame(render);

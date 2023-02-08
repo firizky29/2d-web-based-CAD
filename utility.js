@@ -41,13 +41,9 @@ window.requestAnimFrame = (function () {
     );
 })();
 
-function drawHitbox(point1, point2){
-    // if vert1 and vert2 empty
-    if (point1 == undefined || point2 == undefined) {
-        return;
-    }
-    const vert1 = [point1.x, point1.y];
-    const vert2 = [point2.x, point2.y];
+function drawHitbox(object){
+    let point1 = object.findMin();
+    let point2 = object.findMax();
     const color = new Color(0,0.25,0.75);
 
     const hitBoxVertices = [
@@ -59,4 +55,25 @@ function drawHitbox(point1, point2){
     let hitbox = new Hitbox(gl, hitBoxVertices, color);
     // console.log(hitbox)
     return hitbox;
+}
+
+function hoverObject(e, objects){
+    let x = -1 + 2 * (e.clientX - canvas.offsetLeft)/canvas.width;
+    let y = 1 - 2  *(e.clientY - canvas.offsetTop)/canvas.height;
+    let min, max, object;
+
+    for (let i = 0;i<objects.length;i++){
+        object = objects[i];
+
+        min = object.findMin();
+        max = object.findMax();
+
+        if (x >= min.x && x <= max.x && y >= min.y && y <= max.y){
+            // object selected
+            return i;
+        }
+        else{
+            // no object selected
+        }
+    }
 }
