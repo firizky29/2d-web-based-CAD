@@ -184,10 +184,18 @@ class Line extends Shape{
 }
 
 class Hitbox extends Shape{
-    // Kelas Rectangle
+    // Kelas Hitbox
     // parameter: gl, vertices
     constructor(gl, vertices){
         super(gl, vertices, gl.LINE_LOOP);
+    }
+}
+
+class Rectangle extends Shape{
+    // Kelas Rectangle
+    // parameter: gl, vertices
+    constructor(gl, vertices){
+        super(gl, vertices, gl.TRIANGLE_STRIP);
     }
 }
 

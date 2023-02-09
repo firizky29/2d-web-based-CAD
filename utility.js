@@ -73,6 +73,30 @@ function drawHitbox(object){
     return hitbox;
 }
 
+function drawVertexHitbox(object, selectedVertexId){
+    let vertex = object.vertices[selectedVertexId];
+    let radius = 20/canvas.width; 
+    const color = new Color(0.95,0.55,0.25);
+
+    const hitBoxPoints = [
+        new Point(vertex.x - radius, vertex.y - radius), 
+        new Point(vertex.x - radius, vertex.y + radius), 
+        new Point(vertex.x + radius, vertex.y + radius), 
+        new Point(vertex.x + radius, vertex.y - radius)
+    ];
+
+    const hitBoxVertices = [
+        new Vertex(hitBoxPoints[0], color),
+        new Vertex(hitBoxPoints[1], color),
+        new Vertex(hitBoxPoints[3], color),
+        new Vertex(hitBoxPoints[2], color)
+    ];
+
+    let hitbox = new Rectangle(gl, hitBoxVertices, color);
+    // console.log(hitbox)
+    return hitbox;
+}
+
 
 function hoverObject(e, objects){
     let x = -1 + 2 * (e.clientX - canvas.offsetLeft)/canvas.width;
@@ -99,7 +123,7 @@ function hoverVertex(e, object){
     let x = -1 + 2 * (e.clientX - canvas.offsetLeft)/canvas.width;
     let y = 1 - 2  *(e.clientY - canvas.offsetTop)/canvas.height;
     let min, max, vertex;
-    let radius = 40/canvas.width;
+    let radius = 20/canvas.width;
 
     for (let i = 0;i<object.vertices.length;i++){
         vertex = object.vertices[i];
@@ -129,3 +153,4 @@ function hexToRGB(hexColor) {
 
     return new Color(r/255, g/255, b/255);
 }
+
