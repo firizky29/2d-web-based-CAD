@@ -1,12 +1,3 @@
-class Point {
-    // Kelas Point
-    // parameter: x, y
-    constructor(x, y){
-        this.x = x;
-        this.y = y;
-    }
-}
-
 class Color {
     // Kelas Color
     // parameter: red, green, blue
@@ -17,14 +8,33 @@ class Color {
     }
 }
 
+class Point{
+    // Kelas Point
+    // parameter: x, y
+    constructor(x, y){
+        this.x = x;
+        this.y = y;
+    }
+}
+class Vertex {
+    // Kelas Vertex
+    // parameter: x, y
+    constructor(point, color){
+        this.x = point.x;
+        this.y = point.y;
+        this.red = color.red;
+        this.green = color.green;
+        this.blue = color.blue;
+    }
+}
+
 class Shape{
     // Kelas abstrak shape secara umum
-    // parameter: gl, points, color, GL_SHAPE
+    // parameter: gl, vertices, GL_SHAPE
 
-    constructor(gl, points, color, GL_SHAPE){
+    constructor(gl, vertices, GL_SHAPE){
         this.gl = gl;               // WebGL context
-        this.points = points;       // Array of points
-        this.color = color          // Color of the shape
+        this.vertices = vertices;       // Array of vertex
         this.GL_SHAPE = GL_SHAPE;   // GL Shape
         this.theta = 0;
     }
@@ -32,13 +42,13 @@ class Shape{
     // rendering
     draw(){
         let vertices = [];
-        for (let point of this.points) {
+        for (let vertex of this.vertices) {
             vertices.push(
-              point.x,
-              point.y,
-              this.color.red / 255,
-              this.color.green / 255,
-              this.color.blue / 255
+                vertex.x, 
+                vertex.y, 
+                vertex.red, 
+                vertex.green, 
+                vertex.blue
             );
         }
         this.gl.bufferData(
@@ -46,27 +56,28 @@ class Shape{
             new Float32Array(vertices),
             gl.STATIC_DRAW
         );
-        this.gl.drawArrays(this.GL_SHAPE, 0, this.points.length);
+
+        this.gl.drawArrays(this.GL_SHAPE, 0, this.vertices.length);
     }
 
     // find minimum x and minimum y
     findMin(){
-        let min_x = this.points[0].x;
-        let min_y = this.points[0].y;
-        for (let point of this.points) {
-            if (point.x < min_x) min_x = point.x;
-            if (point.y < min_y) min_y = point.y;
+        let min_x = this.vertices[0].x;
+        let min_y = this.vertices[0].y;
+        for (let vertex of this.vertices) {
+            if (vertex.x < min_x) min_x = vertex.x;
+            if (vertex.y < min_y) min_y = vertex.y;
         }
         return new Point(min_x, min_y);
     }
 
     // find maximum x and maximum y
     findMax(){
-        let max_x = this.points[0].x;
-        let max_y = this.points[0].y;
-        for (let point of this.points) {
-            if (point.x > max_x) max_x = point.x;
-            if (point.y > max_y) max_y = point.y;
+        let max_x = this.vertices[0].x;
+        let max_y = this.vertices[0].y;
+        for (let vertex of this.vertices) {
+            if (vertex.x > max_x) max_x = vertex.x;
+            if (vertex.y > max_y) max_y = vertex.y;
         }
         return new Point(max_x, max_y);
     }
@@ -83,12 +94,22 @@ class Shape{
         let x = 2*(e.clientX - relativePosition[0])/canvas.width;
         let y = -2*(e.clientY - relativePosition[1])/canvas.height;
 
-        // update all points
-        for (let point of this.points) {
-            point.x += x;
-            point.y += y;
+        // update all vertex
+        for (let vertex of this.vertices) {
+            vertex.x += x;
+            vertex.y += y;
         }
 
+    }
+
+    moveVertex(e, relativePosition, vertexId){
+        // update vertex
+        let x = 2*(e.clientX - relativePosition[0])/canvas.width;
+        let y = -2*(e.clientY - relativePosition[1])/canvas.height;
+        
+        // update vertex
+        this.vertices[vertexId].x += x;
+        this.vertices[vertexId].y += y;
     }
 
     rotate(currRotation){
@@ -97,39 +118,49 @@ class Shape{
 
         let centroid = this.findCentroid();
         rotation = rotation/ 180 * Math.PI ;
-        for (let point of this.points) {
+        for (let vertex of this.vertices) {
             //euclidien distance
-            let dis = euclideanDistance(centroid, point);
+            let dis = euclideanDistance(centroid, vertex);
 
             // angle
-            let arg = norm(Math.atan2(point.y - centroid.y, point.x - centroid.x) + rotation);
+            let arg = norm(Math.atan2(vertex.y - centroid.y, vertex.x - centroid.x) + rotation);
             
-            // new point
-            point.x = centroid.x + dis * Math.cos(arg);
-            point.y = centroid.y + dis * Math.sin(arg);
+            // new vertex
+            vertex.x = centroid.x + dis * Math.cos(arg);
+            vertex.y = centroid.y + dis * Math.sin(arg);
         }
     }
 
+    updateColor(vertexId, color){   
+        // set new vertex color
+        this.vertices[vertexId].red = color.red;
+        this.vertices[vertexId].green = color.green;
+        this.vertices[vertexId].blue = color.blue;
+    }
 
 }
 
 
 class Line extends Shape{
     // Kelas Line
-    // parameter: gl, points, color
-    constructor(gl, points, color){
-        super(gl, points, color, gl.LINES);
+    // parameter: gl, vertices
+    constructor(gl, vertices){
+        super(gl, vertices, gl.LINES);
         this.calculateDistance();
     }
 
     // setter points
     setPoints(points){
-        this.points = points;
+        // loop vertices
+        for (let i = 0; i < this.vertices.length; i++) {
+            this.vertices[i].x = points[i].x;
+            this.vertices[i].y = points[i].y;
+        }
         this.calculateDistance();
     }
 
     calculateDistance(){
-        this.length = Math.sqrt(Math.pow(this.points[0].x - this.points[1].x, 2) + Math.pow(this.points[0].y - this.points[1].y, 2));
+        this.length = Math.sqrt(Math.pow(this.vertices[0].x - this.vertices[1].x, 2) + Math.pow(this.vertices[0].y - this.vertices[1].y, 2));
     }
 
     setNewLength(newLength){
@@ -139,11 +170,14 @@ class Line extends Shape{
 
         this.calculateDistance();
         let centroid = this.findCentroid();
-        let lambdaX = (newLength/this.length) * (this.points[0].x - this.points[1].x) / 2;
-        let lambdaY = (newLength/this.length) * (this.points[0].y - this.points[1].y) / 2;
+        let lambdaX = (newLength/this.length) * (this.vertices[0].x - this.vertices[1].x) / 2;
+        let lambdaY = (newLength/this.length) * (this.vertices[0].y - this.vertices[1].y) / 2;
 
-        this.points[0] = new Point(centroid.x - lambdaX, centroid.y - lambdaY);
-        this.points[1] = new Point(centroid.x + lambdaX, centroid.y + lambdaY);
+        this.vertices[0].x = centroid.x - lambdaX
+        this.vertices[0].y = centroid.y - lambdaY;
+
+        this.vertices[1].x = centroid.x + lambdaX;
+        this.vertices[1].y = centroid.y + lambdaY;
         
         this.calculateDistance();    
     }
@@ -151,9 +185,10 @@ class Line extends Shape{
 
 class Hitbox extends Shape{
     // Kelas Rectangle
-    // parameter: gl, points, color
-    constructor(gl, points, color){
-        super(gl, points, color, gl.LINE_LOOP);
+    // parameter: gl, vertices
+    constructor(gl, vertices){
+        super(gl, vertices, gl.LINE_LOOP);
     }
 }
+
 

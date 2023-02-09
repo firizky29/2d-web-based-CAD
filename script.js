@@ -24,8 +24,10 @@ var hitboxes = [];
 var selectedShapes = [];
 var hoveredShapeId = undefined;
 var selectedShapeId = undefined;
+var hoeveredVertexId = undefined;
+var selectedVertexId = undefined;
 var relativePosition = [];
-var color = new Color(180,40,80); //make it input from user
+var color = new Color(0.75,0.25,0.35); //make it input from user
 
 // Canvas purposes
 const canvas = document.getElementById('gl-canvas');
@@ -55,15 +57,26 @@ canvas.addEventListener('mousedown', (e) => {
             // console.log(object)
             // console.log(object.length);
         }
+        else if (hoveredShapeId != undefined && hoveredShapeId == selectedShapeId){
+            // select vertex
+            let object = objects[selectedShapeId];
+            hoeveredVertexId = hoverVertex(e, object);
+            if (hoeveredVertexId != undefined){
+                selectedVertexId = hoeveredVertexId;
+                console.log("selected vertex id: " + selectedVertexId);
+            }
+            else{
+                selectedVertexId = undefined;
+            }
+        }
         else if(hoveredShapeId == undefined){
             console.log("no object selected");
             selectedShapes = [];
             selectedShapeId = undefined;
+            selectedVertexId = undefined;
         }
     }
-    
 
-    console.log(hitboxes)
 
     // Drawing tool
     if (!isSelect){
@@ -76,7 +89,8 @@ canvas.addEventListener('mousedown', (e) => {
         // Menggambar line
         if (lineShape){
             for(let i = 0; i < 2; i++) {
-                vertices.push(new Point(x,y));
+                let point = new Point(x, y);
+                vertices.push(new Vertex(point, color));
                 
             }
             objects.push(new Line(gl, vertices, color));
@@ -90,8 +104,15 @@ canvas.addEventListener('mousedown', (e) => {
 })
 
 canvas.mouseMoveListener = (e) => { 
-    // Moving tool
-    if (isSelect  && isDown && selectedShapeId != undefined){
+    // Moving tool vertex
+    if (isSelect && isDown && selectedShapeId == hoveredShapeId && selectedVertexId != undefined){
+        let object = objects[selectedShapeId];
+        object.moveVertex(e, relativePosition, selectedVertexId);
+        relativePosition = [e.clientX, e.clientY];
+    }
+
+    // Moving tool shape
+    else if (isSelect  && isDown && selectedShapeId != undefined){
         let object = objects[selectedShapeId];
         object.moveShape(e, relativePosition);
         selectedShapes[0] = drawHitbox(object);
@@ -99,6 +120,12 @@ canvas.mouseMoveListener = (e) => {
         relativePosition = [e.clientX, e.clientY];
     }
 
+
+    // Selecting vertex
+    else if (isSelect && selectedShapeId != undefined){
+        let object = objects[selectedShapeId];
+        hoeveredVertexId = hoverVertex(e, object);
+    }
     // Selection tool   
     else if (isSelect){
         hoveredShapeId = hoverObject(e, objects)
@@ -119,8 +146,9 @@ canvas.mouseMoveListener = (e) => {
         let y = 1 - 2  *(e.clientY - canvas.offsetTop)/canvas.height;
 
         if (lineShape){
-            let objectPoints = objects[objects.length - 1].points;
-            objects[objects.length - 1].setPoints( [objectPoints[0], new Point(x,y)]);
+            let objectStartVertex = objects[objects.length - 1].vertices[0];
+            let objectStartPoint = new Point(objectStartVertex.x, objectStartVertex.y);
+            objects[objects.length-1].setPoints([objectStartPoint, new Point(x,y)]);
         }
     }
 }
@@ -149,6 +177,7 @@ shapeButton.lineShape = (e) => {
     hitboxes = []
     selectedShapes = []
     selectedShapeId = undefined;
+    selectedVertexId = undefined;
 }
 // change length on input
 const lengthInput = document.getElementById('line-length');
@@ -166,6 +195,16 @@ function updateRotation() {
     if (selectedShapeId != undefined){
         object = objects[selectedShapeId];
         object.rotate(rotation);
+    }
+}
+// input color
+const colorInput = document.getElementById('vertex-color');
+document.getElementById("vertex-color").addEventListener("input", updateColor);
+function updateColor() {
+    color = hexToRGB(document.getElementById("vertex-color").value);
+    if (selectedVertexId != undefined){
+        object = objects[selectedShapeId];
+        object.updateColor(selectedVertexId, color);
     }
 }
 
