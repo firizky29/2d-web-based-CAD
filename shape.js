@@ -199,4 +199,16 @@ class Rectangle extends Shape{
     }
 }
 
+class Polygon extends Shape{
+    // Kelas Polygon
+    // parameter: gl, vertices
+    constructor(gl, vertices){
+        super(gl, vertices, gl.TRIANGLE_FAN);
+    }
+
+    deleteVertex(vertexId){
+        this.vertices.splice(vertexId,1);
+    }
+}
+
 

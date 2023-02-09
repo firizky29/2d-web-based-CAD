@@ -39,7 +39,7 @@ if(!gl) {
     alert("WebGl isn't available");
 }
 
-// Mouse Input
+/* MOUSE INPUT */
 var isDown = false;
 canvas.addEventListener('mousedown', (e) => {
     /* SELECTING OBJECTS */
@@ -89,16 +89,43 @@ canvas.addEventListener('mousedown', (e) => {
         // Input startitng point
         let x = -1 + 2 * (e.clientX - canvas.offsetLeft)/canvas.width;
         let y = 1 - 2  *(e.clientY - canvas.offsetTop)/canvas.height;
+        let point = new Point(x, y);
         let vertices = [];
 
         // Menggambar line
-        if (drawnShape = 'line'){
-            for(let i = 0; i < 2; i++) {
-                let point = new Point(x, y);
-                vertices.push(new Vertex(point, color));
-                
+        if (drawnShape == 'line'){
+            console.log("Drawing line");
+            if (isDrawing){
+                isDrawing = false;
             }
-            objects.push(new Line(gl, vertices, color));
+            else{
+                isDrawing = true;
+                for(let i = 0; i < 2; i++) {
+                    vertices.push(new Vertex(point, color));
+                }
+                objects.push(new Line(gl, vertices, color));
+            }
+        }
+        else if (drawnShape == 'polygon'){
+            if (e.button == 2){
+                isDrawingPolygon = false;
+                return;
+            }
+
+            console.log("Drawing polyon")
+            if(isDrawingPolygon){
+                object = objects[objects.length-1];
+                vertices = object.vertices;
+                vertices.push(new Vertex(point, color));
+                console.log(vertices)
+            }else{
+                isDrawingPolygon = true; 
+                for(let i = 0; i < 2; i++) {
+                    vertices.push(new Vertex(point, color));
+                }
+                objects.push(new Polygon(gl, vertices, color));
+            }
+
         }
     }
     
@@ -111,15 +138,20 @@ canvas.addEventListener('mousedown', (e) => {
 canvas.mouseMoveListener = (e) => { 
     /* DRAWING OBJECTS */
     // Drawing tool
-    if (isUsingDrawTools && isDown){
+    if (isUsingDrawTools){
         // update vertex
         let x = -1 + 2 * (e.clientX - canvas.offsetLeft)/canvas.width;
         let y = 1 - 2  *(e.clientY - canvas.offsetTop)/canvas.height;
+        let object = objects[objects.length-1]
+        let lastVertices = object.vertices[object.vertices.length-1]
 
-        if (drawnShape = 'line'){
-            let objectStartVertex = objects[objects.length - 1].vertices[0];
-            let objectStartPoint = new Point(objectStartVertex.x, objectStartVertex.y);
-            objects[objects.length-1].setPoints([objectStartPoint, new Point(x,y)]);
+        if (drawnShape == 'line' && isDrawing){
+            lastVertices.x = x;
+            lastVertices.y = y;
+        }
+        else if (drawnShape == 'polygon' && isDrawingPolygon){
+            lastVertices.x = x;
+            lastVertices.y = y;
         }
     }
 
@@ -168,27 +200,45 @@ canvas.mouseMoveListener = (e) => {
         relativePosition = [e.clientX, e.clientY];
     }
 }
-
-/* APPS */
 // Mouse Up
 canvas.addEventListener('mouseup', (e) => {
     isDown = false;
 })
+
+/* APPS */
 // Buttons
 isUsingSelectionTools = false;
 isUsingDrawTools = true;
-drawnShape = undefined;
+drawnShape = 'line';
+isDrawingPolygon = false;
+isDrawing = false;
 const selectButton = document.getElementById('select-button');
 selectButton.selectButton = (e) => {
     console.log("selection tool activated")
     isUsingSelectionTools = true;
     isUsingDrawTools = false;
 }
-const shapeButton = document.getElementById('line-shape');
-shapeButton.lineShape = () => {
+const lineShapeButton = document.getElementById('line-shape');
+lineShapeButton.lineShape = () => {
     console.log("line tool activated")
     drawnShape = "line";
     resetSelectionTools();
+}
+const polygonShapeButton = document.getElementById('polygon-shape');
+polygonShapeButton.polygonShape = () => {
+    console.log("polygon tool activated")
+    drawnShape = "polygon";
+    resetSelectionTools();
+}
+const deletePolygonVertexButton = document.getElementById('deletePolygonVertex');
+deletePolygonVertexButton.deletePolygonVertex = () => {
+    console.log("deleting polygon vertex");
+    if (selectedVertexId != undefined){
+        object = objects[selectedShapeId];
+        object.deleteVertex(selectedVertexId);
+        selectedShapes[0] = drawHitbox(object);
+        selectedVertices = [];
+    }
 }
 // change length on input
 const lengthInput = document.getElementById('line-length');
