@@ -109,6 +109,9 @@ canvas.addEventListener('mousedown', (e) => {
         else if (drawnShape == 'polygon'){
             if (e.button == 2){
                 isDrawingPolygon = false;
+                object = objects[objects.length-1];
+                vertices = object.vertices;
+                vertices.pop();                
                 return;
             }
 
@@ -117,7 +120,7 @@ canvas.addEventListener('mousedown', (e) => {
                 object = objects[objects.length-1];
                 vertices = object.vertices;
                 vertices.push(new Vertex(point, color));
-                console.log(vertices)
+                // console.log(vertices)
             }else{
                 isDrawingPolygon = true; 
                 for(let i = 0; i < 2; i++) {
@@ -236,8 +239,7 @@ deletePolygonVertexButton.deletePolygonVertex = () => {
     if (selectedVertexId != undefined){
         object = objects[selectedShapeId];
         object.deleteVertex(selectedVertexId);
-        selectedShapes[0] = drawHitbox(object);
-        selectedVertices = [];
+        updateDeletedObject(objects, selectedShapeId);
     }
 }
 // change length on input
@@ -279,6 +281,19 @@ function resetSelectionTools(){
     selectedVertices = []
     selectedShapeId = undefined;
     selectedVertexId = undefined;
+}
+
+function updateDeletedObject(objects, selectedShapeId){
+    // delete obect if vertices == 0
+    if (objects[selectedShapeId].vertices.length == 0){
+        objects.slice(selectedShapeId,1);
+        hitboxes = [];
+        selectedShapes = [];
+        selectedVertices = [];
+    }else{
+        selectedShapes[0] = drawHitbox(object);
+        selectedVertices = [];
+    }
 }
 /* */
 
