@@ -99,8 +99,7 @@ function drawVertexHitbox(object, selectedVertexId){
 
 
 function hoverObject(e, objects){
-    let x = -1 + 2 * (e.clientX - canvas.offsetLeft)/canvas.width;
-    let y = 1 - 2  *(e.clientY - canvas.offsetTop)/canvas.height;
+    let mousePosition = getMousePosition(e);
     let min, max, object;
 
     for (let i = 0;i<objects.length;i++){
@@ -109,7 +108,7 @@ function hoverObject(e, objects){
         min = object.findMin();
         max = object.findMax();
 
-        if (x >= min.x && x <= max.x && y >= min.y && y <= max.y){
+        if (mousePosition.x >= min.x && mousePosition.x <= max.x && mousePosition.y >= min.y && mousePosition.y <= max.y){
             // object selected
             return i;
         }
@@ -120,8 +119,7 @@ function hoverObject(e, objects){
 }
 
 function hoverVertex(e, object){
-    let x = -1 + 2 * (e.clientX - canvas.offsetLeft)/canvas.width;
-    let y = 1 - 2  *(e.clientY - canvas.offsetTop)/canvas.height;
+    let mousePosition = getMousePosition(e);
     let min, max, vertex;
     let radius = 20/canvas.width;
 
@@ -131,7 +129,7 @@ function hoverVertex(e, object){
         min = new Point(vertex.x - radius, vertex.y - radius);
         max = new Point(vertex.x + radius, vertex.y + radius);
 
-        if (x >= min.x && x <= max.x && y >= min.y && y <= max.y){
+        if (mousePosition.x >= min.x && mousePosition.x <= max.x && mousePosition.y >= min.y && mousePosition.y <= max.y){
             // vertex selected
             return i;
         }
@@ -152,5 +150,12 @@ function hexToRGB(hexColor) {
     const b = hexToDec(result[3]);
 
     return new Color(r/255, g/255, b/255);
+}
+
+function getMousePosition(e){
+    let x = -1 + 2 * (e.clientX - canvas.offsetLeft)/canvas.width;
+    let y = 1 - 2  *(e.clientY - canvas.offsetTop)/canvas.height;
+
+    return {x, y};
 }
 

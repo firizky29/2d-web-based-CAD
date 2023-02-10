@@ -195,6 +195,7 @@ class Line extends Shape{
     }
 }
 
+
 class Hitbox extends Shape{
     // Kelas Hitbox
     // parameter: gl, vertices
