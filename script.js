@@ -212,6 +212,18 @@ lineShapeButton.lineShape = (e) => {
     lineShapeButton.classList.add("active");
     lineShapeButton.style.backgroundColor = "#0C8CE9";
 }
+// Change Length on Line
+const lengthInput = document.getElementById('line-length');
+document.getElementById("line-length").addEventListener("keyup", updateLength);
+function updateLength() {
+    length = document.getElementById("line-length").value;
+    object = objects[selectedShapeId];
+    object.setNewLength(lengthInput.value);
+    selectedShapes[0] = drawHitbox(object);
+}
+
+
+// square tool
 const squareShapeButton = document.getElementById('square-shape');
 squareShapeButton.squareShape = (e) => {
     console.log("square tool activated")
@@ -225,6 +237,8 @@ squareShapeButton.squareShape = (e) => {
     squareShapeButton.classList.add("active");
     squareShapeButton.style.backgroundColor = "#0C8CE9";
 }
+
+// rectangle tool
 const rectangleShapeButton = document.getElementById('rectangle-shape');
 rectangleShapeButton.rectangleShape = (e) => {
     console.log("rectangle tool activated")
@@ -238,15 +252,7 @@ rectangleShapeButton.rectangleShape = (e) => {
     rectangleShapeButton.classList.add("active");
     rectangleShapeButton.style.backgroundColor = "#0C8CE9";
 }
-// Change Length on Line
-const lengthInput = document.getElementById('line-length');
-document.getElementById("line-length").addEventListener("keyup", updateLength);
-function updateLength() {
-    length = document.getElementById("line-length").value;
-    object = objects[selectedShapeId];
-    object.setNewLength(lengthInput.value);
-    selectedShapes[0] = drawHitbox(object);
-}
+
 
 // Polygon Tool
 const polygonShapeButton = document.getElementById('polygon-shape');
@@ -262,6 +268,7 @@ polygonShapeButton.polygonShape = (e) => {
     polygonShapeButton.classList.add("active");
     polygonShapeButton.style.backgroundColor = "#0C8CE9";
 }
+
 // Delete Vertex on Polygon
 const deletePolygonVertexButton = document.getElementById('deletePolygonVertex');
 deletePolygonVertexButton.deletePolygonVertex = (e) => {
