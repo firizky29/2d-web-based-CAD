@@ -51,6 +51,7 @@ class Shape{
                 vertex.blue
             );
         }
+
         this.gl.bufferData(
             gl.ARRAY_BUFFER,
             new Float32Array(vertices),
@@ -84,9 +85,20 @@ class Shape{
 
     // find centroid
     findCentroid(){
-        let min = this.findMin();
-        let max = this.findMax();
-        return new Point((min.x + max.x) / 2, (min.y + max.y) / 2);
+        // let min = this.findMin();
+        // let max = this.findMax();
+        // return new Point((min.x + max.x) / 2, (min.y + max.y) / 2);
+
+        // find average out of all vertex
+        let sum_x = 0;
+        let sum_y = 0;
+
+        for (let vertex of this.vertices) {
+            sum_x += vertex.x;
+            sum_y += vertex.y;
+        }
+
+        return new Point(sum_x/this.vertices.length, sum_y/this.vertices.length);
     }
 
     moveShape(e, relativePosition){
@@ -183,6 +195,7 @@ class Line extends Shape{
     }
 }
 
+
 class Hitbox extends Shape{
     // Kelas Hitbox
     // parameter: gl, vertices
@@ -209,6 +222,37 @@ class Polygon extends Shape{
     deleteVertex(vertexId){
         this.vertices.splice(vertexId,1);
     }
+
+    //rendering
+    // draw(){
+    //     let centroid = this.findCentroid();
+    //     let vertices = [centroid.x, centroid.y, 0.75, 0.25, 0.35];
+    //     for (let vertex of this.vertices) {
+    //         vertices.push(
+    //             vertex.x, 
+    //             vertex.y, 
+    //             vertex.red, 
+    //             vertex.green, 
+    //             vertex.blue
+    //         );
+    //     }
+
+    //     vertices.push(
+    //         this.vertices[0].x, 
+    //         this.vertices[0].y, 
+    //         this.vertices[0].red, 
+    //         this.vertices[0].green, 
+    //         this.vertices[0].blue
+    //     );
+
+    //     this.gl.bufferData(
+    //         gl.ARRAY_BUFFER,
+    //         new Float32Array(vertices),
+    //         gl.STATIC_DRAW
+    //     );
+
+    //     this.gl.drawArrays(this.GL_SHAPE, 0, this.vertices.length + 2);
+    // }
 }
 
 
