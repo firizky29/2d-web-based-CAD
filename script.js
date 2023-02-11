@@ -14,7 +14,6 @@ canvas.addEventListener('mousedown', (e) => {
     if (isUsingSelectionTools){
         // select shapes
         hoveredShapeId = hoverObject(e, objects);
-        console.log(hoveredShapeId)
         if (hoveredShapeId != undefined && hoveredShapeId != selectedShapeId){
             // add hitbox and update selected shape id
             selectedShapeId = hoveredShapeId;
@@ -75,6 +74,8 @@ canvas.addEventListener('mousedown', (e) => {
             console.log("Drawing line");
             if (isDrawing){
                 isDrawing = false;
+                object = objects[objects.length-1];
+                object.calculateDistance();
             }
             else{
                 isDrawing = true;
@@ -113,7 +114,6 @@ canvas.addEventListener('mousedown', (e) => {
     isDown = true;
     // records the position of the mouse on click
     relativePosition = [e.clientX, e.clientY]
-    console.log(selectedShapeId)
     console.log(objects);
 })
 
@@ -289,7 +289,7 @@ deletePolygonVertexButton.deletePolygonVertex = (e) => {
     if (selectedVertexId != undefined){
         object = objects[selectedShapeId];
         object.deleteVertex(selectedVertexId);
-        updateDeletedObject(objects, selectedShapeId);
+        updateDeletedObject(objects);
     }
 }
 
@@ -329,13 +329,20 @@ function resetSelectionTools(){
     selectedVertexId = undefined;
 }
 // Update Deleted Object
-function updateDeletedObject(objects, selectedShapeId){
+function updateDeletedObject(objects){
     // delete obect if vertices == 0
-    if (objects[selectedShapeId].vertices.length == 0){
-        objects.slice(selectedShapeId,1);
+    if (objects[selectedShapeId].vertices.length <= 2){
+        if (objects.length == 1){
+            objects.pop()
+        }else{
+            objects.slice(selectedShapeId,1);
+        }
+
         hitboxes = [];
         selectedShapes = [];
         selectedVertices = [];
+        selectedShapeId = undefined;
+        selectedVertexId = undefined;
     }else{
         selectedShapes[0] = drawHitbox(object);
         selectedVertices = [];
