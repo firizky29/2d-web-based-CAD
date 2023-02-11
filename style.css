@@ -10,6 +10,8 @@ body {
     margin: 0;
     font-family: 'Inter';
     background-color: #1E1E1E;
+    color: white;
+    font-size: 0.8rem;
 }
 
 .container {
@@ -44,7 +46,7 @@ nav{
     margin: 0;
 }
 
-.nav-content li{
+.nav-content .tools{
     vertical-align: middle;
     display: flex;
     justify-content: center;
@@ -63,18 +65,62 @@ nav{
     height: 100%;
 }
 
-.nav-content li:hover{
+.nav-content .tools:hover{
     background-color: #111111;
     cursor: pointer;
 }
 
-.nav-content li.active{
+.nav-content .tools.active{
     background-color: #0C8CE9;
 }
 
 .nav-content .svg{
     display: inline-block;
     vertical-align: middle;
+}
+
+
+
+#dropdown-icon{
+    transition: margin-top 0.2s ease-in;
+
+}
+
+#dropdown-icon:hover{
+    transition: margin-top 0.2s ease-in;
+}
+
+#mainmenu{
+    display: none;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 190px;
+    margin: 5px;
+    z-index: 100;
+    background-color: #1E1E1E;
+    color: white;
+    border: solid 1px #444444;
+}
+
+#mainmenu hr{
+    border-top: solid 1px #444444;
+    border-bottom: 0;
+}
+
+#mainmenu ul{
+    list-style-type:none;
+    padding: 0;
+}
+
+#mainmenu li{
+    padding: 2px 5px 2px 25px;
+    width: 100%;
+}
+
+#mainmenu li:hover{
+    background-color: #0C8CE9;
+    cursor: pointer;
 }
 
 
@@ -87,7 +133,6 @@ nav{
     top:50px;
     left:0;
     margin:0;
-    border-top: solid 1px #444444;
     border-right: solid 1px #444444;
     width: 241px;
 }
@@ -99,7 +144,6 @@ nav{
     top:50px;
     right:0;
     margin:0;
-    border-top: solid 1px #444444;
     border-left: solid 1px #444444;
     width: 241px;
 }

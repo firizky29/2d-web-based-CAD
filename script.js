@@ -345,7 +345,86 @@ function updateDeletedObject(objects){
 
 
 
-// UX
+// main menu tools
+mainMenuActive = false;
+const mainMenuButton = document.getElementById('main-menu-button');
+const mainMenuItems = document.getElementById('mainmenu');
+const dropdownIcon = document.getElementById('dropdown-icon');
+mainMenuButton.mainMenuButton = (e) => {
+    console.log("main menu tool activated")
+    resetSelectionTools();
+
+    let navbarActive = document.getElementsByClassName("active")[0];
+    navbarActive.classList.remove("active");
+    mainMenuButton.classList.add("active");
+    dropdownIcon.style.marginTop = "5px";
+    mainMenuActive = true;
+    mainMenuItems.style.display = "block";
+}
+
+mainMenuButton.mainMenuHovered = (e) => {
+    if(!mainMenuActive){
+        dropdownIcon.style.marginTop = "5px";
+    }
+        
+}
+
+mainMenuButton.mainMenuUnhovered = (e) => {
+    if(!mainMenuActive){
+        dropdownIcon.style.marginTop = "0px";
+    }
+}
+
+// new design
+const newDesign = document.getElementById('new-design');
+newDesign.newDesign = (e) => {
+    window.location.reload();
+}
+
+
+// export design
+const exportDesign = document.getElementById('export-design');
+exportDesign.saveDesign = (e) => {
+    let design = JSON.stringify(objects);
+    console.log(design);
+}
+
+// save design
+const saveDesign = document.getElementById('save-design');
+saveDesign.saveDesign = (e) => {
+    // let downloadLink = document.createElement('a');
+    // downloadLink.setAttribute('download', 'CanvasAsImage.png');
+    // let dataURL = canvas.toDataURL('image/png');
+    // // console.log(dataURL);
+    // let url = dataURL.replace('image/png','application/octet-stream');
+    // downloadLink.setAttribute('href', dataURL);
+    // // console.log(url);
+    // downloadLink.click();
+    
+}
+
+
+
+
+document.body.addEventListener('click', (e) => {
+    if(!e.target.closest('.tools')){
+        if (mainMenuActive){
+            dropdownIcon.style.marginTop = "0px";
+            mainMenuActive = false;
+            mainMenuItems.style.display = "none";
+            selectButton.dispatchEvent(new Event('click'));
+        }
+    } else{
+        if(!e.target.closest('#main-menu-button')){
+            if (mainMenuActive){
+                dropdownIcon.style.marginTop = "0px";
+                mainMenuItems.style.display = "none";
+                mainMenuActive = false;
+            }
+        }
+    }
+});
+
 
 
 
