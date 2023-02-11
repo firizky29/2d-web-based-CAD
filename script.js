@@ -14,9 +14,11 @@ canvas.addEventListener('mousedown', (e) => {
     if (isUsingSelectionTools){
         // select shapes
         hoveredShapeId = hoverObject(e, objects);
+        console.log(hoveredShapeId)
         if (hoveredShapeId != undefined && hoveredShapeId != selectedShapeId){
             // add hitbox and update selected shape id
             selectedShapeId = hoveredShapeId;
+            selectedVertexId = undefined;
             let object = objects[selectedShapeId];
             selectedShapes = [drawHitbox(object)];
             console.log("selected shape id: " + selectedShapeId);
@@ -29,14 +31,18 @@ canvas.addEventListener('mousedown', (e) => {
         else if (selectedShapeId != undefined){
             let object = objects[selectedShapeId];
             hoveredVertexId = hoverVertex(e, object);
-            console.log(hoveredVertexId)
             if (hoveredVertexId != undefined){
                 selectedVertexId = hoveredVertexId;
                 console.log("selected vertex id: " + selectedVertexId);
                 selectedVertices = [drawVertexHitbox(object, selectedVertexId)];
             }
-            else{
+            else if (hoveredShapeId != selectedShapeId){
+                // deselect shape
                 selectedShapeId = undefined;
+            }
+            else if (hoveredVertexId == undefined){
+                // deselect vertex
+                selectedVertexId = undefined;
             }
         }
         
@@ -45,6 +51,12 @@ canvas.addEventListener('mousedown', (e) => {
             selectedShapes = [];
             selectedVertices = [];
             selectedShapeId = undefined;
+            selectedVertexId = undefined;
+        }
+
+        if(selectedVertexId == undefined){
+            // console.log("no vertex selected");
+            selectedVertices = [];
             selectedVertexId = undefined;
         }
     }
@@ -101,6 +113,7 @@ canvas.addEventListener('mousedown', (e) => {
     isDown = true;
     // records the position of the mouse on click
     relativePosition = [e.clientX, e.clientY]
+    console.log(selectedShapeId)
     console.log(objects);
 })
 
