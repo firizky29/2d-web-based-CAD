@@ -52,6 +52,7 @@ nav{
     padding: 0 15px;
     height: 50px;
     line-height: 50px;
+    background-color: #2C2C2C;
 }
 
 .nav-content a{

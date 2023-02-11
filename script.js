@@ -190,10 +190,8 @@ selectButton.selectButton = (e) => {
 
     let navbarActive = document.getElementsByClassName("active")[0];
     navbarActive.classList.remove("active");
-    navbarActive.style.backgroundColor = "#2C2C2C";
 
     selectButton.classList.add("active");
-    selectButton.style.backgroundColor = "#0C8CE9";
     
 }
 
@@ -207,10 +205,8 @@ lineShapeButton.lineShape = (e) => {
 
     let navbarActive = document.getElementsByClassName("active")[0];
     navbarActive.classList.remove("active");
-    navbarActive.style.backgroundColor = "#2C2C2C";
 
     lineShapeButton.classList.add("active");
-    lineShapeButton.style.backgroundColor = "#0C8CE9";
 }
 // Change Length on Line
 const lengthInput = document.getElementById('line-length');
@@ -232,10 +228,10 @@ squareShapeButton.squareShape = (e) => {
 
     let navbarActive = document.getElementsByClassName("active")[0];
     navbarActive.classList.remove("active");
-    navbarActive.style.backgroundColor = "#2C2C2C";
+    
 
     squareShapeButton.classList.add("active");
-    squareShapeButton.style.backgroundColor = "#0C8CE9";
+
 }
 
 // rectangle tool
@@ -247,10 +243,10 @@ rectangleShapeButton.rectangleShape = (e) => {
 
     let navbarActive = document.getElementsByClassName("active")[0];
     navbarActive.classList.remove("active");
-    navbarActive.style.backgroundColor = "#2C2C2C";
+
 
     rectangleShapeButton.classList.add("active");
-    rectangleShapeButton.style.backgroundColor = "#0C8CE9";
+
 }
 
 
@@ -263,10 +259,8 @@ polygonShapeButton.polygonShape = (e) => {
 
     let navbarActive = document.getElementsByClassName("active")[0];
     navbarActive.classList.remove("active");
-    navbarActive.style.backgroundColor = "#2C2C2C";
-
     polygonShapeButton.classList.add("active");
-    polygonShapeButton.style.backgroundColor = "#0C8CE9";
+
 }
 
 // Delete Vertex on Polygon
@@ -328,3 +322,10 @@ function updateDeletedObject(objects, selectedShapeId){
         selectedVertices = [];
     }
 }
+
+
+
+// UX
+
+
+
