@@ -91,8 +91,8 @@ class Shape{
 
     moveShape(e, relativePosition){
         // update vertex
-        let x = 2*(e.clientX - relativePosition[0])/canvas.width;
-        let y = -2*(e.clientY - relativePosition[1])/canvas.height;
+        let x = 2*(e.clientX - relativePosition[0])/canvas.offsetWidth;
+        let y = -2*(e.clientY - relativePosition[1])/canvas.offsetHeight;
 
         // update all vertex
         for (let vertex of this.vertices) {
@@ -104,8 +104,8 @@ class Shape{
 
     moveVertex(e, relativePosition, vertexId){
         // update vertex
-        let x = 2*(e.clientX - relativePosition[0])/canvas.width;
-        let y = -2*(e.clientY - relativePosition[1])/canvas.height;
+        let x = 2*(e.clientX - relativePosition[0])/canvas.offsetWidth;
+        let y = -2*(e.clientY - relativePosition[1])/canvas.offsetHeight;
         
         // update vertex
         this.vertices[vertexId].x += x;

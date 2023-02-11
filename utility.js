@@ -75,7 +75,7 @@ function drawHitbox(object){
 
 function drawVertexHitbox(object, selectedVertexId){
     let vertex = object.vertices[selectedVertexId];
-    let radius = 20/canvas.width; 
+    let radius = 20/canvas.offsetWidth; 
     const color = new Color(0.95,0.55,0.25);
 
     const hitBoxPoints = [
@@ -99,8 +99,8 @@ function drawVertexHitbox(object, selectedVertexId){
 
 
 function hoverObject(e, objects){
-    let x = -1 + 2 * (e.clientX - canvas.offsetLeft)/canvas.width;
-    let y = 1 - 2  *(e.clientY - canvas.offsetTop)/canvas.height;
+    let x = -1 + 2 * (e.clientX - canvas.offsetLeft - canvasContainer.offsetLeft)/canvas.offsetWidth;
+    let y = 1 - 2  *(e.clientY - canvas.offsetTop - canvasContainer.offsetTop)/canvas.offsetHeight;
     let min, max, object;
 
     for (let i = 0;i<objects.length;i++){
@@ -120,10 +120,10 @@ function hoverObject(e, objects){
 }
 
 function hoverVertex(e, object){
-    let x = -1 + 2 * (e.clientX - canvas.offsetLeft)/canvas.width;
-    let y = 1 - 2  *(e.clientY - canvas.offsetTop)/canvas.height;
+    let x = -1 + 2 * (e.clientX - canvas.offsetLeft - canvasContainer.offsetLeft)/canvas.offsetWidth;
+    let y = 1 - 2  *(e.clientY - canvas.offsetTop - canvasContainer.offsetTop)/canvas.offsetHeight;
     let min, max, vertex;
-    let radius = 20/canvas.width;
+    let radius = 20/canvas.offsetWidth;
 
     for (let i = 0;i<object.vertices.length;i++){
         vertex = object.vertices[i];

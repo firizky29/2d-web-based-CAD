@@ -28,10 +28,14 @@ var selectedShapeId = undefined;
 var hoveredVertexId = undefined;
 var selectedVertexId = undefined;
 var relativePosition = [];
-var color = new Color(0.75,0.25,0.35); //make it input from user
+var color = new Color(0,0,0); //make it input from user
 
 // Canvas purposes
 const canvas = document.getElementById('gl-canvas');
+const canvasContainer = document.getElementById('canvas-container');
+
+canvas.width  = 900;
+canvas.height = 800; 
 
 const gl = canvas.getContext('webgl') ?? canvas.getContext('experimental-webgl');
 
@@ -87,8 +91,9 @@ canvas.addEventListener('mousedown', (e) => {
     if (isUsingDrawTools){
         // New object
         // Input startitng point
-        let x = -1 + 2 * (e.clientX - canvas.offsetLeft)/canvas.width;
-        let y = 1 - 2  *(e.clientY - canvas.offsetTop)/canvas.height;
+        // console.log(canvas.offsetLeft + " " + canvasContainer.offsetLeft);
+        let x = -1 + 2 * (e.clientX - canvas.offsetLeft - canvasContainer.offsetLeft)/canvas.offsetWidth;
+        let y = 1 - 2  *(e.clientY - canvas.offsetTop - canvasContainer.offsetTop)/canvas.offsetHeight;
         let point = new Point(x, y);
         let vertices = [];
 
@@ -140,8 +145,13 @@ canvas.mouseMoveListener = (e) => {
     // Drawing tool
     if (isUsingDrawTools){
         // update vertex
-        let x = -1 + 2 * (e.clientX - canvas.offsetLeft)/canvas.width;
-        let y = 1 - 2  *(e.clientY - canvas.offsetTop)/canvas.height;
+        // console.log(canvas.offsetWidth);
+        // console.log(e.clientX- canvas.offsetLeft - canvasContainer.offsetLeft);
+        let x = -1 + 2 * (e.clientX - canvas.offsetLeft - canvasContainer.offsetLeft)/canvas.offsetWidth;
+        let y = 1 - 2  *(e.clientY - canvas.offsetTop - canvasContainer.offsetTop)/canvas.offsetHeight;
+        // console.log("->");
+        // console.log(x);
+        // console.log(y);
         let object = objects[objects.length-1]
         let lastVertices = object.vertices[object.vertices.length-1]
 
@@ -207,8 +217,8 @@ canvas.addEventListener('mouseup', (e) => {
 
 /* APPS */
 // Buttons
-isUsingSelectionTools = false;
-isUsingDrawTools = true;
+isUsingSelectionTools = true;
+isUsingDrawTools = false;
 drawnShape = 'line';
 isDrawingPolygon = false;
 isDrawing = false;
@@ -217,21 +227,69 @@ selectButton.selectButton = (e) => {
     console.log("selection tool activated")
     isUsingSelectionTools = true;
     isUsingDrawTools = false;
+
+    let navbarActive = document.getElementsByClassName("active")[0];
+    navbarActive.classList.remove("active");
+    navbarActive.style.backgroundColor = "#2C2C2C";
+
+    selectButton.classList.add("active");
+    selectButton.style.backgroundColor = "#0C8CE9";
+    
 }
 const lineShapeButton = document.getElementById('line-shape');
-lineShapeButton.lineShape = () => {
+lineShapeButton.lineShape = (e) => {
     console.log("line tool activated")
     drawnShape = "line";
     resetSelectionTools();
+
+    let navbarActive = document.getElementsByClassName("active")[0];
+    navbarActive.classList.remove("active");
+    navbarActive.style.backgroundColor = "#2C2C2C";
+
+    lineShapeButton.classList.add("active");
+    lineShapeButton.style.backgroundColor = "#0C8CE9";
+}
+const squareShapeButton = document.getElementById('square-shape');
+squareShapeButton.squareShape = (e) => {
+    console.log("square tool activated")
+    drawnShape = "square";
+    resetSelectionTools();
+
+    let navbarActive = document.getElementsByClassName("active")[0];
+    navbarActive.classList.remove("active");
+    navbarActive.style.backgroundColor = "#2C2C2C";
+
+    squareShapeButton.classList.add("active");
+    squareShapeButton.style.backgroundColor = "#0C8CE9";
+}
+const rectangleShapeButton = document.getElementById('rectangle-shape');
+rectangleShapeButton.rectangleShape = (e) => {
+    console.log("rectangle tool activated")
+    drawnShape = "rectangle";
+    resetSelectionTools();
+
+    let navbarActive = document.getElementsByClassName("active")[0];
+    navbarActive.classList.remove("active");
+    navbarActive.style.backgroundColor = "#2C2C2C";
+
+    rectangleShapeButton.classList.add("active");
+    rectangleShapeButton.style.backgroundColor = "#0C8CE9";
 }
 const polygonShapeButton = document.getElementById('polygon-shape');
-polygonShapeButton.polygonShape = () => {
+polygonShapeButton.polygonShape = (e) => {
     console.log("polygon tool activated")
     drawnShape = "polygon";
     resetSelectionTools();
+
+    let navbarActive = document.getElementsByClassName("active")[0];
+    navbarActive.classList.remove("active");
+    navbarActive.style.backgroundColor = "#2C2C2C";
+
+    polygonShapeButton.classList.add("active");
+    polygonShapeButton.style.backgroundColor = "#0C8CE9";
 }
 const deletePolygonVertexButton = document.getElementById('deletePolygonVertex');
-deletePolygonVertexButton.deletePolygonVertex = () => {
+deletePolygonVertexButton.deletePolygonVertex = (e) => {
     console.log("deleting polygon vertex");
     if (selectedVertexId != undefined){
         object = objects[selectedShapeId];
@@ -240,6 +298,8 @@ deletePolygonVertexButton.deletePolygonVertex = () => {
         selectedVertices = [];
     }
 }
+
+
 // change length on input
 const lengthInput = document.getElementById('line-length');
 document.getElementById("line-length").addEventListener("keyup", updateLength);
@@ -286,7 +346,7 @@ function resetSelectionTools(){
 
 // Set ukuran canvas
 gl.viewport(0, 0, canvas.width, canvas.height);
-gl.clearColor(0.8, 0.8, 0.8, 1.0);
+gl.clearColor(0.89, 0.89, 0.89, 1.0);
 
 // Setup shaders
 const program = initShaders(gl, vertexShaderText, fragmentShaderText);
