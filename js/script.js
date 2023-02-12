@@ -352,14 +352,22 @@ const mainMenuItems = document.getElementById('mainmenu');
 const dropdownIcon = document.getElementById('dropdown-icon');
 mainMenuButton.mainMenuButton = (e) => {
     console.log("main menu tool activated")
-    resetSelectionTools();
+    if(!mainMenuActive){
+        resetSelectionTools();
+        isUsingDrawTools = false;
 
-    let navbarActive = document.getElementsByClassName("active")[0];
-    navbarActive.classList.remove("active");
-    mainMenuButton.classList.add("active");
-    dropdownIcon.style.marginTop = "5px";
-    mainMenuActive = true;
-    mainMenuItems.style.display = "block";
+        let navbarActive = document.getElementsByClassName("active")[0];
+        navbarActive.classList.remove("active");
+        mainMenuButton.classList.add("active");
+        dropdownIcon.style.marginTop = "5px";
+        mainMenuActive = true;
+        mainMenuItems.style.display = "block";
+    } else{
+        dropdownIcon.style.marginTop = "0px";
+        mainMenuActive = false;
+        mainMenuItems.style.display = "none";
+        selectButton.dispatchEvent(new Event('click'));
+    }
 }
 
 mainMenuButton.mainMenuHovered = (e) => {

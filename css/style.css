@@ -19,7 +19,7 @@ body {
     justify-content: center;
 }
 
-nav{
+nav {
     background-color: #2C2C2C;
     overflow: hidden;
     position: fixed;
@@ -27,10 +27,16 @@ nav{
     width: 100%;
     border-bottom: solid 1px #444444;
     border-top: solid 1px #444444;
+    -webkit-user-select: none;
+    /* Safari */
+    -ms-user-select: none;
+    /* IE 10 and IE 11 */
+    user-select: none;
+    /* Standard syntax */
 }
 
 
-.nav-content{
+.nav-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -38,15 +44,15 @@ nav{
     color: white;
 }
 
-.nav-content ul{
+.nav-content ul {
     display: flex;
     justify-content: space-between;
-    list-style-type:none;
+    list-style-type: none;
     padding: 0;
     margin: 0;
 }
 
-.nav-content .tools{
+.nav-content .tools {
     vertical-align: middle;
     display: flex;
     justify-content: center;
@@ -57,7 +63,7 @@ nav{
     background-color: #2C2C2C;
 }
 
-.nav-content a{
+.nav-content a {
     color: white;
     text-decoration: none;
     font-size: 1.2rem;
@@ -65,32 +71,32 @@ nav{
     height: 100%;
 }
 
-.nav-content .tools:hover{
+.nav-content .tools:hover {
     background-color: #111111;
     cursor: pointer;
 }
 
-.nav-content .tools.active{
+.nav-content .tools.active {
     background-color: #0C8CE9;
 }
 
-.nav-content .svg{
+.nav-content .svg {
     display: inline-block;
     vertical-align: middle;
 }
 
 
 
-#dropdown-icon{
+#dropdown-icon {
     transition: margin-top 0.2s ease-in;
 
 }
 
-#dropdown-icon:hover{
+#dropdown-icon:hover {
     transition: margin-top 0.2s ease-in;
 }
 
-#mainmenu{
+#mainmenu {
     display: none;
     position: absolute;
     top: 50px;
@@ -103,22 +109,22 @@ nav{
     border: solid 1px #444444;
 }
 
-#mainmenu hr{
+#mainmenu hr {
     border-top: solid 1px #444444;
     border-bottom: 0;
 }
 
-#mainmenu ul{
-    list-style-type:none;
+#mainmenu ul {
+    list-style-type: none;
     padding: 0;
 }
 
-#mainmenu li{
+#mainmenu li {
     padding: 2px 5px 2px 25px;
     width: 100%;
 }
 
-#mainmenu li:hover{
+#mainmenu li:hover {
     background-color: #0C8CE9;
     cursor: pointer;
 }
@@ -126,29 +132,29 @@ nav{
 
 
 
-.left-sidebar{
+.left-sidebar {
     background-color: #2C2C2C;
     height: 100%;
     position: fixed;
-    top:50px;
-    left:0;
-    margin:0;
+    top: 50px;
+    left: 0;
+    margin: 0;
     border-right: solid 1px #444444;
     width: 241px;
 }
 
-.right-sidebar{
+.right-sidebar {
     background-color: #2C2C2C;
     height: 100%;
     position: fixed;
-    top:50px;
-    right:0;
-    margin:0;
+    top: 50px;
+    right: 0;
+    margin: 0;
     border-left: solid 1px #444444;
     width: 241px;
 }
 
-.canvas-container{
+.canvas-container {
     margin: 0;
     padding: 20px;
     position: relative;

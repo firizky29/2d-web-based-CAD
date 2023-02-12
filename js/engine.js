@@ -40,7 +40,7 @@ if(!gl) {
 
 // Set ukuran canvas
 gl.viewport(0, 0, canvas.width, canvas.height);
-gl.clearColor(0.8, 0.8, 0.8, 1.0);
+gl.clearColor(1.0, 1.0, 1.0, 1.0);
 
 // Setup shaders
 const program = initShaders(gl, vertexShaderText, fragmentShaderText);
