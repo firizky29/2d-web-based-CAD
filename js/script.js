@@ -4,7 +4,7 @@ var selectedShapeId = undefined;
 var hoveredVertexId = undefined;
 var selectedVertexId = undefined;
 var relativePosition = [];
-var color = new Color(0,0,0); //make it input from user
+var color = new Color(0.85,0.85,0.85); //make it input from user
 
 /* MOUSE INPUT */
 var isDown = false;
@@ -445,19 +445,6 @@ exportDesign.saveDesign = (e) => {
     console.log(design);
 }
 
-// save design
-const saveDesign = document.getElementById('save-design');
-saveDesign.saveDesign = (e) => {
-    // let downloadLink = document.createElement('a');
-    // downloadLink.setAttribute('download', 'CanvasAsImage.png');
-    // let dataURL = canvas.toDataURL('image/png');
-    // // console.log(dataURL);
-    // let url = dataURL.replace('image/png','application/octet-stream');
-    // downloadLink.setAttribute('href', dataURL);
-    // // console.log(url);
-    // downloadLink.click();
-    
-}
 
 
 
