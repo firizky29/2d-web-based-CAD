@@ -124,6 +124,68 @@ class Shape{
         this.vertices[vertexId].y += y;
     }
 
+    resizeSquare(e, relativePosition, vertexId){
+        let x = 2*(e.clientX - relativePosition[0])/canvas.offsetWidth;
+        let y = -2*(e.clientY - relativePosition[1])/canvas.offsetHeight;
+
+        if (vertexId === 0) {
+            this.vertices[0].x += x;
+            this.vertices[0].y += x;
+
+            this.vertices[1].x += x;
+            this.vertices[2].y += x;
+        } else if (vertexId === 1) {
+            this.vertices[1].x -= y;
+            this.vertices[1].y += y;
+
+            this.vertices[0].x -= y;
+            this.vertices[3].y += y;
+        } else if (vertexId === 2) {
+            this.vertices[2].x -= y;
+            this.vertices[2].y += y;
+
+            this.vertices[3].x -= y;
+            this.vertices[0].y += y;
+        } else if (vertexId === 3) {
+            this.vertices[3].x += x;
+            this.vertices[3].y += x;
+
+            this.vertices[2].x += x;
+            this.vertices[1].y += x;
+        }
+    }
+
+    resizeRectangle(e, relativePosition, vertexId){
+        let x = 2*(e.clientX - relativePosition[0])/canvas.offsetWidth;
+        let y = -2*(e.clientY - relativePosition[1])/canvas.offsetHeight;
+
+        if (vertexId === 0) {
+            this.vertices[0].x += x;
+            this.vertices[0].y += y;
+
+            this.vertices[1].x += x;
+            this.vertices[2].y += y;
+        } else if (vertexId === 1) {
+            this.vertices[1].x += x;
+            this.vertices[1].y += y;
+
+            this.vertices[0].x += x;
+            this.vertices[3].y += y;
+        } else if (vertexId === 2) {
+            this.vertices[2].x += x;
+            this.vertices[2].y += y;
+
+            this.vertices[3].x += x;
+            this.vertices[0].y += y;
+        } else if (vertexId === 3) {
+            this.vertices[3].x += x;
+            this.vertices[3].y += y;
+
+            this.vertices[2].x += x;
+            this.vertices[1].y += y;
+        }
+    }
+
     rotate(currRotation){
         rotation = -1 * (currRotation-this.theta); //reverse rotation
         this.theta = currRotation;
@@ -201,6 +263,14 @@ class Hitbox extends Shape{
     // parameter: gl, vertices
     constructor(gl, vertices){
         super(gl, vertices, gl.LINE_LOOP);
+    }
+}
+
+class Square extends Shape{
+    // Kelas Square
+    // parameter: gl, vertices
+    constructor(gl, vertices){
+        super(gl, vertices, gl.TRIANGLE_STRIP);
     }
 }
 

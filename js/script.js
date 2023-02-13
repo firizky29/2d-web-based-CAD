@@ -109,6 +109,32 @@ canvas.addEventListener('mousedown', (e) => {
             }
 
         }
+        else if (drawnShape == 'square') {
+            if (isDrawingSquare){
+                isDrawingSquare = false;
+            }
+            else{
+                isDrawingSquare = true;
+                vertices.push(new Vertex(point, color));
+                vertices.push(new Vertex(new Point(mousePosition.x, mousePosition.y+0.3), color));
+                vertices.push(new Vertex(new Point(mousePosition.x+0.3, mousePosition.y), color));
+                vertices.push(new Vertex(new Point(mousePosition.x+0.3, mousePosition.y+0.3), color));
+                objects.push(new Square(gl, vertices, color));
+            }
+        }
+        else if (drawnShape == 'rectangle') {
+            if (isDrawingRectangle){
+                isDrawingRectangle = false;
+            }
+            else {
+                isDrawingRectangle = true;
+                vertices.push(new Vertex(point, color));
+                vertices.push(new Vertex(new Point(mousePosition.x, mousePosition.y+0.3), color));
+                vertices.push(new Vertex(new Point(mousePosition.x+0.6, mousePosition.y), color));
+                vertices.push(new Vertex(new Point(mousePosition.x+0.6, mousePosition.y+0.3), color));
+                objects.push(new Rectangle(gl, vertices, color));
+            }
+        }
     }
     
     isDown = true;
@@ -134,6 +160,10 @@ canvas.mouseMoveListener = (e) => {
             lastVertices.x = mousePosition.x;
             lastVertices.y = mousePosition.y;
         }
+        // else if (drawnShape == 'square' && isDrawingSquare){
+        //     lastVertices.x = mousePosition.x;
+        //     lastVertices.y = mousePosition.y;
+        // }
     }
 
     /* HOVERING OBJECTS */
@@ -165,11 +195,27 @@ canvas.mouseMoveListener = (e) => {
     // Moving tool vertex
     if (isUsingSelectionTools && isDown && selectedShapeId != undefined && selectedVertexId != undefined){
         let object = objects[selectedShapeId];
-        object.moveVertex(e, relativePosition, selectedVertexId);
-        selectedVertices[0] = drawVertexHitbox(object, selectedVertexId);
-        selectedShapes[0] = drawHitbox(object);
-        hitboxes = [];
-        relativePosition = [e.clientX, e.clientY];
+        if (object instanceof Square) {
+            object.resizeSquare(e, relativePosition, selectedVertexId);
+            selectedVertices[0] = drawVertexHitbox(object, selectedVertexId);
+            selectedShapes[0] = drawHitbox(object);
+            hitboxes = [];
+            relativePosition = [e.clientX, e.clientY];
+        } 
+        else if (object instanceof Rectangle) {
+            object.resizeRectangle(e, relativePosition, selectedVertexId);
+            selectedVertices[0] = drawVertexHitbox(object, selectedVertexId);
+            selectedShapes[0] = drawHitbox(object);
+            hitboxes = [];
+            relativePosition = [e.clientX, e.clientY];
+        }
+        else {
+            object.moveVertex(e, relativePosition, selectedVertexId);
+            selectedVertices[0] = drawVertexHitbox(object, selectedVertexId);
+            selectedShapes[0] = drawHitbox(object);
+            hitboxes = [];
+            relativePosition = [e.clientX, e.clientY];
+        }
     }
 
     // Moving tool shape
@@ -193,6 +239,8 @@ isUsingDrawTools = false;
 drawnShape = 'line';
 isDrawingPolygon = false;
 isDrawing = false;
+isDrawingSquare = false;
+isDrawingRectangle = false;
 
 // SELECT BUTTON
 const selectButton = document.getElementById('select-button');
