@@ -269,15 +269,15 @@ lineShapeButton.lineShape = (e) => {
 
     lineShapeButton.classList.add("active");
 }
-// Change Length on Line
-const lengthInput = document.getElementById('line-length');
-document.getElementById("line-length").addEventListener("keyup", updateLength);
-function updateLength() {
-    length = document.getElementById("line-length").value;
-    object = objects[selectedShapeId];
-    object.setNewLength(lengthInput.value);
-    selectedShapes[0] = drawHitbox(object);
-}
+// // Change Length on Line
+// const lengthInput = document.getElementById('line-length');
+// document.getElementById("line-length").addEventListener("keyup", updateLength);
+// function updateLength() {
+//     length = document.getElementById("line-length").value;
+//     object = objects[selectedShapeId];
+//     object.setNewLength(lengthInput.value);
+//     selectedShapes[0] = drawHitbox(object);
+// }
 
 
 // square tool
@@ -325,37 +325,37 @@ polygonShapeButton.polygonShape = (e) => {
 }
 
 // Delete Vertex on Polygon
-const deletePolygonVertexButton = document.getElementById('deletePolygonVertex');
-deletePolygonVertexButton.deletePolygonVertex = (e) => {
-    console.log("deleting polygon vertex");
-    if (selectedVertexId != undefined){
-        object = objects[selectedShapeId];
-        object.deleteVertex(selectedVertexId);
-        updateDeletedObject(objects);
-    }
-}
+// const deletePolygonVertexButton = document.getElementById('deletePolygonVertex');
+// deletePolygonVertexButton.deletePolygonVertex = (e) => {
+//     console.log("deleting polygon vertex");
+//     if (selectedVertexId != undefined){
+//         object = objects[selectedShapeId];
+//         object.deleteVertex(selectedVertexId);
+//         updateDeletedObject(objects);
+//     }
+// }
 
 // GENERAL TOOLS
 // Rotation Tool
-const rotationSlider = document.getElementById('rotation-slider');
-document.getElementById("rotation-slider").addEventListener("input", updateRotation);
-function updateRotation() {
-    rotation = document.getElementById("rotation-slider").value;
-    if (selectedShapeId != undefined){
-        object = objects[selectedShapeId];
-        object.rotate(rotation);
-    }
-}
-// Color Tool
-const colorInput = document.getElementById('vertex-color');
-document.getElementById("vertex-color").addEventListener("input", updateColor);
-function updateColor() {
-    color = hexToRGB(document.getElementById("vertex-color").value);
-    if (selectedVertexId != undefined){
-        object = objects[selectedShapeId];
-        object.updateColor(selectedVertexId, color);
-    }
-}
+// const rotationSlider = document.getElementById('rotation-slider');
+// document.getElementById("rotation-slider").addEventListener("input", updateRotation);
+// function updateRotation() {
+//     rotation = document.getElementById("rotation-slider").value;
+//     if (selectedShapeId != undefined){
+//         object = objects[selectedShapeId];
+//         object.rotate(rotation);
+//     }
+// }
+// // Color Tool
+// const colorInput = document.getElementById('vertex-color');
+// document.getElementById("vertex-color").addEventListener("input", updateColor);
+// function updateColor() {
+//     color = hexToRGB(document.getElementById("vertex-color").value);
+//     if (selectedVertexId != undefined){
+//         object = objects[selectedShapeId];
+//         object.updateColor(selectedVertexId, color);
+//     }
+// }
 
 // UTILS
 // Reset Selection Variables
