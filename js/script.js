@@ -220,28 +220,11 @@ canvas.mouseMoveListener = (e) => {
     // Moving tool vertex
     if (isUsingSelectionTools && isDown && selectedShapeId != undefined && selectedVertexId != undefined){
         let object = objects[selectedShapeId];
-        if (object instanceof Square) {
-            object.moveVertex(e, relativePosition, selectedVertexId);
-            selectedVertices[0] = drawVertexHitbox(object, selectedVertexId);
-            selectedShapes[0] = drawHitbox(object);
-            hitboxes = [];
-            relativePosition = [e.clientX, e.clientY];
-        } 
-        else if (object instanceof Rectangle) {
-            object.moveVertex(e, relativePosition, selectedVertexId);
-            selectedVertices[0] = drawVertexHitbox(object, selectedVertexId);
-            selectedShapes[0] = drawHitbox(object);
-            hitboxes = [];
-            relativePosition = [e.clientX, e.clientY];
-        }
-        else {
-            object.moveVertex(e, relativePosition, selectedVertexId);
-            selectedVertices[0] = drawVertexHitbox(object, selectedVertexId);
-            selectedShapes[0] = drawHitbox(object);
-            hitboxes = [];
-            relativePosition = [e.clientX, e.clientY];
-        }
-
+        object.moveVertex(e, relativePosition, selectedVertexId);
+        selectedVertices[0] = drawVertexHitbox(object, selectedVertexId);
+        selectedShapes[0] = drawHitbox(object);
+        hitboxes = [];
+        relativePosition = [e.clientX, e.clientY];
         updateDetailItemVertex(object, object.vertices[selectedVertexId]);
     }
 
