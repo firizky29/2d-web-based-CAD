@@ -41,10 +41,13 @@ canvas.addEventListener('mousedown', (e) => {
             else if (hoveredShapeId != selectedShapeId){
                 selectedShapeId = undefined;
                 resetDetailItem();
+                resetSelectedLayer();
             }
             else if (hoveredVertexId == undefined){
                 selectedVertexId = undefined;
                 updateDetailItemShape(object);
+                const shapeItem = document.getElementById("shape-item-"+selectedShapeId);
+                shapeItem.dispatchEvent(new Event("click"));
             }
         } else{
             console.log("no object selected");
@@ -53,6 +56,7 @@ canvas.addEventListener('mousedown', (e) => {
             selectedShapeId = undefined;
             selectedVertexId = undefined;
             resetDetailItem();
+            resetSelectedLayer();
         }
     }
 
@@ -659,6 +663,13 @@ function selectVertexItem(e, i, j){
     sselectedVertices = [drawVertexHitbox(object, selectedVertexId)];
     selectedShapes = [drawHitbox(object)];
     updateDetailItemVertex(object, object.vertices[selectedVertexId]);
+}
+
+function resetSelectedLayer(){
+    const lastSelected = document.getElementsByClassName("selected")[0];
+    if(lastSelected != undefined){
+        lastSelected.classList.remove("selected");
+    }
 }
 
 
