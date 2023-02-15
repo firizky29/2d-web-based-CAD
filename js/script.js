@@ -34,11 +34,12 @@ canvas.addEventListener('mousedown', (e) => {
             if (hoveredVertexId != undefined){
                 selectedVertexId = hoveredVertexId;
                 console.log("selected vertex id: " + selectedVertexId);
-                selectedVertices = [drawVertexHitbox(object, selectedVertexId)];
-                updateDetailItemVertex(object, object.vertices[selectedVertexId]);
 
                 const vertexItem = document.getElementById("vertex-item-"+selectedShapeId + "-" + selectedVertexId);
                 vertexItem.dispatchEvent(new Event("click"));
+               
+                updateDetailItemVertex(object, object.vertices[selectedVertexId]);
+                selectedVertices = [drawVertexHitbox(object, selectedVertexId)];
             }
             else if (hoveredShapeId != selectedShapeId){
                 selectedShapeId = undefined;
@@ -146,15 +147,15 @@ canvas.addEventListener('mousedown', (e) => {
                 // vertices.push(new Vertex(new Point(mousePosition.x+0.6, mousePosition.y), color));
                 // vertices.push(new Vertex(new Point(mousePosition.x+0.6, mousePosition.y+0.3), color));
 
-                vertices.push(new Vertex(point, new Color(1,0,0)));
-                vertices.push(new Vertex(point, new Color(1,1,1)));
-                vertices.push(new Vertex(point, new Color(0,1,0)));
-                vertices.push(new Vertex(point, new Color(0,0,1)));
+                // vertices.push(new Vertex(point, new Color(1,0,0)));
+                // vertices.push(new Vertex(point, new Color(1,1,1)));
+                // vertices.push(new Vertex(point, new Color(0,1,0)));
+                // vertices.push(new Vertex(point, new Color(0,0,1)));
 
-                // vertices.push(new Vertex(point, color));
-                // vertices.push(new Vertex(point, color));
-                // vertices.push(new Vertex(point, color));
-                // vertices.push(new Vertex(point, color));
+                vertices.push(new Vertex(point, color));
+                vertices.push(new Vertex(point, color));
+                vertices.push(new Vertex(point, color));
+                vertices.push(new Vertex(point, color));
                 objects.push(new Rectangle(gl, vertices));
             }
         }
@@ -164,7 +165,6 @@ canvas.addEventListener('mousedown', (e) => {
     isDown = true;
     relativePosition = [e.clientX, e.clientY]
     console.log(objects);
-    console.log(selectedShapeId, isDown)
 })
 
 canvas.mouseMoveListener = (e) => { 
@@ -695,7 +695,7 @@ function selectVertexItem(e, i, j){
     selectedShapeId = i;
     selectedVertexId = j;
     let object = objects[selectedShapeId];
-    sselectedVertices = [drawVertexHitbox(object, selectedVertexId)];
+    selectedVertices = [drawVertexHitbox(object, selectedVertexId)];
     selectedShapes = [drawHitbox(object)];
     updateDetailItemVertex(object, object.vertices[selectedVertexId]);
 }
