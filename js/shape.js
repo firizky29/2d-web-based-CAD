@@ -1,10 +1,11 @@
 class Color {
     // Kelas Color
     // parameter: red, green, blue
-    constructor(red, green, blue){
+    constructor(red, green, blue, alpha){
         this.red = red;
         this.green = green;
         this.blue = blue;
+        this.alpha = alpha;
     }
 }
 
@@ -25,6 +26,7 @@ class Vertex {
         this.red = color.red;
         this.green = color.green;
         this.blue = color.blue;
+        this.alpha = color.alpha
     }
 }
 
@@ -32,11 +34,12 @@ class Shape{
     // Kelas abstrak shape secara umum
     // parameter: gl, vertices, GL_SHAPE
 
-    constructor(gl, vertices, GL_SHAPE){
+    constructor(gl, vertices, GL_SHAPE, name){
         this.gl = gl;               // WebGL context
         this.vertices = vertices;       // Array of vertex
         this.GL_SHAPE = GL_SHAPE;   // GL Shape
         this.theta = 0;
+        this.name = name;
     }
 
     // rendering
@@ -48,7 +51,8 @@ class Shape{
                 vertex.y, 
                 vertex.red, 
                 vertex.green, 
-                vertex.blue
+                vertex.blue,
+                vertex.alpha
             );
         }
 
@@ -210,6 +214,7 @@ class Shape{
         this.vertices[vertexId].red = color.red;
         this.vertices[vertexId].green = color.green;
         this.vertices[vertexId].blue = color.blue;
+        this.vertices[vertexId].alpha = color.alpha;
     }
 
 }
@@ -219,7 +224,7 @@ class Line extends Shape{
     // Kelas Line
     // parameter: gl, vertices
     constructor(gl, vertices){
-        super(gl, vertices, gl.LINES);
+        super(gl, vertices, gl.LINES, "Line");
         this.calculateDistance();
     }
 
@@ -262,7 +267,7 @@ class Hitbox extends Shape{
     // Kelas Hitbox
     // parameter: gl, vertices
     constructor(gl, vertices){
-        super(gl, vertices, gl.LINE_LOOP);
+        super(gl, vertices, gl.LINE_LOOP, "Hitbox");
     }
 }
 
@@ -270,7 +275,7 @@ class Square extends Shape{
     // Kelas Square
     // parameter: gl, vertices
     constructor(gl, vertices){
-        super(gl, vertices, gl.TRIANGLE_STRIP);
+        super(gl, vertices, gl.TRIANGLE_STRIP, "Square");
     }
 }
 
@@ -278,7 +283,7 @@ class Rectangle extends Shape{
     // Kelas Rectangle
     // parameter: gl, vertices
     constructor(gl, vertices){
-        super(gl, vertices, gl.TRIANGLE_STRIP);
+        super(gl, vertices, gl.TRIANGLE_STRIP, "Rectangle");
     }
 }
 
@@ -286,7 +291,7 @@ class Polygon extends Shape{
     // Kelas Polygon
     // parameter: gl, vertices
     constructor(gl, vertices){
-        super(gl, vertices, gl.TRIANGLE_FAN);
+        super(gl, vertices, gl.TRIANGLE_FAN, "Polygon");
     }
 
     deleteVertex(vertexId){

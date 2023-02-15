@@ -29,8 +29,8 @@ var selectedVertices = [];
 const canvas = document.getElementById('gl-canvas');
 const canvasContainer = document.getElementById('canvas-container');
 
-canvas.width  = 900;
-canvas.height = 800; 
+canvas.width  = 1300;
+canvas.height = 1300; 
 
 const gl = canvas.getContext('webgl') ?? canvas.getContext('experimental-webgl');
 
@@ -41,6 +41,9 @@ if(!gl) {
 // Set ukuran canvas
 gl.viewport(0, 0, canvas.width, canvas.height);
 gl.clearColor(1.0, 1.0, 1.0, 1.0);
+gl.disable(gl.DEPTH_TEST);
+gl.enable(gl.BLEND);
+gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
 // Setup shaders
 const program = initShaders(gl, vertexShaderText, fragmentShaderText);
@@ -61,16 +64,16 @@ function render(){
         2, // number of elements per attribute
         gl.FLOAT, //type of elements
         gl.FALSE,
-        5 * Float32Array.BYTES_PER_ELEMENT, // Size of an individual vertex
+        6 * Float32Array.BYTES_PER_ELEMENT, // Size of an individual vertex
         0 // Offset from the beginning of a single vertex to this attribute
     );
 
     gl.vertexAttribPointer(
         colorAttLoc, //Attribute location
-        3, // number of elements per attribute
+        4, // number of elements per attribute
         gl.FLOAT, //type of elements
         gl.FALSE,
-        5 * Float32Array.BYTES_PER_ELEMENT, // Size of an individual vertex
+        6 * Float32Array.BYTES_PER_ELEMENT, // Size of an individual vertex
         2 * Float32Array.BYTES_PER_ELEMENT // Offset from the beginning of a single vertex to this attribute
     );
 

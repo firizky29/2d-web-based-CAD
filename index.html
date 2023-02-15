@@ -125,12 +125,12 @@
 <body>
 
 
-	<div class="left-sidebar">
+	<div class="left-sidebar" id = "left-sidebar">
 		<div class="item-header" id="item-layer-header">
 			Layer
 		</div>
 		<hr>
-		<div class="item-layer">
+		<!-- <div class="item-layer">
 			<div class="item-layer-container">
 				<div class="shape-item selected">
 					<div class="shape-item-logo">
@@ -264,11 +264,9 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> -->
 
-
-
-		<div class="item-layer">
+		<!-- <div class="item-layer">
 			<div class="item-layer-container">
 				<div class="shape-item">
 					<div class="shape-item-logo">
@@ -299,13 +297,10 @@
 					</div>
 				</div>
 			</div>
-		</div>
-
-
+		</div> -->
 
 	</div>
-	</div>
-	<div class="right-sidebar">
+	<div class="right-sidebar" id="right-sidebar">
 		<!-- <div class="container">
 			<button onclick="deletePolygonVertex()" id="deletePolygonVertex">
 				Delete Polygon Vertex
@@ -326,12 +321,12 @@
 				</svg>
 			</div>
 		</div>
-		<div class="delete-button-container">
+		<div class="delete-button-container" id="delete-button-container">
 			<div class="delete-button">
 				Delete
 			</div>
 		</div>
-		<div class="detail-item" id="size-and-position">
+		<!-- <div class="detail-item" id="size-and-position">
 			<div class="item-container" id="position">
 				<div class="item">
 					<label for="x">X</label>
@@ -368,8 +363,6 @@
 			</div>
 		</div>
 		<hr>
-
-		<!-- TO DO: idnya dibedain -->
 		<div class="detail-item" id="color-picker">
 			<div class="item-header">
 				Fill
@@ -398,7 +391,7 @@
 					%
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
 	<div class="canvas-container" id="canvas-container">
 		<canvas id="gl-canvas" onmousemove="mouseMoveListener(event)">

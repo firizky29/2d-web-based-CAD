@@ -4,7 +4,9 @@ var selectedShapeId = undefined;
 var hoveredVertexId = undefined;
 var selectedVertexId = undefined;
 var relativePosition = [];
-var color = new Color(0.85,0.85,0.85); //make it input from user
+var color = new Color(0,0,0,0.5); //make it input from user
+
+// updateLayer();
 
 /* MOUSE INPUT */
 var isDown = false;
@@ -23,7 +25,9 @@ canvas.addEventListener('mousedown', (e) => {
             console.log("selected shape id: " + selectedShapeId);
     
             //update length to screen
-            document.getElementById("line-length").value = object.length;
+            // document.getElementById("line-length").value = object.length;
+
+            updateDetailItemShape(object);
         }
 
         // select vertex
@@ -116,9 +120,13 @@ canvas.addEventListener('mousedown', (e) => {
             else{
                 isDrawingSquare = true;
                 vertices.push(new Vertex(point, color));
-                vertices.push(new Vertex(new Point(mousePosition.x, mousePosition.y+0.3), color));
-                vertices.push(new Vertex(new Point(mousePosition.x+0.3, mousePosition.y), color));
-                vertices.push(new Vertex(new Point(mousePosition.x+0.3, mousePosition.y+0.3), color));
+                let mousePosition1 = getMousePositionOnCanvas(e.clientX, e.clientY+200);
+                let mousePosition2 = getMousePositionOnCanvas(e.clientX+200, e.clientY);
+                let mousePosition3 = getMousePositionOnCanvas(e.clientX+200, e.clientY+200);
+
+                vertices.push(new Vertex(new Point(mousePosition1.x, mousePosition1.y), color));
+                vertices.push(new Vertex(new Point(mousePosition2.x, mousePosition2.y), color));
+                vertices.push(new Vertex(new Point(mousePosition3.x, mousePosition3.y), color));
                 objects.push(new Square(gl, vertices, color));
             }
         }
@@ -129,12 +137,17 @@ canvas.addEventListener('mousedown', (e) => {
             else {
                 isDrawingRectangle = true;
                 vertices.push(new Vertex(point, color));
-                vertices.push(new Vertex(new Point(mousePosition.x, mousePosition.y+0.3), color));
-                vertices.push(new Vertex(new Point(mousePosition.x+0.6, mousePosition.y), color));
-                vertices.push(new Vertex(new Point(mousePosition.x+0.6, mousePosition.y+0.3), color));
+                let mousePosition1 = getMousePositionOnCanvas(e.clientX, e.clientY+150);
+                let mousePosition2 = getMousePositionOnCanvas(e.clientX+300, e.clientY);
+                let mousePosition3 = getMousePositionOnCanvas(e.clientX+300, e.clientY+150);
+
+                vertices.push(new Vertex(new Point(mousePosition1.x, mousePosition1.y), color));
+                vertices.push(new Vertex(new Point(mousePosition2.x, mousePosition2.y), color));
+                vertices.push(new Vertex(new Point(mousePosition3.x, mousePosition3.y), color));
                 objects.push(new Rectangle(gl, vertices, color));
             }
         }
+        updateLayer(objects);
     }
     
     isDown = true;
@@ -225,6 +238,7 @@ canvas.mouseMoveListener = (e) => {
         selectedShapes[0] = drawHitbox(object);
         hitboxes = [];
         relativePosition = [e.clientX, e.clientY];
+        updateDetailItemShape(object);
     }
 }
 // Mouse Up
@@ -467,6 +481,8 @@ document.body.addEventListener('click', (e) => {
         }
     }
 });
+
+
 
 
 
