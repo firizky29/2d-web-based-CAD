@@ -242,6 +242,16 @@ hr {
 #detail-item-header{
     margin-bottom: 0;
 }
+
+
+#convex-hull{
+    padding: 5px;
+}
+
+#convex-hull-container{
+    display: none;
+}
+
 .item-container {
     display: flex;
     width: 100%;

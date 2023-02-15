@@ -1,7 +1,7 @@
 class Color {
     // Kelas Color
     // parameter: red, green, blue
-    constructor(red, green, blue, alpha){
+    constructor(red, green, blue, alpha) {
         this.red = red;
         this.green = green;
         this.blue = blue;
@@ -9,10 +9,10 @@ class Color {
     }
 }
 
-class Point{
+class Point {
     // Kelas Point
     // parameter: x, y
-    constructor(x, y){
+    constructor(x, y) {
         this.x = x;
         this.y = y;
     }
@@ -20,7 +20,7 @@ class Point{
 class Vertex {
     // Kelas Vertex
     // parameter: x, y
-    constructor(point, color){
+    constructor(point, color) {
         this.x = point.x;
         this.y = point.y;
         this.red = color.red;
@@ -29,31 +29,31 @@ class Vertex {
         this.alpha = color.alpha
     }
 
-    translateX(x){
-        this.x =  -1 + 2*x/canvas.offsetWidth;
+    translateX(x) {
+        this.x = -1 + 2 * x / canvas.offsetWidth;
     }
 
-    translateY(y){
-        this.y = 1 - 2*y/canvas.offsetHeight;
+    translateY(y) {
+        this.y = 1 - 2 * y / canvas.offsetHeight;
     }
 
-    fill(color){
+    fill(color) {
         const colorRGB = hexToRGB(color);
         this.red = colorRGB.red;
         this.green = colorRGB.green;
         this.blue = colorRGB.blue;
     }
 
-    fillOpacity(alpha){
+    fillOpacity(alpha) {
         this.alpha = alpha;
     }
 }
 
-class Shape{
+class Shape {
     // Kelas abstrak shape secara umum
     // parameter: gl, vertices, GL_SHAPE
 
-    constructor(gl, vertices, GL_SHAPE, name){
+    constructor(gl, vertices, GL_SHAPE, name) {
         this.gl = gl;               // WebGL context
         this.vertices = vertices;       // Array of vertex
         this.GL_SHAPE = GL_SHAPE;   // GL Shape
@@ -63,14 +63,14 @@ class Shape{
     }
 
     // rendering
-    draw(){
+    draw() {
         let vertices = [];
         for (let vertex of this.vertices) {
             vertices.push(
-                vertex.x, 
-                vertex.y, 
-                vertex.red, 
-                vertex.green, 
+                vertex.x,
+                vertex.y,
+                vertex.red,
+                vertex.green,
                 vertex.blue,
                 vertex.alpha
             );
@@ -86,7 +86,7 @@ class Shape{
     }
 
     // find minimum x and minimum y
-    findMin(){
+    findMin() {
         let min_x = this.vertices[0].x;
         let min_y = this.vertices[0].y;
         for (let vertex of this.vertices) {
@@ -97,7 +97,7 @@ class Shape{
     }
 
     // find maximum x and maximum y
-    findMax(){
+    findMax() {
         let max_x = this.vertices[0].x;
         let max_y = this.vertices[0].y;
         for (let vertex of this.vertices) {
@@ -108,7 +108,7 @@ class Shape{
     }
 
     // find centroid
-    findCentroid(){
+    findCentroid() {
         // let min = this.findMin();
         // let max = this.findMax();
         // return new Point((min.x + max.x) / 2, (min.y + max.y) / 2);
@@ -122,13 +122,13 @@ class Shape{
             sum_y += vertex.y;
         }
 
-        return new Point(sum_x/this.vertices.length, sum_y/this.vertices.length);
+        return new Point(sum_x / this.vertices.length, sum_y / this.vertices.length);
     }
 
-    moveShape(e, relativePosition){
+    moveShape(e, relativePosition) {
         // update vertex
-        let x = 2*(e.clientX - relativePosition[0])/canvas.offsetWidth;
-        let y = -2*(e.clientY - relativePosition[1])/canvas.offsetHeight;
+        let x = 2 * (e.clientX - relativePosition[0]) / canvas.offsetWidth;
+        let y = -2 * (e.clientY - relativePosition[1]) / canvas.offsetHeight;
 
         // update all vertex
         for (let vertex of this.vertices) {
@@ -138,19 +138,19 @@ class Shape{
 
     }
 
-    moveVertex(e, relativePosition, vertexId){
+    moveVertex(e, relativePosition, vertexId) {
         // update vertex
-        let x = 2*(e.clientX - relativePosition[0])/canvas.offsetWidth;
-        let y = -2*(e.clientY - relativePosition[1])/canvas.offsetHeight;
-        
+        let x = 2 * (e.clientX - relativePosition[0]) / canvas.offsetWidth;
+        let y = -2 * (e.clientY - relativePosition[1]) / canvas.offsetHeight;
+
         // update vertex
         this.vertices[vertexId].x += x;
         this.vertices[vertexId].y += y;
     }
 
-    resizeSquare(e, relativePosition, vertexId){
-        let x = 2*(e.clientX - relativePosition[0])/canvas.offsetWidth;
-        let y = -2*(e.clientY - relativePosition[1])/canvas.offsetHeight;
+    resizeSquare(e, relativePosition, vertexId) {
+        let x = 2 * (e.clientX - relativePosition[0]) / canvas.offsetWidth;
+        let y = -2 * (e.clientY - relativePosition[1]) / canvas.offsetHeight;
 
         if (vertexId === 0) {
             this.vertices[0].x += x;
@@ -179,9 +179,9 @@ class Shape{
         }
     }
 
-    resizeRectangle(e, relativePosition, vertexId){
-        let x = 2*(e.clientX - relativePosition[0])/canvas.offsetWidth;
-        let y = -2*(e.clientY - relativePosition[1])/canvas.offsetHeight;
+    resizeRectangle(e, relativePosition, vertexId) {
+        let x = 2 * (e.clientX - relativePosition[0]) / canvas.offsetWidth;
+        let y = -2 * (e.clientY - relativePosition[1]) / canvas.offsetHeight;
 
         if (vertexId === 0) {
             this.vertices[0].x += x;
@@ -210,12 +210,12 @@ class Shape{
         }
     }
 
-    rotate(currRotation){
-        let rotation = -1 * (currRotation-this.theta); //reverse rotation
+    rotate(currRotation) {
+        let rotation = -1 * (currRotation - this.theta); //reverse rotation
         this.theta = currRotation;
 
         let centroid = getReverseMousePosition(this.findCentroid());
-        rotation = rotation/ 180 * Math.PI ;
+        rotation = rotation / 180 * Math.PI;
         for (let vertex of this.vertices) {
             let vertex_ = getReverseMousePosition(vertex);
             //euclidien distance
@@ -223,7 +223,7 @@ class Shape{
 
             // angle
             let arg = norm(Math.atan2(vertex_.y - centroid.y, vertex_.x - centroid.x) + rotation);
-            
+
             // new vertex
             vertex_.x = centroid.x + dis * Math.cos(arg);
             vertex_.y = centroid.y + dis * Math.sin(arg);
@@ -233,66 +233,66 @@ class Shape{
         }
     }
 
-    fill(color){
+    fill(color) {
         const colorRGB = hexToRGB(color);
-        for(let vertex of this.vertices){
+        for (let vertex of this.vertices) {
             vertex.red = colorRGB.red;
             vertex.green = colorRGB.green;
             vertex.blue = colorRGB.blue;
         }
     }
 
-    fillOpacity(opacity){
-        for(let vertex of this.vertices){
+    fillOpacity(opacity) {
+        for (let vertex of this.vertices) {
             vertex.alpha = opacity;
         }
     }
 
-    translateX(x){
+    translateX(x) {
         const d = screenToCanvasX(x) - this.findMin().x;
         for (let vertex of this.vertices) {
             vertex.x += d;
         }
     }
 
-    translateY(y){
+    translateY(y) {
         const d = screenToCanvas(y) - this.findMax().y;
         for (let vertex of this.vertices) {
             vertex.y += d;
         }
     }
 
-    stretchX(w){
+    stretchX(w) {
         const vertexMin = canvasToScreen(this.findMin());
         const vertexMax = canvasToScreen(this.findMax());
         const lastWidth = Math.abs(vertexMax.x - vertexMin.x);
         for (let vertex of this.vertices) {
             vertex.x -= screenToCanvasX(vertexMin.x);
-            vertex.x *= w/lastWidth;
+            vertex.x *= w / lastWidth;
             vertex.x += screenToCanvasX(vertexMin.x);
         }
     }
 
-    stretchY(h){
+    stretchY(h) {
         const vertexMin = canvasToScreen(this.findMin());
         const vertexMax = canvasToScreen(this.findMax());
         const lastHeight = Math.abs(vertexMax.y - vertexMin.y);
         for (let vertex of this.vertices) {
             vertex.y -= screenToCanvasY(vertexMax.y);
-            vertex.y *= h/lastHeight;
+            vertex.y *= h / lastHeight;
             vertex.y += screenToCanvasY(vertexMax.y);
         }
     }
 
-    dilate(k){
+    dilate(k) {
         const centroid = canvasToScreen(this.findCentroid());
         for (let vertex of this.vertices) {
             vertex.x = canvasToScreenX(vertex.x);
             vertex.y = canvasToScreenY(vertex.y);
             vertex.x -= centroid.x;
             vertex.y -= centroid.y;
-            vertex.x *= k/this.dilatation;
-            vertex.y *= k/this.dilatation;
+            vertex.x *= k / this.dilatation;
+            vertex.y *= k / this.dilatation;
             vertex.x += centroid.x;
             vertex.y += centroid.y;
             vertex.x = screenToCanvasX(vertex.x);
@@ -304,16 +304,16 @@ class Shape{
 }
 
 
-class Line extends Shape{
+class Line extends Shape {
     // Kelas Line
     // parameter: gl, vertices
-    constructor(gl, vertices){
+    constructor(gl, vertices) {
         super(gl, vertices, gl.LINES, "Line");
         this.calculateDistance();
     }
 
     // setter points
-    setPoints(points){
+    setPoints(points) {
         // loop vertices
         for (let i = 0; i < this.vertices.length; i++) {
             this.vertices[i].x = points[i].x;
@@ -322,65 +322,125 @@ class Line extends Shape{
         this.calculateDistance();
     }
 
-    calculateDistance(){
+    calculateDistance() {
         this.length = Math.sqrt(Math.pow(this.vertices[0].x - this.vertices[1].x, 2) + Math.pow(this.vertices[0].y - this.vertices[1].y, 2));
     }
 
-    setNewLength(newLength){
-        if (length <=0){
+    setNewLength(newLength) {
+        if (length <= 0) {
             return;
         }
 
         this.calculateDistance();
         let centroid = this.findCentroid();
-        let lambdaX = (newLength/this.length) * (this.vertices[0].x - this.vertices[1].x) / 2;
-        let lambdaY = (newLength/this.length) * (this.vertices[0].y - this.vertices[1].y) / 2;
+        let lambdaX = (newLength / this.length) * (this.vertices[0].x - this.vertices[1].x) / 2;
+        let lambdaY = (newLength / this.length) * (this.vertices[0].y - this.vertices[1].y) / 2;
 
         this.vertices[0].x = centroid.x - lambdaX
         this.vertices[0].y = centroid.y - lambdaY;
 
         this.vertices[1].x = centroid.x + lambdaX;
         this.vertices[1].y = centroid.y + lambdaY;
-        
-        this.calculateDistance();    
+
+        this.calculateDistance();
     }
 }
 
 
-class Hitbox extends Shape{
+class Hitbox extends Shape {
     // Kelas Hitbox
     // parameter: gl, vertices
-    constructor(gl, vertices){
+    constructor(gl, vertices) {
         super(gl, vertices, gl.LINE_LOOP, "Hitbox");
     }
 }
 
-class Square extends Shape{
+class Square extends Shape {
     // Kelas Square
     // parameter: gl, vertices
-    constructor(gl, vertices){
+    constructor(gl, vertices) {
         super(gl, vertices, gl.TRIANGLE_STRIP, "Square");
     }
 }
 
-class Rectangle extends Shape{
+class Rectangle extends Shape {
     // Kelas Rectangle
     // parameter: gl, vertices
-    constructor(gl, vertices){
+    constructor(gl, vertices) {
         super(gl, vertices, gl.TRIANGLE_STRIP, "Rectangle");
     }
 }
 
-class Polygon extends Shape{
+class Polygon extends Shape {
     // Kelas Polygon
     // parameter: gl, vertices
-    constructor(gl, vertices){
+    constructor(gl, vertices) {
         super(gl, vertices, gl.TRIANGLE_FAN, "Polygon");
     }
 
-    deleteVertex(vertexId){
-        this.vertices.splice(vertexId,1);
+    deleteVertex(vertexId) {
+        this.vertices.splice(vertexId, 1);
     }
+
+    // A function to find the bottom-left point
+    findBottomLeft(temp) {
+        let bottomLeft = 0;
+        for (let i = 1; i < temp.length; i++) {
+            if (temp[i].y < temp[bottomLeft].y ||
+                (temp[i].y == temp[bottomLeft].y &&
+                    temp[i].x < temp[bottomLeft].x)) {
+                bottomLeft = i;
+            }
+        }
+        return bottomLeft;
+    }
+
+    // A function to calculate the cross product of two vectors
+    crossProduct(p1, p2, p3) {
+        return ((p2.x - p1.x) * (p3.y - p1.y)) -
+            ((p2.y - p1.y) * (p3.x - p1.x));
+    }
+
+    // The main function to find the convex hull
+    convexHull() {
+        // Sort the points by polar angle with respect to the bottom-left point
+        let tempVertices = [];
+        for (let i = 0; i < this.vertices.length; i++) {
+            tempVertices.push(this.vertices[i]);
+        }
+        const bottomLeft = this.findBottomLeft(tempVertices);
+
+        tempVertices.sort((a, b) => {
+            const angleA = Math.atan2(a.y - tempVertices[bottomLeft].y, a.x - tempVertices[bottomLeft].x);
+            const angleB = Math.atan2(b.y - tempVertices[bottomLeft].y, b.x - tempVertices[bottomLeft].x);
+            if (angleA < angleB) return -1;
+            if (angleA > angleB) return 1;
+            // If angles are equal, choose the closest point to the bottom-left point
+            return (a.x < b.x) ? -1 : 1;
+        });
+
+        // Create a stack and add the first three points
+        const stack = [tempVertices[0], tempVertices[1], tempVertices[2]];
+
+        // Iterate through the rest of the tempVertices
+        for (let i = 3; i < tempVertices.length; i++) {
+            // Remove tempVertices that create a concave angle
+            while (stack.length > 1 && this.crossProduct(stack[stack.length - 2], stack[stack.length - 1], tempVertices[i]) <= 0) {
+                stack.pop();
+            }
+            // Add the current point to the stack
+            stack.push(this.vertices[i]);
+        }
+
+        this.convexHullArray = stack;
+        console.log(this.convexHullArray);
+        return stack;
+    }
+
+    draw(){
+        super.draw();
+    }
+
 
 }
 
