@@ -4,7 +4,7 @@ var selectedShapeId = undefined;
 var hoveredVertexId = undefined;
 var selectedVertexId = undefined;
 var relativePosition = [];
-var color = new Color(0,0,0,0.5); //make it input from user
+var color = new Color(0,0,1,0.5); //make it input from user
 
 
 /* MOUSE INPUT */
@@ -22,6 +22,9 @@ canvas.addEventListener('mousedown', (e) => {
             let object = objects[selectedShapeId];
             selectedShapes = [drawHitbox(object)];
             console.log("selected shape id: " + selectedShapeId);
+
+            const shapeItem = document.getElementById("shape-item-"+selectedShapeId);
+            shapeItem.dispatchEvent(new Event("click"));
             updateDetailItemShape(object);
         }         
         // select vertex
@@ -33,13 +36,20 @@ canvas.addEventListener('mousedown', (e) => {
                 console.log("selected vertex id: " + selectedVertexId);
                 selectedVertices = [drawVertexHitbox(object, selectedVertexId)];
                 updateDetailItemVertex(object, object.vertices[selectedVertexId]);
+
+                const vertexItem = document.getElementById("vertex-item-"+selectedShapeId + "-" + selectedVertexId);
+                vertexItem.dispatchEvent(new Event("click"));
             }
             else if (hoveredShapeId != selectedShapeId){
                 selectedShapeId = undefined;
+                resetDetailItem();
+                resetSelectedLayer();
             }
             else if (hoveredVertexId == undefined){
                 selectedVertexId = undefined;
                 updateDetailItemShape(object);
+                const shapeItem = document.getElementById("shape-item-"+selectedShapeId);
+                shapeItem.dispatchEvent(new Event("click"));
             }
         } 
 
@@ -50,6 +60,7 @@ canvas.addEventListener('mousedown', (e) => {
             selectedShapeId = undefined;
             selectedVertexId = undefined;
             resetDetailItem();
+            resetSelectedLayer();
         }
 
         if(selectedVertexId == undefined){
@@ -524,6 +535,178 @@ function clickedDeleteItem(e){
         resetDetailItem();
     }
 }
+
+function updateX(e){
+    if (selectedShapeId != undefined){
+        object = objects[selectedShapeId];
+        if(selectedVertexId != undefined && object.name !== "Rectangle" && object.name !== "Square"){
+            object.vertices[selectedVertexId].translateX(e.target.value);
+        } else{
+            object.translateX(e.target.value);
+        }
+    }
+    resetHitBox();
+}
+
+function updateY(e){
+    if (selectedShapeId != undefined){
+        object = objects[selectedShapeId];
+        if(selectedVertexId != undefined && object.name !== "Rectangle" && object.name !== "Square"){
+            object.vertices[selectedVertexId].translateY(e.target.value);
+        } else{
+            object.translateY(e.target.value);
+        }
+    }
+    resetHitBox();
+}
+
+function updateWidth(e){
+    if (selectedShapeId != undefined){
+        e.target.value = Math.max(1, e.target.value);
+        object = objects[selectedShapeId];
+        object.stretchX(e.target.value);
+
+        if(object.name === "Square"){
+            let heightInput = document.getElementById("height");
+            heightInput.value = e.target.value;
+            object.stretchY(e.target.value);
+        }
+    }
+    resetHitBox();
+}
+
+function updateHeight(e){
+    if (selectedShapeId != undefined){
+        e.target.value = Math.max(1, e.target.value);
+        object = objects[selectedShapeId];
+        object.stretchY(e.target.value);
+        
+        if(object.name === "Square"){
+            let widthInput = document.getElementById("width");
+            widthInput.value = e.target.value;
+            object.stretchX(e.target.value);
+        }
+    }
+    resetHitBox();
+}
+
+function updateColor(e){
+    if (selectedShapeId != undefined){
+        object = objects[selectedShapeId];
+        if(selectedVertexId != undefined){
+            object.vertices[selectedVertexId].fill(e.target.value);
+        } else{
+            object.fill(e.target.value);
+        }
+
+        const colorHex = document.getElementById("color-hex");
+        const rgbColor = hexToRGB(e.target.value);
+        colorHex.value = RGBToHex(rgbColor.red, rgbColor.green, rgbColor.blue);
+    }
+    resetHitBox();
+}
+
+function updateColorHex(e){
+    if (selectedShapeId != undefined && e.target.value.length == 6 && e.target.value.match(/^[0-9A-F]{6}$/i)){
+        object = objects[selectedShapeId];
+        if(selectedVertexId != undefined){
+            object.vertices[selectedVertexId].fill("#" + e.target.value);
+        } else{
+            object.fill("#" + e.target.value);
+        }
+        
+        const color = document.getElementById("color");
+        color.value = "#" + e.target.value;
+    }
+    resetHitBox();
+}
+
+function updateOpacity(e){
+    // e.target.value is a float number concatenated with a character percentage, validate it
+    const regex = /^([1-9]|[1-9]\d|100)([,.]\d+)?%?$/;
+    
+    if (selectedShapeId != undefined && e.target.value.match(regex) != null){
+        const [match, numberStr, decimalStr] = e.target.value.match(regex);
+        const number = parseFloat(numberStr + (decimalStr || ""));
+        const opacity = number / 100;
+        object = objects[selectedShapeId];
+        e.target.value = number + "%";
+        if(selectedVertexId != undefined){
+            object.vertices[selectedVertexId].fillOpacity(opacity);
+        } else{
+            object.fillOpacity(opacity);
+        }
+    }
+    resetHitBox();
+}
+
+
+function updateDilate(e){
+    if (selectedShapeId != undefined){
+        object = objects[selectedShapeId];
+        object.dilate(Math.max(e.target.value, 0.0001)/100);
+    }
+    resetHitBox();
+}
+
+function resetHitBox(){
+    if(selectedShapeId != undefined){
+        if(selectedVertexId != undefined){
+            selectedVertices[0] = drawVertexHitbox(object, selectedVertexId);
+        }
+        selectedShapes[0] = drawHitbox(object);
+        hitboxes = [];
+    }
+}
+
+function selectShapeItem(e, i){
+    resetSelectionTools();
+    isUsingDrawTools = false;
+    isUsingSelectionTools = true;
+
+    const lastSelected= document.getElementsByClassName("selected")[0];
+    if(lastSelected != undefined){
+        lastSelected.classList.remove("selected");
+    }
+
+    const shapeItem = document.getElementById("shape-item-" + i);
+    shapeItem.classList.add("selected");
+
+    selectedShapeId = i;
+    selectedVertexId = undefined;
+    let object = objects[selectedShapeId];
+    selectedShapes = [drawHitbox(object)];
+    updateDetailItemShape(object);
+}
+
+function selectVertexItem(e, i, j){
+    resetSelectionTools();
+    isUsingDrawTools = false;
+    isUsingSelectionTools = true;
+    
+    const lastSelected = document.getElementsByClassName("selected")[0];
+    if(lastSelected!= undefined){
+        lastSelected.classList.remove("selected");
+    }
+
+    const vertexItem = document.getElementById("vertex-item-"+ i + '-' + j);
+    vertexItem.classList.add("selected");
+
+    selectedShapeId = i;
+    selectedVertexId = j;
+    let object = objects[selectedShapeId];
+    sselectedVertices = [drawVertexHitbox(object, selectedVertexId)];
+    selectedShapes = [drawHitbox(object)];
+    updateDetailItemVertex(object, object.vertices[selectedVertexId]);
+}
+
+function resetSelectedLayer(){
+    const lastSelected = document.getElementsByClassName("selected")[0];
+    if(lastSelected != undefined){
+        lastSelected.classList.remove("selected");
+    }
+}
+
 
 
 

@@ -28,6 +28,25 @@ class Vertex {
         this.blue = color.blue;
         this.alpha = color.alpha
     }
+
+    translateX(x){
+        this.x =  -1 + 2*x/canvas.offsetWidth;
+    }
+
+    translateY(y){
+        this.y = 1 - 2*y/canvas.offsetHeight;
+    }
+
+    fill(color){
+        const colorRGB = hexToRGB(color);
+        this.red = colorRGB.red;
+        this.green = colorRGB.green;
+        this.blue = colorRGB.blue;
+    }
+
+    fillOpacity(alpha){
+        this.alpha = alpha;
+    }
 }
 
 class Shape{
@@ -195,27 +214,91 @@ class Shape{
         let rotation = -1 * (currRotation-this.theta); //reverse rotation
         this.theta = currRotation;
 
-        let centroid = this.findCentroid();
+        let centroid = getReverseMousePosition(this.findCentroid());
         rotation = rotation/ 180 * Math.PI ;
         for (let vertex of this.vertices) {
+            let vertex_ = getReverseMousePosition(vertex);
             //euclidien distance
-            let dis = euclideanDistance(centroid, vertex);
+            let dis = euclideanDistance(centroid, vertex_);
 
             // angle
-            let arg = norm(Math.atan2(vertex.y - centroid.y, vertex.x - centroid.x) + rotation);
+            let arg = norm(Math.atan2(vertex_.y - centroid.y, vertex_.x - centroid.x) + rotation);
             
             // new vertex
-            vertex.x = centroid.x + dis * Math.cos(arg);
-            vertex.y = centroid.y + dis * Math.sin(arg);
+            vertex_.x = centroid.x + dis * Math.cos(arg);
+            vertex_.y = centroid.y + dis * Math.sin(arg);
+            let temp = getMousePositionOnCanvas(vertex_.x, vertex_.y);
+            vertex.x = temp.x;
+            vertex.y = temp.y;
         }
     }
 
-    updateColor(vertexId, color){   
-        // set new vertex color
-        this.vertices[vertexId].red = color.red;
-        this.vertices[vertexId].green = color.green;
-        this.vertices[vertexId].blue = color.blue;
-        this.vertices[vertexId].alpha = color.alpha;
+    fill(color){
+        const colorRGB = hexToRGB(color);
+        for(let vertex of this.vertices){
+            vertex.red = colorRGB.red;
+            vertex.green = colorRGB.green;
+            vertex.blue = colorRGB.blue;
+        }
+    }
+
+    fillOpacity(opacity){
+        for(let vertex of this.vertices){
+            vertex.alpha = opacity;
+        }
+    }
+
+    translateX(x){
+        const d = screenToCanvasX(x) - this.findMin().x;
+        for (let vertex of this.vertices) {
+            vertex.x += d;
+        }
+    }
+
+    translateY(y){
+        const d = screenToCanvas(y) - this.findMax().y;
+        for (let vertex of this.vertices) {
+            vertex.y += d;
+        }
+    }
+
+    stretchX(w){
+        const vertexMin = canvasToScreen(this.findMin());
+        const vertexMax = canvasToScreen(this.findMax());
+        const lastWidth = Math.abs(vertexMax.x - vertexMin.x);
+        for (let vertex of this.vertices) {
+            vertex.x -= screenToCanvasX(vertexMin.x);
+            vertex.x *= w/lastWidth;
+            vertex.x += screenToCanvasX(vertexMin.x);
+        }
+    }
+
+    stretchY(h){
+        const vertexMin = canvasToScreen(this.findMin());
+        const vertexMax = canvasToScreen(this.findMax());
+        const lastHeight = Math.abs(vertexMax.y - vertexMin.y);
+        for (let vertex of this.vertices) {
+            vertex.y -= screenToCanvasY(vertexMax.y);
+            vertex.y *= h/lastHeight;
+            vertex.y += screenToCanvasY(vertexMax.y);
+        }
+    }
+
+    dilate(k){
+        const centroid = canvasToScreen(this.findCentroid());
+        for (let vertex of this.vertices) {
+            vertex.x = canvasToScreenX(vertex.x);
+            vertex.y = canvasToScreenY(vertex.y);
+            vertex.x -= centroid.x;
+            vertex.y -= centroid.y;
+            vertex.x *= k/this.dilatation;
+            vertex.y *= k/this.dilatation;
+            vertex.x += centroid.x;
+            vertex.y += centroid.y;
+            vertex.x = screenToCanvasX(vertex.x);
+            vertex.y = screenToCanvasY(vertex.y);
+        }
+        this.dilatation = k;
     }
 
 }

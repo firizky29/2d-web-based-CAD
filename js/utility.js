@@ -139,15 +139,11 @@ function hoverVertex(e, object) {
     }
 }
 
-function hexToDec(hex) {
-    return parseInt(hex, 16);
-}
 
 function hexToRGB(hexColor) {
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hexColor);
-    const r = hexToDec(result[1]);
-    const g = hexToDec(result[2]);
-    const b = hexToDec(result[3]);
+    const r = parseInt(hexColor.substr(1, 2), 16);
+    const g = parseInt(hexColor.substr(3, 2), 16);
+    const b = parseInt(hexColor.substr(5, 2), 16);
 
     return new Color(r / 255, g / 255, b / 255, 1);
 }
@@ -178,6 +174,42 @@ function getMousePositionOnCanvas(X, Y) {
     return { x, y };
 }
 
+function getReverseMousePosition(object) {
+    let x = (object.x + 1)*canvas.offsetWidth/2 + canvas.offsetLeft + canvasContainer.offsetLeft;
+    let y = (1 - object.y)*canvas.offsetHeight/2 + canvas.offsetTop + canvasContainer.offsetTop;
+
+    return { x, y };
+}
+
+function canvasToScreenX(x){
+    return (x + 1) * canvas.offsetWidth / 2;
+}
+
+function screenToCanvasX(x){
+    return (2 * x / canvas.offsetWidth) - 1;
+}
+
+function canvasToScreenY(y){
+    return (1 - y) * canvas.offsetHeight / 2;
+}
+
+function screenToCanvasY(y){
+    return 1 - (2 * y / canvas.offsetHeight);
+}
+
+function screenToCanvas(object){
+    let x = screenToCanvasX(object.x);
+    let y = screenToCanvasY(object.y);
+
+    return { x, y };
+}
+
+function canvasToScreen(object){
+    let x = canvasToScreenX(object.x);
+    let y = canvasToScreenY(object.y);
+
+    return { x, y };
+}
 
 function updateLayer(objects) {
     const rectangleLogo = `
@@ -239,6 +271,12 @@ function updateLayer(objects) {
             </div>
         `);
 
+        let shapeItem = document.getElementsByClassName("shape-item")[i];
+        shapeItem.setAttribute("id", "shape-item-" + i);
+        shapeItem.addEventListener("click", (event) => {
+            selectShapeItem(event, i);
+        });
+
         let shapeItemLogo = document.getElementsByClassName("shape-item-logo")[i];
         let shapeItemName = document.getElementsByClassName("shape-item-name")[i];
 
@@ -277,11 +315,16 @@ function updateLayer(objects) {
                 </div>
             `);
 
+            let vertexItem = document.getElementsByClassName("vertex-item")[curVertex];
+            vertexItem.setAttribute("id", "vertex-item-"+ i + '-' + j);
+            vertexItem.addEventListener("click", (event) => {
+                selectVertexItem(event, i, j);
+            });
+
             let vertexItemName = document.getElementsByClassName("vertex-item-name")[curVertex];
             curVertex++;
             vertexItemName.insertAdjacentText('beforeend', "Vertex ");
             vertexItemName.insertAdjacentHTML('beforeend', "<span class='vertex-item-number'>" + (j + 1) + "</span>");
-            let vertexItem = itemLayerContainer.lastChild;
         }
     }
 }
@@ -315,11 +358,11 @@ function updateDetailItemShape(object){
             <div class="item-container" id="size">
                 <div class="item">
                     <label for="width">W</label>
-                    <input type="number" id="width" value="0">
+                    <input type="number" id="width" value="1" min="1">
                 </div>
                 <div class="item">
                     <label for="height">H</label>
-                    <input type="number" id="height" value="0">
+                    <input type="number" id="height" value="1" min="1">
                 </div>
             </div>
         </div>
@@ -339,7 +382,6 @@ function updateDetailItemShape(object){
         </div>
         <hr>
 
-        <!-- TO DO: idnya dibedain -->
         <div class="detail-item" id="color-picker">
             <div class="item-header">
                 Fill
@@ -362,7 +404,7 @@ function updateDetailItemShape(object){
             </div>
             <div class="item-container">
                 <div class="item">
-                    <input type="number" id="line-width" value="100" min="0.0000" step="0.1000">
+                    <input type="number" id="dilate" value="100" min="0.00001" step="0.1000">
                 </div>
                 <div class="item">
                     %
@@ -387,27 +429,23 @@ function updateDetailItemShape(object){
     let color = document.getElementById("color");
     let colorHex = document.getElementById("color-hex");
     let opacity = document.getElementById("opacity");
-    let lineWidth = document.getElementById("line-width");
+    let dilate = document.getElementById("dilate");
 
-    let minVertex = object.findMin();
-    let maxVertex = object.findMax();
+    let minVertex = canvasToScreen(object.findMin());
+    let maxVertex = canvasToScreen(object.findMax());
 
-    let x_1 = (minVertex.x+1)/2;
-    let y_1 = (1-minVertex.y)/2;
-    let x_2 = (maxVertex.x+1)/2;
-    let y_2 = (1-maxVertex.y)/2;
+    x.value = Math.min(minVertex.x, maxVertex.x);
+    y.value = Math.min(minVertex.y, maxVertex.y);
 
-    x.value = Math.min(x_1, x_2);
-    x.value *= canvas.offsetWidth;
-    y.value = Math.min(y_1, y_2);
-    y.value *= canvas.offsetHeight;
+    x.addEventListener("change", updateX);
+    y.addEventListener("change", updateY);
 
+    width.value = Math.abs(maxVertex.x - minVertex.x);
+    height.value = Math.abs(maxVertex.y - minVertex.y);
 
-
-    width.value = Math.abs(x_1-x_2)*canvas.offsetWidth;
-    height.value = Math.abs(y_1-y_2)*canvas.offsetHeight;
+    width.addEventListener("change", updateWidth);
+    height.addEventListener("change", updateHeight);
     
-
     rotation.addEventListener("input", updateRotation);
     rotation.addEventListener("change", updateRotation);
     rotationValue.innerHTML = object.theta + "<span>&deg</span>";
@@ -429,7 +467,13 @@ function updateDetailItemShape(object){
     colorHex.value = RGBToHex(tmpR, tmpG, tmpB);
     opacity.value = tmpA * 100 + "%";
 
-    lineWidth.value = object.dilatation * 100;
+    color.addEventListener("input", updateColor);
+    colorHex.addEventListener("input", updateColorHex);
+    opacity.addEventListener("input", updateOpacity);
+
+    dilate.value = object.dilatation * 100;
+
+    dilate.addEventListener("input", updateDilate);
 }
 
 function updateDetailItemVertex(object, vertex){
@@ -490,14 +534,20 @@ function updateDetailItemVertex(object, vertex){
     let colorHex = document.getElementById("color-hex");
     let opacity = document.getElementById("opacity");
 
-    x.value = (vertex.x+1)/2;
-    x.value *= canvas.offsetWidth;
-    y.value = (1-vertex.y)/2;
-    y.value *= canvas.offsetHeight;
+    x.value = canvasToScreenX(vertex.x);
+    y.value = canvasToScreenY(vertex.y);
+
+    x.addEventListener("change", updateX);
+    y.addEventListener("change", updateY);
 
     color.value = '#' + RGBToHex(vertex.red, vertex.green, vertex.blue);
     colorHex.value = RGBToHex(vertex.red, vertex.green, vertex.blue);
     opacity.value = vertex.alpha * 100 + "%";
+
+
+    color.addEventListener("input", updateColor);
+    colorHex.addEventListener("input", updateColorHex);
+    opacity.addEventListener("input", updateOpacity);
 
 
 }
