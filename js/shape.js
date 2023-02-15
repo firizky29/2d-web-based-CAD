@@ -544,8 +544,6 @@ class Rectangle extends Shape {
             theta2 = 2 * this.theta0 - Math.PI;
         }
 
-        console.log(this.theta)
-
         // 90 degree after vertex by theta
         let vertex1 = [
             centroid[0] + distance * Math.cos(angle + theta1),
@@ -600,7 +598,7 @@ class Rectangle extends Shape {
             (this.vertices[0].y + this.vertices[3].y)/2
         ];
 
-        this.theta0 = Math.atan2(this.vertices[0].y - centroid[1], this.vertices[0].x - centroid[0]);
+        this.theta0 = - Math.atan2(this.vertices[0].y - centroid[1], this.vertices[0].x - centroid[0]) + Math.PI/2;
     }
 
 }
