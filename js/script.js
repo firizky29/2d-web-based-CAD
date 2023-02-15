@@ -260,7 +260,7 @@ canvas.mouseMoveListener = (e) => {
     }
 
     // Moving tool shape
-    if (isUsingSelectionTools  && isDown && selectedShapeId != undefined){
+    if (isUsingSelectionTools  && isDown && selectedShapeId != undefined && selectedVertexId == undefined){
         let object = objects[selectedShapeId];
         object.moveShape(e, relativePosition);
         selectedShapes[0] = drawHitbox(object);
