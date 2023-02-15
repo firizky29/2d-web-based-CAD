@@ -4,7 +4,7 @@ var selectedShapeId = undefined;
 var hoveredVertexId = undefined;
 var selectedVertexId = undefined;
 var relativePosition = [];
-var color = new Color(0,0,1,0.5); //make it input from user
+var color = new Color(0.85,0.85,0.85,1); //make it input from user
 
 
 /* MOUSE INPUT */
