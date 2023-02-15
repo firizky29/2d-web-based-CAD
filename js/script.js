@@ -128,11 +128,6 @@ canvas.addEventListener('mousedown', (e) => {
             }
             else{
                 isDrawingSquare = true;
-                // vertices.push(new Vertex(point, color));
-                // vertices.push(new Vertex(new Point(mousePosition.x, mousePosition.y+0.3), color));
-                // vertices.push(new Vertex(new Point(mousePosition.x+0.3, mousePosition.y), color));
-                // vertices.push(new Vertex(new Point(mousePosition.x+0.3, mousePosition.y+0.3), color));
-
                 vertices.push(new Vertex(point, color));
                 vertices.push(new Vertex(point, color));
                 vertices.push(new Vertex(point, color));
@@ -147,15 +142,6 @@ canvas.addEventListener('mousedown', (e) => {
             }
             else {
                 isDrawingRectangle = true;
-                // vertices.push(new Vertex(point, color));
-                // vertices.push(new Vertex(new Point(mousePosition.x, mousePosition.y+0.3), color));
-                // vertices.push(new Vertex(new Point(mousePosition.x+0.6, mousePosition.y), color));
-                // vertices.push(new Vertex(new Point(mousePosition.x+0.6, mousePosition.y+0.3), color));
-
-                // vertices.push(new Vertex(point, new Color(1,0,0)));
-                // vertices.push(new Vertex(point, new Color(1,1,1)));
-                // vertices.push(new Vertex(point, new Color(0,1,0)));
-                // vertices.push(new Vertex(point, new Color(0,0,1)));
 
                 vertices.push(new Vertex(point, color));
                 vertices.push(new Vertex(point, color));
@@ -201,7 +187,7 @@ canvas.mouseMoveListener = (e) => {
             object.vertices[2].y = firstVertices.y;
             object.vertices[3].x = mousePosition.x;
             object.vertices[3].y = mousePosition.y;   
-            object.calculateTheta();          
+            object.calculateInitialTheta();          
         }
     }
 
