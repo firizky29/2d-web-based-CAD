@@ -445,7 +445,7 @@ class Rectangle extends Shape{
     // parameter: gl, vertices
     constructor(gl, vertices){
         super(gl, vertices, gl.TRIANGLE_STRIP, "Rectangle");
-        this.theta = 0;
+        this.theta0 = 0;
     }
     
     moveVertex(e, relativePosition, vertexId){
@@ -469,8 +469,6 @@ class Rectangle extends Shape{
         this.vertices[vertexId].x += x;
         this.vertices[vertexId].y += y;
 
-        console.log(x,y)
-
         // centroid
         let centroid = [
             (this.vertices[vertexId].x + this.vertices[oppositeVertex].x)/2 ,
@@ -486,13 +484,15 @@ class Rectangle extends Shape{
         // set new vertex position
         let theta1, theta2;
         if (vertexId == 3 || vertexId == 0){
-            theta1 = Math.PI - 2 * this.theta;
-            theta2 = - 2 * this.theta
+            theta1 = Math.PI - 2 * this.theta0;
+            theta2 = - 2 * this.theta0
         }
         else if(vertexId == 1 || vertexId == 2){
-            theta1 = 2 * this.theta;
-            theta2 = 2 * this.theta - Math.PI;
+            theta1 = 2 * this.theta0;
+            theta2 = 2 * this.theta0 - Math.PI;
         }
+
+        console.log(this.theta)
 
         // 90 degree after vertex by theta
         let vertex1 = [
@@ -537,13 +537,13 @@ class Rectangle extends Shape{
         
     }
 
-    calculateTheta(){
+    calculateInitialTheta(){
         let centroid = [
             (this.vertices[0].x + this.vertices[3].x)/2 ,
             (this.vertices[0].y + this.vertices[3].y)/2
         ];
 
-        this.theta = Math.atan2(this.vertices[0].y - centroid[1], this.vertices[0].x - centroid[0]);
+        this.theta0 = Math.atan2(this.vertices[0].y - centroid[1], this.vertices[0].x - centroid[0]);
     }
 
 }
