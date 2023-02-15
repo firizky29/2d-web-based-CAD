@@ -39,6 +39,7 @@ class Shape{
         this.vertices = vertices;       // Array of vertex
         this.GL_SHAPE = GL_SHAPE;   // GL Shape
         this.theta = 0;
+        this.dilatation = 1;
         this.name = name;
     }
 
@@ -298,36 +299,6 @@ class Polygon extends Shape{
         this.vertices.splice(vertexId,1);
     }
 
-    //rendering
-    // draw(){
-    //     let centroid = this.findCentroid();
-    //     let vertices = [centroid.x, centroid.y, 0.75, 0.25, 0.35];
-    //     for (let vertex of this.vertices) {
-    //         vertices.push(
-    //             vertex.x, 
-    //             vertex.y, 
-    //             vertex.red, 
-    //             vertex.green, 
-    //             vertex.blue
-    //         );
-    //     }
-
-    //     vertices.push(
-    //         this.vertices[0].x, 
-    //         this.vertices[0].y, 
-    //         this.vertices[0].red, 
-    //         this.vertices[0].green, 
-    //         this.vertices[0].blue
-    //     );
-
-    //     this.gl.bufferData(
-    //         gl.ARRAY_BUFFER,
-    //         new Float32Array(vertices),
-    //         gl.STATIC_DRAW
-    //     );
-
-    //     this.gl.drawArrays(this.GL_SHAPE, 0, this.vertices.length + 2);
-    // }
 }
 
 

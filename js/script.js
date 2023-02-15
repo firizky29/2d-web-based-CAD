@@ -6,7 +6,6 @@ var selectedVertexId = undefined;
 var relativePosition = [];
 var color = new Color(0,0,0,0.5); //make it input from user
 
-// updateLayer();
 
 /* MOUSE INPUT */
 var isDown = false;
@@ -23,44 +22,30 @@ canvas.addEventListener('mousedown', (e) => {
             let object = objects[selectedShapeId];
             selectedShapes = [drawHitbox(object)];
             console.log("selected shape id: " + selectedShapeId);
-    
-            //update length to screen
-            // document.getElementById("line-length").value = object.length;
-
             updateDetailItemShape(object);
-        }
-
-        // select vertex
-        else if (selectedShapeId != undefined){
+        } else if (selectedShapeId != undefined){
             let object = objects[selectedShapeId];
             hoveredVertexId = hoverVertex(e, object);
             if (hoveredVertexId != undefined){
                 selectedVertexId = hoveredVertexId;
                 console.log("selected vertex id: " + selectedVertexId);
                 selectedVertices = [drawVertexHitbox(object, selectedVertexId)];
+                updateDetailItemVertex(object, object.vertices[selectedVertexId]);
             }
             else if (hoveredShapeId != selectedShapeId){
-                // deselect shape
                 selectedShapeId = undefined;
             }
             else if (hoveredVertexId == undefined){
-                // deselect vertex
                 selectedVertexId = undefined;
+                updateDetailItemShape(object);
             }
-        }
-        
-        if(selectedShapeId == undefined){
+        } else{
             console.log("no object selected");
             selectedShapes = [];
             selectedVertices = [];
             selectedShapeId = undefined;
             selectedVertexId = undefined;
-        }
-
-        if(selectedVertexId == undefined){
-            // console.log("no vertex selected");
-            selectedVertices = [];
-            selectedVertexId = undefined;
+            resetDetailItem();
         }
     }
 
@@ -75,7 +60,6 @@ canvas.addEventListener('mousedown', (e) => {
 
         // Menggambar line
         if (drawnShape == 'line'){
-            console.log("Drawing line");
             if (isDrawing){
                 isDrawing = false;
                 object = objects[objects.length-1];
@@ -97,14 +81,11 @@ canvas.addEventListener('mousedown', (e) => {
                 vertices.pop();                
                 return;
             }
-
-            console.log("Drawing polyon")
             if(isDrawingPolygon){
                 object = objects[objects.length-1];
                 vertices = object.vertices;
                 vertices.push(new Vertex(point, color));
-                // console.log(vertices)
-            }else{
+            } else{
                 isDrawingPolygon = true; 
                 for(let i = 0; i < 2; i++) {
                     vertices.push(new Vertex(point, color));
@@ -151,9 +132,7 @@ canvas.addEventListener('mousedown', (e) => {
     }
     
     isDown = true;
-    // records the position of the mouse on click
     relativePosition = [e.clientX, e.clientY]
-    console.log(objects);
 })
 
 canvas.mouseMoveListener = (e) => { 
@@ -173,10 +152,6 @@ canvas.mouseMoveListener = (e) => {
             lastVertices.x = mousePosition.x;
             lastVertices.y = mousePosition.y;
         }
-        // else if (drawnShape == 'square' && isDrawingSquare){
-        //     lastVertices.x = mousePosition.x;
-        //     lastVertices.y = mousePosition.y;
-        // }
     }
 
     /* HOVERING OBJECTS */
@@ -229,6 +204,8 @@ canvas.mouseMoveListener = (e) => {
             hitboxes = [];
             relativePosition = [e.clientX, e.clientY];
         }
+
+        updateDetailItemVertex(object, object.vertices[selectedVertexId]);
     }
 
     // Moving tool shape
@@ -338,16 +315,6 @@ polygonShapeButton.polygonShape = (e) => {
 
 }
 
-// Delete Vertex on Polygon
-// const deletePolygonVertexButton = document.getElementById('deletePolygonVertex');
-// deletePolygonVertexButton.deletePolygonVertex = (e) => {
-//     console.log("deleting polygon vertex");
-//     if (selectedVertexId != undefined){
-//         object = objects[selectedShapeId];
-//         object.deleteVertex(selectedVertexId);
-//         updateDeletedObject(objects);
-//     }
-// }
 
 // GENERAL TOOLS
 // Rotation Tool
@@ -383,6 +350,7 @@ function resetSelectionTools(){
     selectedVertices = []
     selectedShapeId = undefined;
     selectedVertexId = undefined;
+    resetDetailItem();
 }
 // Update Deleted Object
 function updateDeletedObject(objects){
@@ -391,7 +359,7 @@ function updateDeletedObject(objects){
         if (objects.length == 1){
             objects.pop()
         }else{
-            objects.slice(selectedShapeId,1);
+            objects.splice(selectedShapeId, 1);
         }
 
         hitboxes = [];
@@ -403,6 +371,7 @@ function updateDeletedObject(objects){
         selectedShapes[0] = drawHitbox(object);
         selectedVertices = [];
     }
+    updateLayer(objects);
 }
 
 
@@ -481,6 +450,46 @@ document.body.addEventListener('click', (e) => {
         }
     }
 });
+
+
+function clickedDeleteContainer(e){
+    let deleteButtonContainer = document.getElementById("delete-button-container");
+    let deleteItemContainer = document.getElementById("delete-item-container");
+    if(deleteItemContainer.classList.contains("clicked")){
+        deleteButtonContainer.style.display = "none";
+        deleteItemContainer.classList.remove("clicked");
+    } else{
+        deleteButtonContainer.style.display = "block";
+        deleteItemContainer.classList.add("clicked");
+    }
+}
+
+function clickedDeleteItem(e){
+    let deleteButtonContainer = document.getElementById("delete-button-container");
+    let deleteItemContainer = document.getElementById("delete-item-container");
+    deleteButtonContainer.style.display = "none";
+    deleteItemContainer.classList.remove("clicked");
+    console.log("delete item clicked", selectedShapeId, selectedVertexId);
+    if (selectedVertexId != undefined){
+        object = objects[selectedShapeId];
+        object.deleteVertex(selectedVertexId);
+        updateDeletedObject(objects);
+    } else if (selectedShapeId != undefined){
+        if(objects.length == 1){
+            objects.pop()
+        }else{
+            objects.splice(selectedShapeId, 1);
+        }
+
+        hitboxes = [];
+        selectedShapes = [];
+        selectedVertices = [];
+        selectedShapeId = undefined;
+        selectedVertexId = undefined;
+        updateLayer(objects);
+        resetDetailItem();
+    }
+}
 
 
 

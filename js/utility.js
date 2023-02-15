@@ -152,6 +152,18 @@ function hexToRGB(hexColor) {
     return new Color(r / 255, g / 255, b / 255, 1);
 }
 
+function RGBToHex(r, g, b) {
+    r = Math.round(r*255);
+    g = Math.round(g*255);
+    b = Math.round(b*255);
+
+    const red = r.toString(16);
+    const green = g.toString(16);
+    const blue = b.toString(16);
+
+    return red.padStart(2, '0') + green.padStart(2, '0') + blue.padStart(2, '0');
+}
+
 function getMousePosition(e) {
     let x = -1 + 2 * (e.clientX - canvas.offsetLeft - canvasContainer.offsetLeft) / canvas.offsetWidth;
     let y = 1 - 2 * (e.clientY - canvas.offsetTop - canvasContainer.offsetTop) / canvas.offsetHeight;
@@ -279,9 +291,14 @@ function updateDetailItemShape(object){
     let detailItemContainer = document.getElementById("right-sidebar");
     const itemDetailHeader = document.getElementById("detail-item-header");
     const deleteButtonContainer = document.getElementById("delete-button-container");
+    let deleteItemContainer = document.getElementById("delete-item-container");
     detailItemContainer.innerHTML = "";
     detailItemContainer.appendChild(itemDetailHeader);
     detailItemContainer.appendChild(deleteButtonContainer);
+
+    deleteItemContainer.style.display = "block";
+    deleteItemContainer.addEventListener("click", clickedDeleteContainer);
+    deleteButtonContainer.addEventListener("click", clickedDeleteItem);
 
     detailItemContainer.insertAdjacentHTML('beforeend', `
         <div class="detail-item" id="size-and-position">
@@ -383,10 +400,108 @@ function updateDetailItemShape(object){
     width.value = Math.abs(x_1-x_2)*canvas.offsetWidth;
     height.value = Math.abs(y_1-y_2)*canvas.offsetHeight;
 
-    console.log(object.tetha);
-    rotation.value = object.tetha;
-    rotationValue.innerHTML = object.tetha + "<span>&deg</span>";
+    rotation.value = object.theta;
+    rotationValue.innerHTML = object.theta + "<span>&deg</span>";
 
-    // color.value = object.color;
-    lineWidth.value = object.lineWidth;
+    let tmpR = object.vertices[0].red;
+    let tmpG = object.vertices[0].green;
+    let tmpB = object.vertices[0].blue;
+    let tmpA = object.vertices[0].alpha;
+    for(let i = 1; i < object.vertices.length; i++){
+        if(tmpR != object.vertices[i].red || tmpG != object.vertices[i].green || tmpB != object.vertices[i].blue || tmpA != object.vertices[i].alpha){
+            tmpR = 0;
+            tmpG = 0;
+            tmpB = 0;
+            tmpA = 1;
+            break;
+        }
+    }
+    color.value = '#' + RGBToHex(tmpR, tmpG, tmpB);
+    colorHex.value = RGBToHex(tmpR, tmpG, tmpB);
+    opacity.value = tmpA * 100 + "%";
+
+    lineWidth.value = object.dilatation * 100;
+}
+
+function updateDetailItemVertex(object, vertex){
+    let detailItemContainer = document.getElementById("right-sidebar");
+    const itemDetailHeader = document.getElementById("detail-item-header");
+    const deleteButtonContainer = document.getElementById("delete-button-container");
+    let deleteItemContainer = document.getElementById("delete-item-container");
+    detailItemContainer.innerHTML = "";
+    detailItemContainer.appendChild(itemDetailHeader);
+    detailItemContainer.appendChild(deleteButtonContainer);
+
+
+    if(object instanceof Polygon){
+        deleteItemContainer.style.display = "block";
+        deleteItemContainer.addEventListener("click", clickedDeleteContainer);
+
+        deleteButtonContainer.addEventListener("click", clickedDeleteItem);
+    } else{
+        deleteItemContainer.style.display = "none";
+    }
+
+
+    detailItemContainer.insertAdjacentHTML('beforeend', `
+        <div class="detail-item" id="size-and-position">
+            <div class="item-container" id="position">
+                <div class="item">
+                    <label for="x">X</label>
+                    <input type="number" id="x" value="0">
+                </div>
+                <div class="item">
+                    <label for="y">Y</label>
+                    <input type="number" id="y" value="0">
+                </div>
+            </div>
+        </div>
+        <hr>
+
+
+        <div class="detail-item" id="color-picker">
+            <div class="item-header">
+                Fill
+            </div>
+            <div class="item-container">
+                <div class="item color-input" id="color-input">
+                    <div class="color-wrapper">
+                        <input class="color" type="color" id="color" value="#000000">
+                    </div>
+                    <input class="color-hex" type="text" id="color-hex" value="000000">
+                    <input class="opacity" type="text" id="opacity" value="100%">
+                </div>
+            </div>
+        </div>
+    `);
+
+    let x = document.getElementById("x");
+    let y = document.getElementById("y");
+    let color = document.getElementById("color");
+    let colorHex = document.getElementById("color-hex");
+    let opacity = document.getElementById("opacity");
+
+    x.value = (vertex.x+1)/2;
+    x.value *= canvas.offsetWidth;
+    y.value = (1-vertex.y)/2;
+    y.value *= canvas.offsetHeight;
+
+    color.value = '#' + RGBToHex(vertex.red, vertex.green, vertex.blue);
+    colorHex.value = RGBToHex(vertex.red, vertex.green, vertex.blue);
+    opacity.value = vertex.alpha * 100 + "%";
+
+
+}
+
+function resetDetailItem(){
+    let detailItemContainer = document.getElementById("right-sidebar");
+    const itemDetailHeader = document.getElementById("detail-item-header");
+    const deleteButtonContainer = document.getElementById("delete-button-container");
+    let deleteItemContainer = document.getElementById("delete-item-container");
+    detailItemContainer.innerHTML = "";
+    detailItemContainer.appendChild(itemDetailHeader);
+    detailItemContainer.appendChild(deleteButtonContainer);
+
+    deleteItemContainer.style.display = "none";
+    deleteButtonContainer.style.display = "none";
 }
