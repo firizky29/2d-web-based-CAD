@@ -53,12 +53,12 @@ class Shape {
     // Kelas abstrak shape secara umum
     // parameter: gl, vertices, GL_SHAPE
 
-    constructor(gl, vertices, GL_SHAPE, name) {
+    constructor(gl, vertices, GL_SHAPE, name, theta=0, dilatation=1) {
         this.gl = gl;               // WebGL context
         this.vertices = vertices;       // Array of vertex
         this.GL_SHAPE = GL_SHAPE;   // GL Shape
-        this.theta = 0;
-        this.dilatation = 1;
+        this.theta = theta;
+        this.dilatation = dilatation;
         this.name = name;
     }
 
