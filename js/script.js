@@ -23,7 +23,9 @@ canvas.addEventListener('mousedown', (e) => {
             selectedShapes = [drawHitbox(object)];
             console.log("selected shape id: " + selectedShapeId);
             updateDetailItemShape(object);
-        } else if (selectedShapeId != undefined){
+        }         
+        // select vertex
+        else if (selectedShapeId != undefined){
             let object = objects[selectedShapeId];
             hoveredVertexId = hoverVertex(e, object);
             if (hoveredVertexId != undefined){
@@ -39,7 +41,9 @@ canvas.addEventListener('mousedown', (e) => {
                 selectedVertexId = undefined;
                 updateDetailItemShape(object);
             }
-        } else{
+        } 
+
+        if(selectedShapeId == undefined){
             console.log("no object selected");
             selectedShapes = [];
             selectedVertices = [];
@@ -47,7 +51,14 @@ canvas.addEventListener('mousedown', (e) => {
             selectedVertexId = undefined;
             resetDetailItem();
         }
+
+        if(selectedVertexId == undefined){
+            // console.log("no vertex selected");
+            selectedVertices = [];
+            selectedVertexId = undefined;
+        }        
     }
+
 
 
     /* DRAWING OBJECTS */
@@ -70,7 +81,7 @@ canvas.addEventListener('mousedown', (e) => {
                 for(let i = 0; i < 2; i++) {
                     vertices.push(new Vertex(point, color));
                 }
-                objects.push(new Line(gl, vertices, color));
+                objects.push(new Line(gl, vertices));
             }
         }
         else if (drawnShape == 'polygon'){
@@ -90,7 +101,7 @@ canvas.addEventListener('mousedown', (e) => {
                 for(let i = 0; i < 2; i++) {
                     vertices.push(new Vertex(point, color));
                 }
-                objects.push(new Polygon(gl, vertices, color));
+                objects.push(new Polygon(gl, vertices));
             }
 
         }
@@ -100,32 +111,40 @@ canvas.addEventListener('mousedown', (e) => {
             }
             else{
                 isDrawingSquare = true;
-                vertices.push(new Vertex(point, color));
-                let mousePosition1 = getMousePositionOnCanvas(e.clientX, e.clientY+200);
-                let mousePosition2 = getMousePositionOnCanvas(e.clientX+200, e.clientY);
-                let mousePosition3 = getMousePositionOnCanvas(e.clientX+200, e.clientY+200);
+                // vertices.push(new Vertex(point, color));
+                // vertices.push(new Vertex(new Point(mousePosition.x, mousePosition.y+0.3), color));
+                // vertices.push(new Vertex(new Point(mousePosition.x+0.3, mousePosition.y), color));
+                // vertices.push(new Vertex(new Point(mousePosition.x+0.3, mousePosition.y+0.3), color));
 
-                vertices.push(new Vertex(new Point(mousePosition1.x, mousePosition1.y), color));
-                vertices.push(new Vertex(new Point(mousePosition2.x, mousePosition2.y), color));
-                vertices.push(new Vertex(new Point(mousePosition3.x, mousePosition3.y), color));
-                objects.push(new Square(gl, vertices, color));
+                vertices.push(new Vertex(point, color));
+                vertices.push(new Vertex(point, color));
+                vertices.push(new Vertex(point, color));
+                vertices.push(new Vertex(point, color));
+                objects.push(new Square(gl, vertices));
             }
         }
+
         else if (drawnShape == 'rectangle') {
             if (isDrawingRectangle){
                 isDrawingRectangle = false;
             }
             else {
                 isDrawingRectangle = true;
-                vertices.push(new Vertex(point, color));
-                let mousePosition1 = getMousePositionOnCanvas(e.clientX, e.clientY+150);
-                let mousePosition2 = getMousePositionOnCanvas(e.clientX+300, e.clientY);
-                let mousePosition3 = getMousePositionOnCanvas(e.clientX+300, e.clientY+150);
+                // vertices.push(new Vertex(point, color));
+                // vertices.push(new Vertex(new Point(mousePosition.x, mousePosition.y+0.3), color));
+                // vertices.push(new Vertex(new Point(mousePosition.x+0.6, mousePosition.y), color));
+                // vertices.push(new Vertex(new Point(mousePosition.x+0.6, mousePosition.y+0.3), color));
 
-                vertices.push(new Vertex(new Point(mousePosition1.x, mousePosition1.y), color));
-                vertices.push(new Vertex(new Point(mousePosition2.x, mousePosition2.y), color));
-                vertices.push(new Vertex(new Point(mousePosition3.x, mousePosition3.y), color));
-                objects.push(new Rectangle(gl, vertices, color));
+                vertices.push(new Vertex(point, new Color(1,0,0)));
+                vertices.push(new Vertex(point, new Color(1,1,1)));
+                vertices.push(new Vertex(point, new Color(0,1,0)));
+                vertices.push(new Vertex(point, new Color(0,0,1)));
+
+                // vertices.push(new Vertex(point, color));
+                // vertices.push(new Vertex(point, color));
+                // vertices.push(new Vertex(point, color));
+                // vertices.push(new Vertex(point, color));
+                objects.push(new Rectangle(gl, vertices));
             }
         }
         updateLayer(objects);
@@ -133,6 +152,8 @@ canvas.addEventListener('mousedown', (e) => {
     
     isDown = true;
     relativePosition = [e.clientX, e.clientY]
+    console.log(objects);
+    console.log(selectedShapeId, isDown)
 })
 
 canvas.mouseMoveListener = (e) => { 
@@ -143,6 +164,7 @@ canvas.mouseMoveListener = (e) => {
         let mousePosition = getMousePosition(e);
         let object = objects[objects.length-1]
         let lastVertices = object.vertices[object.vertices.length-1]
+        let firstVertices = object.vertices[0]
 
         if (drawnShape == 'line' && isDrawing){
             lastVertices.x = mousePosition.x;
@@ -151,6 +173,19 @@ canvas.mouseMoveListener = (e) => {
         else if (drawnShape == 'polygon' && isDrawingPolygon){
             lastVertices.x = mousePosition.x;
             lastVertices.y = mousePosition.y;
+        }
+        else if (drawnShape == 'square' && isDrawingSquare){
+            object.moveVertex(e, relativePosition, 3);
+            relativePosition = [e.clientX, e.clientY];
+        }
+        else if (drawnShape == 'rectangle' && isDrawingRectangle){
+            object.vertices[1].x = firstVertices.x;
+            object.vertices[1].y = mousePosition.y;
+            object.vertices[2].x = mousePosition.x;
+            object.vertices[2].y = firstVertices.y;
+            object.vertices[3].x = mousePosition.x;
+            object.vertices[3].y = mousePosition.y;   
+            object.calculateTheta();          
         }
     }
 
@@ -184,14 +219,14 @@ canvas.mouseMoveListener = (e) => {
     if (isUsingSelectionTools && isDown && selectedShapeId != undefined && selectedVertexId != undefined){
         let object = objects[selectedShapeId];
         if (object instanceof Square) {
-            object.resizeSquare(e, relativePosition, selectedVertexId);
+            object.moveVertex(e, relativePosition, selectedVertexId);
             selectedVertices[0] = drawVertexHitbox(object, selectedVertexId);
             selectedShapes[0] = drawHitbox(object);
             hitboxes = [];
             relativePosition = [e.clientX, e.clientY];
         } 
         else if (object instanceof Rectangle) {
-            object.resizeRectangle(e, relativePosition, selectedVertexId);
+            object.moveVertex(e, relativePosition, selectedVertexId);
             selectedVertices[0] = drawVertexHitbox(object, selectedVertexId);
             selectedShapes[0] = drawHitbox(object);
             hitboxes = [];
@@ -209,7 +244,7 @@ canvas.mouseMoveListener = (e) => {
     }
 
     // Moving tool shape
-    else if (isUsingSelectionTools  && isDown && selectedShapeId != undefined){
+    if (isUsingSelectionTools  && isDown && selectedShapeId != undefined){
         let object = objects[selectedShapeId];
         object.moveShape(e, relativePosition);
         selectedShapes[0] = drawHitbox(object);
