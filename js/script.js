@@ -449,7 +449,7 @@ exportDesign.exportDesign = (e) => {
     let design = JSON.stringify(objects);
 
     var a = document.createElement("a");
-    var file = new Blob(design, { type: 'text/plain' });
+    var file = new Blob([design], { type: 'text/plain' });
     a.href = URL.createObjectURL(file);
     a.download = 'out' + Date.now() + '.json';
     a.click();
@@ -475,13 +475,14 @@ openDesign.openDesign = (e) => {
         reader.onload = readerEvent => {
             var content = readerEvent.target.result;
             temp_objects = JSON.parse(content);
+            // console.log(temp_objects);
+            objects = [];
             for(let i = 0; i < temp_objects.length; i++){
                 let tempVertices = [];
                 for(let j = 0; j < temp_objects[i].vertices.length; j++){
                     let currentV = temp_objects[i].vertices[j];
                     tempVertices.push(new Vertex(new Point(currentV.x, currentV.y), new Color(currentV.red, currentV.green, currentV.blue, currentV.alpha)));
                 }
-                objects = [];
                 objects.push(new Shape(gl, tempVertices, temp_objects[i].GL_SHAPE, temp_objects[i].name, temp_objects[i].theta, temp_objects[i].dilatation));
             }
             updateLayer(objects);
