@@ -330,8 +330,8 @@ function updateDetailItemShape(object){
             </div>
             <div class="item-container">
                 <div class="item">
-                    <div class="rotation-container">
-                        <input type="range" min="0" max="360" id="rotation" value="0">
+                    <div class="rotation-container" id="rotation-container">
+                        
                     </div>
                 </div>
                 <div class="item" id="rotation-value">360<span>&deg</span></div>
@@ -375,6 +375,13 @@ function updateDetailItemShape(object){
     let y = document.getElementById("y");
     let width = document.getElementById("width");
     let height = document.getElementById("height");
+    let rotationContainer = document.getElementById("rotation-container");
+
+    rotationContainer.insertAdjacentHTML('beforeend', `
+        <input type="range" min="0" max="360" id="rotation" value="` + object.theta + `">
+    `);
+
+
     let rotation = document.getElementById("rotation");
     let rotationValue = document.getElementById("rotation-value");
     let color = document.getElementById("color");
@@ -399,8 +406,10 @@ function updateDetailItemShape(object){
 
     width.value = Math.abs(x_1-x_2)*canvas.offsetWidth;
     height.value = Math.abs(y_1-y_2)*canvas.offsetHeight;
+    
 
-    rotation.value = object.theta;
+    rotation.addEventListener("input", updateRotation);
+    rotation.addEventListener("change", updateRotation);
     rotationValue.innerHTML = object.theta + "<span>&deg</span>";
 
     let tmpR = object.vertices[0].red;

@@ -318,15 +318,14 @@ polygonShapeButton.polygonShape = (e) => {
 
 // GENERAL TOOLS
 // Rotation Tool
-// const rotationSlider = document.getElementById('rotation-slider');
-// document.getElementById("rotation-slider").addEventListener("input", updateRotation);
-// function updateRotation() {
-//     rotation = document.getElementById("rotation-slider").value;
-//     if (selectedShapeId != undefined){
-//         object = objects[selectedShapeId];
-//         object.rotate(rotation);
-//     }
-// }
+
+function updateRotation(e) {
+    if (selectedShapeId != undefined){
+        object = objects[selectedShapeId];
+        object.rotate(e.target.value);
+        document.getElementById("rotation-value").innerHTML = e.target.value + "<span>&deg</span>";
+    }
+}
 // // Color Tool
 // const colorInput = document.getElementById('vertex-color');
 // document.getElementById("vertex-color").addEventListener("input", updateColor);

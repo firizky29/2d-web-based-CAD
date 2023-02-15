@@ -192,7 +192,7 @@ class Shape{
     }
 
     rotate(currRotation){
-        rotation = -1 * (currRotation-this.theta); //reverse rotation
+        let rotation = -1 * (currRotation-this.theta); //reverse rotation
         this.theta = currRotation;
 
         let centroid = this.findCentroid();
