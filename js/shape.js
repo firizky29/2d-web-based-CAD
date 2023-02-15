@@ -490,7 +490,6 @@ class Rectangle extends Shape {
     }
     
     moveVertex(e, relativePosition, vertexId){
-
         let oppositeVertex = 0;
         if (vertexId === 0) {
             oppositeVertex = 3;
@@ -601,6 +600,16 @@ class Rectangle extends Shape {
         ];
 
         this.theta0 = - Math.atan2(tempVertice1.y - centroid[1], tempVertice1.x - centroid[0]) + Math.PI/2;
+    }
+
+    stretchX(w){
+        super.stretchX(w);
+        this.calculateInitialTheta();
+    }
+
+    stretchY(h){
+        super.stretchY(h);
+        this.calculateInitialTheta();
     }
 
 }
