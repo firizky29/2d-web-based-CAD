@@ -334,20 +334,16 @@ function updateDetailItemShape(object){
     let detailItemContainer = document.getElementById("right-sidebar");
     const itemDetailHeader = document.getElementById("detail-item-header");
     const deleteButtonContainer = document.getElementById("delete-button-container");
-    const convexHullContainer = document.getElementById("convex-hull-container");
 
     let deleteItemContainer = document.getElementById("delete-item-container");
-    let convexHull = document.getElementById("convex-hull");
-
     detailItemContainer.innerHTML = "";
     detailItemContainer.appendChild(itemDetailHeader);
     detailItemContainer.appendChild(deleteButtonContainer);
-    detailItemContainer.appendChild(convexHullContainer);
 
     deleteItemContainer.style.display = "block";
     deleteItemContainer.addEventListener("click", clickedDeleteContainer);
     deleteButtonContainer.addEventListener("click", clickedDeleteItem);
-    convexHull.addEventListener("click", clickedConvexHull);
+
 
 
     detailItemContainer.insertAdjacentHTML('beforeend', `
@@ -487,15 +483,14 @@ function updateDetailItemVertex(object, vertex){
     let detailItemContainer = document.getElementById("right-sidebar");
     const itemDetailHeader = document.getElementById("detail-item-header");
     const deleteButtonContainer = document.getElementById("delete-button-container");
-    const convexHullContainer = document.getElementById("convex-hull-container");
+
 
     let deleteItemContainer = document.getElementById("delete-item-container");
-    let convexHull = document.getElementById("convex-hull");
+
 
     detailItemContainer.innerHTML = "";
     detailItemContainer.appendChild(itemDetailHeader);
     detailItemContainer.appendChild(deleteButtonContainer);
-    detailItemContainer.appendChild(convexHullContainer);
 
 
     if(object instanceof Polygon){
@@ -507,7 +502,7 @@ function updateDetailItemVertex(object, vertex){
         deleteItemContainer.style.display = "none";
     }
 
-    convexHull.addEventListener("click", clickedConvexHull);
+
 
 
     detailItemContainer.insertAdjacentHTML('beforeend', `
@@ -570,14 +565,14 @@ function resetDetailItem(){
     let detailItemContainer = document.getElementById("right-sidebar");
     const itemDetailHeader = document.getElementById("detail-item-header");
     const deleteButtonContainer = document.getElementById("delete-button-container");
-    const convexHullContainer = document.getElementById("convex-hull-container");
+    
     let deleteItemContainer = document.getElementById("delete-item-container");
     detailItemContainer.innerHTML = "";
     detailItemContainer.appendChild(itemDetailHeader);
     detailItemContainer.appendChild(deleteButtonContainer);
-    detailItemContainer.appendChild(convexHullContainer);
+
 
     deleteItemContainer.style.display = "none";
     deleteButtonContainer.style.display = "none";
-    convexHullContainer.style.display = "none";
+
 }

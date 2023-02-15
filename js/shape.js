@@ -614,66 +614,6 @@ class Polygon extends Shape {
         this.vertices.splice(vertexId, 1);
     }
 
-    // A function to find the bottom-left point
-    findBottomLeft(temp) {
-        let bottomLeft = 0;
-        for (let i = 1; i < temp.length; i++) {
-            if (temp[i].y < temp[bottomLeft].y ||
-                (temp[i].y == temp[bottomLeft].y &&
-                    temp[i].x < temp[bottomLeft].x)) {
-                bottomLeft = i;
-            }
-        }
-        return bottomLeft;
-    }
-
-    // A function to calculate the cross product of two vectors
-    crossProduct(p1, p2, p3) {
-        return ((p2.x - p1.x) * (p3.y - p1.y)) -
-            ((p2.y - p1.y) * (p3.x - p1.x));
-    }
-
-    // The main function to find the convex hull
-    convexHull() {
-        // Sort the points by polar angle with respect to the bottom-left point
-        let tempVertices = [];
-        for (let i = 0; i < this.vertices.length; i++) {
-            tempVertices.push(this.vertices[i]);
-        }
-        const bottomLeft = this.findBottomLeft(tempVertices);
-
-        tempVertices.sort((a, b) => {
-            const angleA = Math.atan2(a.y - tempVertices[bottomLeft].y, a.x - tempVertices[bottomLeft].x);
-            const angleB = Math.atan2(b.y - tempVertices[bottomLeft].y, b.x - tempVertices[bottomLeft].x);
-            if (angleA < angleB) return -1;
-            if (angleA > angleB) return 1;
-            // If angles are equal, choose the closest point to the bottom-left point
-            return (a.x < b.x) ? -1 : 1;
-        });
-
-        // Create a stack and add the first three points
-        const stack = [tempVertices[0], tempVertices[1], tempVertices[2]];
-
-        // Iterate through the rest of the tempVertices
-        for (let i = 3; i < tempVertices.length; i++) {
-            // Remove tempVertices that create a concave angle
-            while (stack.length > 1 && this.crossProduct(stack[stack.length - 2], stack[stack.length - 1], tempVertices[i]) <= 0) {
-                stack.pop();
-            }
-            // Add the current point to the stack
-            stack.push(this.vertices[i]);
-        }
-
-        this.convexHullArray = stack;
-        console.log(this.convexHullArray);
-        return stack;
-    }
-
-    draw(){
-        super.draw();
-    }
-
-
 }
 
 

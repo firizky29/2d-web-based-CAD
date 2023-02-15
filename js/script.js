@@ -102,7 +102,6 @@ canvas.addEventListener('mousedown', (e) => {
                 object = objects[objects.length - 1];
                 vertices = object.vertices;
                 vertices.pop();
-                object.convexHull();
 
                 const selectButton = document.getElementById("select-button");
                 selectButton.dispatchEvent(new Event("click"));
@@ -118,7 +117,7 @@ canvas.addEventListener('mousedown', (e) => {
                 for (let i = 0; i < 2; i++) {
                     vertices.push(new Vertex(point, color));
                 }
-                objects.push(new Polygon(gl, vertices, color, convexHull));
+                objects.push(new Polygon(gl, vertices, color));
             }
 
         }
@@ -329,8 +328,7 @@ polygonShapeButton.polygonShape = (e) => {
     drawnShape = "polygon";
     resetSelectionTools();
 
-    // let convexHullContainer = document.getElementById("convex-hull-container");
-    // convexHullContainer.style.display = "block";
+
 
     let navbarActive = document.getElementsByClassName("active")[0];
     navbarActive.classList.remove("active");
@@ -513,10 +511,6 @@ document.body.addEventListener('click', (e) => {
         }
     }
 
-    // if(!e.target.closest('#convex-hull-container')){
-    //     let convexHullContainer = document.getElementById("convex-hull-container");
-    //     convexHullContainer.style.display = "none";
-    // }
 });
 
 
@@ -730,14 +724,7 @@ function resetSelectedLayer() {
     }
 }
 
-var convexHull = false;
-function clickedConvexHull(e) {
-    if (e.is(":checked")) {
-        convexHull = true;
-    } else {
-        convexHull = false;
-    }
-}
+
 
 
 

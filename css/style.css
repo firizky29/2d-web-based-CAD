@@ -244,13 +244,6 @@ hr {
 }
 
 
-#convex-hull{
-    padding: 5px;
-}
-
-#convex-hull-container{
-    display: none;
-}
 
 .item-container {
     display: flex;
