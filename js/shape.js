@@ -377,13 +377,11 @@ class Square extends Shape{
 
         // calculate position based on theta and centroid
         let x = 2*(e.clientX - relativePosition[0])/canvas.offsetWidth;
-        let y = -2*(e.clientY - relativePosition[1])/canvas.offsetHeight;
-        
+        let y = -2*(e.clientY - relativePosition[1])/canvas.offsetHeight;        
+
         // set new vertex position to relative position
         this.vertices[vertexId].x += x;
         this.vertices[vertexId].y += y;
-
-        console.log(x,y)
 
         // centroid
         let centroid = [
