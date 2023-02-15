@@ -30,11 +30,11 @@ class Vertex {
     }
 
     translateX(x) {
-        this.x = -1 + 2 * x / canvas.offsetWidth;
+        this.x = screenToCanvas(x);
     }
 
     translateY(y) {
-        this.y = 1 - 2 * y / canvas.offsetHeight;
+        this.y = screenToCanvas(y);
     }
 
     fill(color) {
@@ -127,8 +127,14 @@ class Shape {
 
     moveShape(e, relativePosition) {
         // update vertex
-        let x = 2 * (e.clientX - relativePosition[0]) / canvas.offsetWidth;
-        let y = -2 * (e.clientY - relativePosition[1]) / canvas.offsetHeight;
+        let client = new Point(e.clientX, e.clientY);
+        client = screenToCanvas(client);
+        relativePosition[0] = screenToCanvasX(relativePosition[0]);
+        relativePosition[1] = screenToCanvasY(relativePosition[1]);
+
+        let x = client.x - relativePosition[0];
+        let y = client.y - relativePosition[1];
+
 
         // update all vertex
         for (let vertex of this.vertices) {
@@ -140,8 +146,13 @@ class Shape {
 
     moveVertex(e, relativePosition, vertexId) {
         // update vertex
-        let x = 2 * (e.clientX - relativePosition[0]) / canvas.offsetWidth;
-        let y = -2 * (e.clientY - relativePosition[1]) / canvas.offsetHeight;
+        let client = new Point(e.clientX, e.clientY);
+        client = screenToCanvas(client);
+        relativePosition[0] = screenToCanvasX(relativePosition[0]);
+        relativePosition[1] = screenToCanvasY(relativePosition[1]);
+
+        let x = client.x - relativePosition[0];
+        let y = client.y - relativePosition[1];
 
         // update vertex
         this.vertices[vertexId].x += x;
@@ -149,8 +160,15 @@ class Shape {
     }
 
     resizeSquare(e, relativePosition, vertexId) {
-        let x = 2 * (e.clientX - relativePosition[0]) / canvas.offsetWidth;
-        let y = -2 * (e.clientY - relativePosition[1]) / canvas.offsetHeight;
+        let client = new Point(e.clientX, e.clientY);
+        client = screenToCanvas(client);
+        relativePosition[0] = screenToCanvasX(relativePosition[0]);
+        relativePosition[1] = screenToCanvasY(relativePosition[1]);
+
+        let x = client.x - relativePosition[0];
+        let y = client.y - relativePosition[1];
+
+
 
         if (vertexId === 0) {
             this.vertices[0].x += x;
@@ -180,8 +198,14 @@ class Shape {
     }
 
     resizeRectangle(e, relativePosition, vertexId) {
-        let x = 2 * (e.clientX - relativePosition[0]) / canvas.offsetWidth;
-        let y = -2 * (e.clientY - relativePosition[1]) / canvas.offsetHeight;
+        let client = new Point(e.clientX, e.clientY);
+        client = screenToCanvas(client);
+        relativePosition[0] = screenToCanvas(relativePosition[0]);
+        relativePosition[1] = screenToCanvas(relativePosition[1]);
+
+        let x = client.x - relativePosition[0];
+        let y = client.y - relativePosition[1];
+
 
         if (vertexId === 0) {
             this.vertices[0].x += x;
@@ -256,7 +280,7 @@ class Shape {
     }
 
     translateY(y) {
-        const d = screenToCanvas(y) - this.findMax().y;
+        const d = screenToCanvasY(y) - this.findMax().y;
         for (let vertex of this.vertices) {
             vertex.y += d;
         }
@@ -361,6 +385,100 @@ class Square extends Shape {
     constructor(gl, vertices) {
         super(gl, vertices, gl.TRIANGLE_STRIP, "Square");
     }
+
+    moveVertex(e, relativePosition, vertexId){
+
+        let oppositeVertex = 0;
+        if (vertexId === 0) {
+            oppositeVertex = 3;
+        } else if (vertexId === 1) {
+            oppositeVertex = 2;
+        } else if (vertexId === 2) {
+            oppositeVertex = 1;
+        } else if (vertexId === 3) {
+            oppositeVertex = 0;
+        }
+
+        // calculate position based on theta and centroid
+        let client = new Point(e.clientX, e.clientY);
+        client = screenToCanvas(client);
+        relativePosition[0] = screenToCanvasX(relativePosition[0]);
+        relativePosition[1] = screenToCanvasY(relativePosition[1]);
+
+        let x = client.x - relativePosition[0];
+        let y = client.y - relativePosition[1];
+
+        
+        // set new vertex position to relative position
+        this.vertices[vertexId].x += x;
+        this.vertices[vertexId].y += y;
+
+        for(let i = 0; i < this.vertices.length; i++){
+            this.vertices[i].x = canvasToScreenX(this.vertices[i].x);
+            this.vertices[i].y = canvasToScreenY(this.vertices[i].y);
+        }
+        // console.log(x,y)
+
+        // centroid
+        let centroid = [
+            (this.vertices[vertexId].x + this.vertices[oppositeVertex].x)/2 ,
+            (this.vertices[vertexId].y + this.vertices[oppositeVertex].y)/2
+        ];
+
+        // find distance from centroid to vertex
+        let distance = Math.sqrt(Math.pow(this.vertices[vertexId].x - centroid[0], 2) + Math.pow(this.vertices[vertexId].y - centroid[1], 2));
+
+        // find angle from centroid to vertex
+        let angle = Math.atan2(this.vertices[vertexId].y - centroid[1], this.vertices[vertexId].x - centroid[0]);
+
+        // set new vertex position
+        // 90 degree after vertexId
+        let vertex1 = [
+            centroid[0] + distance * Math.cos(angle + Math.PI/2),
+            centroid[1] + distance * Math.sin(angle + Math.PI/2)
+        ]
+        // 90 degree before vertexId
+        let vertex2 = [
+            centroid[0] + distance * Math.cos(angle - Math.PI/2),
+            centroid[1] + distance * Math.sin(angle - Math.PI/2)
+        ]
+        
+        // to handle TRIANGLE_STRIP drawing order
+        if(vertexId == 3){
+            this.vertices[1].x = vertex1[0];
+            this.vertices[1].y = vertex1[1];
+
+            this.vertices[2].x = vertex2[0];
+            this.vertices[2].y = vertex2[1];
+        }
+        else if(vertexId == 0){
+            this.vertices[2].x = vertex1[0];
+            this.vertices[2].y = vertex1[1];
+
+            this.vertices[1].x = vertex2[0];
+            this.vertices[1].y = vertex2[1];
+        }
+        else if(vertexId == 1){
+            this.vertices[0].x = vertex1[0];
+            this.vertices[0].y = vertex1[1];
+
+            this.vertices[3].x = vertex2[0];
+            this.vertices[3].y = vertex2[1];
+        }
+        else if(vertexId == 2){
+            this.vertices[3].x = vertex1[0];
+            this.vertices[3].y = vertex1[1];
+
+            this.vertices[0].x = vertex2[0];
+            this.vertices[0].y = vertex2[1];
+        }
+
+        for(let i = 0; i < this.vertices.length; i++){
+            this.vertices[i].x = screenToCanvasX(this.vertices[i].x);
+            this.vertices[i].y = screenToCanvasY(this.vertices[i].y);
+        }
+        
+    }
 }
 
 class Rectangle extends Shape {
@@ -368,7 +486,121 @@ class Rectangle extends Shape {
     // parameter: gl, vertices
     constructor(gl, vertices) {
         super(gl, vertices, gl.TRIANGLE_STRIP, "Rectangle");
+        this.theta = 0;
     }
+    
+    moveVertex(e, relativePosition, vertexId){
+
+        let oppositeVertex = 0;
+        if (vertexId === 0) {
+            oppositeVertex = 3;
+        } else if (vertexId === 1) {
+            oppositeVertex = 2;
+        } else if (vertexId === 2) {
+            oppositeVertex = 1;
+        } else if (vertexId === 3) {
+            oppositeVertex = 0;
+        }
+
+        // calculate position based on theta and centroid
+        let client = new Point(e.clientX, e.clientY);
+        client = screenToCanvas(client);
+        relativePosition[0] = screenToCanvasX(relativePosition[0]);
+        relativePosition[1] = screenToCanvasY(relativePosition[1]);
+
+        let x = client.x - relativePosition[0];
+        let y = client.y - relativePosition[1];
+
+        
+        // set new vertex position to relative position
+        this.vertices[vertexId].x += x;
+        this.vertices[vertexId].y += y;
+
+        for(let i = 0; i < this.vertices.length; i++){
+            this.vertices[i].x = canvasToScreenX(this.vertices[i].x);
+            this.vertices[i].y = canvasToScreenY(this.vertices[i].y);
+        }
+
+        // centroid
+        let centroid = [
+            (this.vertices[vertexId].x + this.vertices[oppositeVertex].x)/2 ,
+            (this.vertices[vertexId].y + this.vertices[oppositeVertex].y)/2
+        ];
+
+        // find distance from centroid to vertex
+        let distance = Math.sqrt(Math.pow(this.vertices[vertexId].x - centroid[0], 2) + Math.pow(this.vertices[vertexId].y - centroid[1], 2));
+
+        // find angle from centroid to vertex
+        let angle = Math.atan2(this.vertices[vertexId].y - centroid[1], this.vertices[vertexId].x - centroid[0]);
+
+        // set new vertex position
+        let theta1, theta2;
+        if (vertexId == 3 || vertexId == 0){
+            theta1 = Math.PI - 2 * this.theta;
+            theta2 = - 2 * this.theta
+        }
+        else if(vertexId == 1 || vertexId == 2){
+            theta1 = 2 * this.theta;
+            theta2 = 2 * this.theta - Math.PI;
+        }
+
+        // 90 degree after vertex by theta
+        let vertex1 = [
+            centroid[0] + distance * Math.cos(angle + theta1),
+            centroid[1] + distance * Math.sin(angle + theta1)
+        ]
+        // 90 degree before vertex by theta
+        let vertex2 = [
+            centroid[0] + distance * Math.cos(angle + theta2),
+            centroid[1] + distance * Math.sin(angle + theta2)
+        ]
+        
+        // to handle TRIANGLE_STRIP drawing order
+        if(vertexId == 3){
+            this.vertices[1].x = vertex1[0];
+            this.vertices[1].y = vertex1[1];
+
+            this.vertices[2].x = vertex2[0];
+            this.vertices[2].y = vertex2[1];
+        }
+        else if(vertexId == 0){
+            this.vertices[2].x = vertex1[0];
+            this.vertices[2].y = vertex1[1];
+
+            this.vertices[1].x = vertex2[0];
+            this.vertices[1].y = vertex2[1];
+        }
+        else if(vertexId == 1){
+            this.vertices[0].x = vertex1[0];
+            this.vertices[0].y = vertex1[1];
+
+            this.vertices[3].x = vertex2[0];
+            this.vertices[3].y = vertex2[1];
+        }
+        else if(vertexId == 2){
+            this.vertices[3].x = vertex1[0];
+            this.vertices[3].y = vertex1[1];
+
+            this.vertices[0].x = vertex2[0];
+            this.vertices[0].y = vertex2[1];
+        }
+
+        for(let i = 0; i < this.vertices.length; i++){
+            this.vertices[i].x = screenToCanvasX(this.vertices[i].x);
+            this.vertices[i].y = screenToCanvasY(this.vertices[i].y);
+        }
+        
+    }
+
+    calculateTheta(){
+        let centroid = [
+            (this.vertices[0].x + this.vertices[3].x)/2 ,
+            (this.vertices[0].y + this.vertices[3].y)/2
+        ];
+
+        this.theta = Math.atan2(this.vertices[0].y - centroid[1], this.vertices[0].x - centroid[0]);
+    }
+
 }
 
 class Polygon extends Shape {
