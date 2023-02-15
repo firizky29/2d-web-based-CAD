@@ -536,12 +536,12 @@ class Rectangle extends Shape {
         // set new vertex position
         let theta1, theta2;
         if (vertexId == 3 || vertexId == 0){
-            theta1 = Math.PI - 2 * this.theta0;
-            theta2 = - 2 * this.theta0
-        }
-        else if(vertexId == 1 || vertexId == 2){
             theta1 = 2 * this.theta0;
             theta2 = 2 * this.theta0 - Math.PI;
+        }
+        else if(vertexId == 1 || vertexId == 2){
+            theta1 = Math.PI - 2 * this.theta0;
+            theta2 = - 2 * this.theta0
         }
 
         // 90 degree after vertex by theta
@@ -593,12 +593,14 @@ class Rectangle extends Shape {
     }
 
     calculateInitialTheta(){
+        let tempVertice1 = canvasToScreen(this.vertices[0]);
+        let tempVertice2 = canvasToScreen(this.vertices[3]);
         let centroid = [
-            (this.vertices[0].x + this.vertices[3].x)/2 ,
-            (this.vertices[0].y + this.vertices[3].y)/2
+            (tempVertice1.x + tempVertice2.x)/2 ,
+            (tempVertice1.y + tempVertice2.y)/2
         ];
 
-        this.theta0 = - Math.atan2(this.vertices[0].y - centroid[1], this.vertices[0].x - centroid[0]) + Math.PI/2;
+        this.theta0 = - Math.atan2(tempVertice1.y - centroid[1], tempVertice1.x - centroid[0]) + Math.PI/2;
     }
 
 }
