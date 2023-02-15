@@ -101,7 +101,12 @@ canvas.addEventListener('mousedown', (e) => {
                 isDrawingPolygon = false;
                 object = objects[objects.length-1];
                 vertices = object.vertices;
-                vertices.pop();                
+                vertices.pop();   
+                object.convexHull();  
+                
+                const selectButton = document.getElementById("select-button");
+                selectButton.dispatchEvent(new Event("click"));
+                updateLayer(objects);
                 return;
             }
             if(isDrawingPolygon){
@@ -113,7 +118,7 @@ canvas.addEventListener('mousedown', (e) => {
                 for(let i = 0; i < 2; i++) {
                     vertices.push(new Vertex(point, color));
                 }
-                objects.push(new Polygon(gl, vertices));
+                objects.push(new Polygon(gl, vertices, color, convexHull));
             }
 
         }
@@ -160,8 +165,8 @@ canvas.mouseMoveListener = (e) => {
         // update vertex
         let mousePosition = getMousePosition(e);
         let object = objects[objects.length-1]
-        let lastVertices = object.vertices[object.vertices.length-1]
-        let firstVertices = object.vertices[0]
+        let lastVertices = object?.vertices[object.vertices.length-1]
+        let firstVertices = object?.vertices[0]
 
         if (drawnShape == 'line' && isDrawing){
             lastVertices.x = mousePosition.x;
@@ -341,6 +346,9 @@ polygonShapeButton.polygonShape = (e) => {
     drawnShape = "polygon";
     resetSelectionTools();
 
+    // let convexHullContainer = document.getElementById("convex-hull-container");
+    // convexHullContainer.style.display = "block";
+
     let navbarActive = document.getElementsByClassName("active")[0];
     navbarActive.classList.remove("active");
     polygonShapeButton.classList.add("active");
@@ -480,6 +488,11 @@ document.body.addEventListener('click', (e) => {
             }
         }
     }
+
+    // if(!e.target.closest('#convex-hull-container')){
+    //     let convexHullContainer = document.getElementById("convex-hull-container");
+    //     convexHullContainer.style.display = "none";
+    // }
 });
 
 
@@ -524,7 +537,7 @@ function clickedDeleteItem(e){
 
 function updateX(e){
     if (selectedShapeId != undefined){
-        object = objects[selectedShapeId];
+        let object = objects[selectedShapeId];
         if(selectedVertexId != undefined && object.name !== "Rectangle" && object.name !== "Square"){
             object.vertices[selectedVertexId].translateX(e.target.value);
         } else{
@@ -536,7 +549,7 @@ function updateX(e){
 
 function updateY(e){
     if (selectedShapeId != undefined){
-        object = objects[selectedShapeId];
+        let object = objects[selectedShapeId];
         if(selectedVertexId != undefined && object.name !== "Rectangle" && object.name !== "Square"){
             object.vertices[selectedVertexId].translateY(e.target.value);
         } else{
@@ -690,6 +703,15 @@ function resetSelectedLayer(){
     const lastSelected = document.getElementsByClassName("selected")[0];
     if(lastSelected != undefined){
         lastSelected.classList.remove("selected");
+    }
+}
+
+var convexHull = false;
+function clickedConvexHull(e){
+    if(e.is(":checked")){
+        convexHull = true;
+    } else{
+        convexHull = false;
     }
 }
 
