@@ -117,7 +117,7 @@ canvas.addEventListener('mousedown', (e) => {
                 for (let i = 0; i < 2; i++) {
                     vertices.push(new Vertex(point, color));
                 }
-                objects.push(new Polygon(gl, vertices, color));
+                objects.push(new Polygon(gl, vertices));
             }
 
         }
@@ -481,7 +481,15 @@ openDesign.openDesign = (e) => {
                     let currentV = temp_objects[i].vertices[j];
                     tempVertices.push(new Vertex(new Point(currentV.x, currentV.y), new Color(currentV.red, currentV.green, currentV.blue, currentV.alpha)));
                 }
-                objects.push(new Shape(gl, tempVertices, temp_objects[i].GL_SHAPE, temp_objects[i].name, temp_objects[i].theta, temp_objects[i].dilatation));
+                if(temp_objects[i].name == "Polygon"){
+                    objects.push(new Polygon(gl, tempVertices, temp_objects[i].GL_SHAPE, temp_objects[i].name, temp_objects[i].theta, temp_objects[i].dilatation));
+                } else if(temp_objects[i].name == "Square"){
+                    objects.push(new Square(gl, tempVertices, temp_objects[i].GL_SHAPE, temp_objects[i].name, temp_objects[i].theta, temp_objects[i].dilatation));
+                } else if(temp_objects[i].name == "Rectangle"){
+                    objects.push(new Rectangle(gl, tempVertices, temp_objects[i].GL_SHAPE, temp_objects[i].name, temp_objects[i].theta, temp_objects[i].dilatation));
+                } else if(temp_objects[i].name == "Line"){
+                    objects.push(new Line(gl, tempVertices, temp_objects[i].GL_SHAPE, temp_objects[i].name, temp_objects[i].theta, temp_objects[i].dilatation));
+                }
             }
             updateLayer(objects);
         }

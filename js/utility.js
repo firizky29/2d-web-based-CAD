@@ -68,21 +68,22 @@ function drawHitbox(object) {
         new Vertex(hitBoxPoints[3], color)
     ];
 
-    let hitbox = new Hitbox(gl, hitBoxVertices, color);
+    let hitbox = new Hitbox(gl, hitBoxVertices);
     // console.log(hitbox)
     return hitbox;
 }
 
 function drawVertexHitbox(object, selectedVertexId) {
     let vertex = object.vertices[selectedVertexId];
-    let radius = 20 / canvas.offsetWidth;
+    let radiusX = Math.abs(screenToCanvasX(7) - screenToCanvasX(0));
+    let radiusY = Math.abs(screenToCanvasY(7) - screenToCanvasY(0));
     const color = new Color(0.95, 0.55, 0.25, 1);
 
     const hitBoxPoints = [
-        new Point(vertex.x - radius, vertex.y - radius),
-        new Point(vertex.x - radius, vertex.y + radius),
-        new Point(vertex.x + radius, vertex.y + radius),
-        new Point(vertex.x + radius, vertex.y - radius)
+        new Point(vertex.x - radiusX, vertex.y - radiusY),
+        new Point(vertex.x - radiusX, vertex.y + radiusY),
+        new Point(vertex.x + radiusX, vertex.y + radiusY),
+        new Point(vertex.x + radiusX, vertex.y - radiusY)
     ];
 
     const hitBoxVertices = [
@@ -92,7 +93,7 @@ function drawVertexHitbox(object, selectedVertexId) {
         new Vertex(hitBoxPoints[2], color)
     ];
 
-    let hitbox = new Rectangle(gl, hitBoxVertices, color);
+    let hitbox = new Rectangle(gl, hitBoxVertices);
     // console.log(hitbox)
     return hitbox;
 }

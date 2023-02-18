@@ -331,8 +331,8 @@ class Shape {
 class Line extends Shape {
     // Kelas Line
     // parameter: gl, vertices
-    constructor(gl, vertices) {
-        super(gl, vertices, gl.LINES, "Line");
+    constructor(gl, vertices, GL_SHAPE=gl.LINES, name="Line", theta=0, dilatation=1) {
+        super(gl, vertices, GL_SHAPE, name, theta, dilatation);
         this.calculateDistance();
     }
 
@@ -382,8 +382,8 @@ class Hitbox extends Shape {
 class Square extends Shape {
     // Kelas Square
     // parameter: gl, vertices
-    constructor(gl, vertices) {
-        super(gl, vertices, gl.TRIANGLE_STRIP, "Square");
+    constructor(gl, vertices, GL_SHAPE=gl.TRIANGLE_STRIP, name="Square", theta=0, dilatation=1) {
+        super(gl, vertices, GL_SHAPE, name, theta, dilatation);
     }
 
     moveVertex(e, relativePosition, vertexId){
@@ -484,8 +484,8 @@ class Square extends Shape {
 class Rectangle extends Shape {
     // Kelas Rectangle
     // parameter: gl, vertices
-    constructor(gl, vertices) {
-        super(gl, vertices, gl.TRIANGLE_STRIP, "Rectangle");
+    constructor(gl, vertices, GL_SHAPE=gl.TRIANGLE_STRIP, name="Rectangle", theta=0, dilatation=1) {
+        super(gl, vertices, GL_SHAPE, name, theta, dilatation);
         this.theta0 = 0;
     }
     
@@ -617,8 +617,8 @@ class Rectangle extends Shape {
 class Polygon extends Shape {
     // Kelas Polygon
     // parameter: gl, vertices
-    constructor(gl, vertices) {
-        super(gl, vertices, gl.TRIANGLE_FAN, "Polygon");
+    constructor(gl, vertices, GL_SHAPE=gl.TRIANGLE_FAN, name="Polygon", theta=0, dilatation=1) {
+        super(gl, vertices, GL_SHAPE, name, theta, dilatation);
     }
 
     deleteVertex(vertexId) {
