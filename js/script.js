@@ -103,6 +103,8 @@ canvas.addEventListener('mousedown', (e) => {
                 vertices = object.vertices;
                 vertices.pop();
 
+                object.convexHull();
+
                 const selectButton = document.getElementById("select-button");
                 selectButton.dispatchEvent(new Event("click"));
                 updateLayer(objects);

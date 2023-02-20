@@ -619,11 +619,82 @@ class Polygon extends Shape {
     // parameter: gl, vertices
     constructor(gl, vertices, GL_SHAPE=gl.TRIANGLE_FAN, name="Polygon", theta=0, dilatation=1) {
         super(gl, vertices, GL_SHAPE, name, theta, dilatation);
+        this.convex = undefined;
     }
 
     deleteVertex(vertexId) {
         this.vertices.splice(vertexId, 1);
     }
+
+    findBottomLeft(temp) {
+        let bottomLeft = 0;
+        for (let i = 1; i < temp.length; i++) {
+            if (temp[i].y < temp[bottomLeft].y ||
+                (temp[i].y == temp[bottomLeft].y &&
+                    temp[i].x < temp[bottomLeft].x)) {
+                bottomLeft = i;
+            }
+        }
+        return bottomLeft;
+    }
+
+    orientation(p1, p2, p3) {
+        const v = p1.x * (p2.y - p3.y) + p2.x * (p3.y - p1.y) + p3.x * (p1.y - p2.y);
+        if (v < 0) return -1;
+        if (v > 0) return 1;
+        return 0;
+    }
+
+
+    // The main function to find the convex hull
+    convexHull() {
+        // Sort the points by polar angle with respect to the bottom-left point
+        let tempVertices = [];
+        for (let i = 0; i < this.vertices.length; i++) {
+            tempVertices.push(new Vertex(
+                new Point(this.vertices[i].x, this.vertices[i].y), 
+                new Color(
+                    this.vertices[i].red, 
+                    this.vertices[i].green, 
+                    this.vertices[i].blue,
+                    this.vertices[i].alpha
+                )
+            ));
+        }
+        const bottomLeft = this.findBottomLeft(tempVertices);
+
+        tempVertices.sort((a, b) => {
+            const o = this.orientation(tempVertices[bottomLeft], a, b);
+            if (o == 0) {
+                const p0x = tempVertices[bottomLeft].x;
+                const p0y = tempVertices[bottomLeft].y;
+                if((p0x - a.x) * (p0x - a.x) + (p0y - a.y) * (p0y - a.y) < 
+                    (p0x - b.x) * (p0x - b.x) + (p0y - b.y) * (p0y - b.y)){
+                    return 1;
+                } else{
+                    return -1;
+                }
+            }
+            // If angles are equal, choose the closest point to the bottom-left point
+            return (o < 0) ? 1 : -1;
+        });
+
+        // Create a stack and add the first three points
+        let stack = [];
+
+        // Iterate through the rest of the tempVertices
+        for (let i = 0; i < tempVertices.length; i++) {
+            // Remove tempVertices that create a concave angle
+            while (stack.length > 1 && this.orientation(stack[stack.length - 2], stack[stack.length - 1], tempVertices[i]) < 0) {
+                stack.pop();
+            }
+            // Add the current point to the stack
+            stack.push(tempVertices[i]);
+        }
+        
+        this.vertices = stack;
+    }
+
 
 }
 
