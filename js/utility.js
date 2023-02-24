@@ -335,15 +335,19 @@ function updateDetailItemShape(object){
     let detailItemContainer = document.getElementById("right-sidebar");
     const itemDetailHeader = document.getElementById("detail-item-header");
     const deleteButtonContainer = document.getElementById("delete-button-container");
+    const convexHullContainer = document.getElementById("convex-hull-container");
+    const convexHullChekbox = document.getElementById("convex-hull");
 
     let deleteItemContainer = document.getElementById("delete-item-container");
     detailItemContainer.innerHTML = "";
     detailItemContainer.appendChild(itemDetailHeader);
     detailItemContainer.appendChild(deleteButtonContainer);
+    detailItemContainer.appendChild(convexHullContainer);
 
     deleteItemContainer.style.display = "block";
     deleteItemContainer.addEventListener("click", clickedDeleteContainer);
     deleteButtonContainer.addEventListener("click", clickedDeleteItem);
+    convexHullChekbox.addEventListener("change", clickedConvexHull);
 
 
 
@@ -484,6 +488,7 @@ function updateDetailItemVertex(object, vertex){
     let detailItemContainer = document.getElementById("right-sidebar");
     const itemDetailHeader = document.getElementById("detail-item-header");
     const deleteButtonContainer = document.getElementById("delete-button-container");
+    const convexHullContainer = document.getElementById("convex-hull-container");
 
 
     let deleteItemContainer = document.getElementById("delete-item-container");
@@ -492,6 +497,7 @@ function updateDetailItemVertex(object, vertex){
     detailItemContainer.innerHTML = "";
     detailItemContainer.appendChild(itemDetailHeader);
     detailItemContainer.appendChild(deleteButtonContainer);
+    detailItemContainer.appendChild(convexHullContainer);
 
 
     if(object instanceof Polygon){
@@ -566,11 +572,13 @@ function resetDetailItem(){
     let detailItemContainer = document.getElementById("right-sidebar");
     const itemDetailHeader = document.getElementById("detail-item-header");
     const deleteButtonContainer = document.getElementById("delete-button-container");
+    const convexHullContainer = document.getElementById("convex-hull-container");
     
     let deleteItemContainer = document.getElementById("delete-item-container");
     detailItemContainer.innerHTML = "";
     detailItemContainer.appendChild(itemDetailHeader);
     detailItemContainer.appendChild(deleteButtonContainer);
+    detailItemContainer.appendChild(convexHullContainer);
 
 
     deleteItemContainer.style.display = "none";

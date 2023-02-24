@@ -619,11 +619,15 @@ class Polygon extends Shape {
     // parameter: gl, vertices
     constructor(gl, vertices, GL_SHAPE=gl.TRIANGLE_FAN, name="Polygon", theta=0, dilatation=1) {
         super(gl, vertices, GL_SHAPE, name, theta, dilatation);
-        this.convex = undefined;
+        this.createConvexHull = false;
     }
 
     deleteVertex(vertexId) {
         this.vertices.splice(vertexId, 1);
+    }
+
+    setCreateConvexHull(createConvexHull) {
+        this.createConvexHull = createConvexHull;
     }
 
     findBottomLeft(temp) {
@@ -648,6 +652,7 @@ class Polygon extends Shape {
 
     // The main function to find the convex hull
     convexHull() {
+        if(this.createConvexHull == false) return;
         // Sort the points by polar angle with respect to the bottom-left point
         let tempVertices = [];
         for (let i = 0; i < this.vertices.length; i++) {

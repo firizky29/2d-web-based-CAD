@@ -124,6 +124,65 @@
 
 <body>
 
+	<div class="help" id="help-container">
+		<div class="help-menu-header">
+			<div class="help-menu-title">
+				Help
+			</div>
+			<div class="close-button" onclick="closeHelpMenu()">
+				X
+			</div>
+		</div>
+		<hr>
+		<div class="help-menu-content">
+			<div class="help-menu-item">
+				<div class="help-menu-item-header">
+					How to use the tool?
+				</div>
+				<div class="help-menu-item-content">
+					<ul>
+						<li>
+							Click on the <b>new design file</b> button to create a new design file.
+						</li>
+						<li>
+							Click on the <b>open design file</b> button to open an existing design file.
+						</li>
+						<li>
+							Click on the <b>export design</b> button to export the design file.
+						</li>
+						<li>
+							Click on the <b>help</b> button to open the help menu.
+						</li>
+						<li>
+							Click on the <b>layer</b> to select object from canvas.
+						</li>
+						<li>
+							Click on any <b>object</b> in canvas to open the design menu.
+						</li>
+						<li>
+							Click on the <b>square</b> button to create a square.
+						</li>
+						<li>
+							Click on the <b>rectangle</b> button to create a rectangle.
+						</li>
+						<li>
+							Click on the <b>polygon</b> button to create a polygon.
+						</li>
+						<li>
+							Click on the <b>three dots</b> button (if exists) in design menu and <b>delete</b> button to delete the selected item.
+						</li>
+						<li>
+							Click on the <b>create only convex hull vertices</b> checkbox to create only convex hull vertices.
+						</li>
+						<li>
+							To draw a polygon, click on the canvas to create a vertex and then click on the canvas again to create another vertex. To finish the polygon, right click on the canvas.
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
 
 	<div class="left-sidebar" id = "left-sidebar">
 		<div class="item-header" id="item-layer-header">
@@ -148,13 +207,22 @@
 				Delete
 			</div>
 		</div>
+		<div class="detail-item" id="convex-hull-container">
+            <div class="item-container">
+                <input type="checkbox" id="convex-hull" name="convex-hull" value="0">
+				<label for="convex-hull">Create only convex hull vertices</label>
+            </div>
+        </div>
 	</div>
+
 
 	<div class="canvas-container" id="canvas-container">
 		<canvas id="gl-canvas" onmousemove="mouseMoveListener(event)">
 			Your browser does not support the HTML5 canvas element.
 		</canvas>
 	</div>
+
+	
 
 </body>
 

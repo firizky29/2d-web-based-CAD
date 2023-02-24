@@ -4,6 +4,7 @@ var selectedShapeId = undefined;
 var hoveredVertexId = undefined;
 var selectedVertexId = undefined;
 var relativePosition = [];
+var createConvexHull = false;
 var color = new Color(0.85, 0.85, 0.85, 1); //make it input from user
 
 
@@ -120,6 +121,8 @@ canvas.addEventListener('mousedown', (e) => {
                     vertices.push(new Vertex(point, color));
                 }
                 objects.push(new Polygon(gl, vertices));
+                objects[objects.length - 1].setCreateConvexHull(createConvexHull);
+                hideConvexHullController();
             }
 
         }
@@ -265,6 +268,7 @@ selectButton.selectButton = (e) => {
     navbarActive.classList.remove("active");
 
     selectButton.classList.add("active");
+    hideConvexHullController();
 
 }
 
@@ -280,6 +284,7 @@ lineShapeButton.lineShape = (e) => {
     navbarActive.classList.remove("active");
 
     lineShapeButton.classList.add("active");
+    hideConvexHullController();
 }
 // // Change Length on Line
 // const lengthInput = document.getElementById('line-length');
@@ -304,6 +309,7 @@ squareShapeButton.squareShape = (e) => {
 
 
     squareShapeButton.classList.add("active");
+    hideConvexHullController();
 
 }
 
@@ -319,6 +325,7 @@ rectangleShapeButton.rectangleShape = (e) => {
 
 
     rectangleShapeButton.classList.add("active");
+    hideConvexHullController();
 
 }
 
@@ -336,6 +343,7 @@ polygonShapeButton.polygonShape = (e) => {
     navbarActive.classList.remove("active");
     polygonShapeButton.classList.add("active");
 
+    showConvexHullController();
 }
 
 
@@ -350,15 +358,6 @@ function updateRotation(e) {
     }
 }
 // // Color Tool
-// const colorInput = document.getElementById('vertex-color');
-// document.getElementById("vertex-color").addEventListener("input", updateColor);
-// function updateColor() {
-//     color = hexToRGB(document.getElementById("vertex-color").value);
-//     if (selectedVertexId != undefined){
-//         object = objects[selectedShapeId];
-//         object.updateColor(selectedVertexId, color);
-//     }
-// }
 
 // UTILS
 // Reset Selection Variables
@@ -735,7 +734,35 @@ function resetSelectedLayer() {
 }
 
 
+function hideConvexHullController(){
+    const convexHullContainer = document.getElementById("convex-hull-container");
+    convexHullContainer.style.display = "none";
+}
 
+function showConvexHullController(){
+    const convexHullContainer = document.getElementById("convex-hull-container");
+    convexHullContainer.style.display = "block";
+}
+
+document.getElementById("convex-hull").addEventListener("change", clickedConvexHull);
+
+function clickedConvexHull(e){
+    if(e.target.checked){
+        createConvexHull = true;
+    } else{
+        createConvexHull = false;
+    }
+}
+
+function helpMenu(e){
+    const helpMenu = document.getElementById("help-container");
+    helpMenu.style.display = "flex";
+}
+
+function closeHelpMenu(e){
+    const helpMenu = document.getElementById("help-container");
+    helpMenu.style.display = "none";
+}
 
 
 
