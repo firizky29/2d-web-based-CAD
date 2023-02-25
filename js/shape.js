@@ -603,13 +603,36 @@ class Rectangle extends Shape {
     }
 
     stretchX(w){
+        // calculate theta by horizontal line
+        let tempVertice1 = canvasToScreen(this.vertices[3]);
+        let tempVertice2 = canvasToScreen(this.vertices[1]);
+
+        let theta = (- Math.atan2(tempVertice1.y - tempVertice2.y, tempVertice1.x - tempVertice2.x))* 180 / Math.PI;
+
+        this.rotate(-theta);
+        this.theta = 0;
         super.stretchX(w);
         this.calculateInitialTheta();
+        this.rotate(theta);
+        this.theta = 0;
+
+
     }
 
     stretchY(h){
+        // calculate theta by horizontal line
+        let tempVertice1 = canvasToScreen(this.vertices[3]);
+        let tempVertice2 = canvasToScreen(this.vertices[1]);
+
+        let theta = (- Math.atan2(tempVertice1.y - tempVertice2.y, tempVertice1.x - tempVertice2.x))* 180 / Math.PI;
+
+        this.rotate(-theta);
+        this.theta = 0;
         super.stretchY(h);
         this.calculateInitialTheta();
+        this.rotate(theta);
+        this.theta = 0;
+
     }
 
 }
