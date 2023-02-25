@@ -697,6 +697,10 @@ class Polygon extends Shape {
         this.vertices.splice(vertexId, 1);
     }
 
+    addVertex(point) {
+        this.vertices.push(new Vertex(point, new Color(0.85, 0.85, 0.85, 1)));
+    }
+
     setCreateConvexHull(createConvexHull) {
         this.createConvexHull = createConvexHull;
     }
