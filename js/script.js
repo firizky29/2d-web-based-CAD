@@ -90,6 +90,11 @@ canvas.addEventListener('mousedown', (e) => {
                 isDrawing = false;
                 object = objects[objects.length - 1];
                 object.calculateDistance();
+
+                const selectButton = document.getElementById("select-button");
+                selectButton.dispatchEvent(new Event("click"));
+                updateLayer(objects);
+                return;
             }
             else {
                 isDrawing = true;
@@ -136,6 +141,11 @@ canvas.addEventListener('mousedown', (e) => {
         else if (drawnShape == 'square') {
             if (isDrawingSquare) {
                 isDrawingSquare = false;
+
+                const selectButton = document.getElementById("select-button");
+                selectButton.dispatchEvent(new Event("click"));
+                updateLayer(objects);
+                return;
             }
             else {
                 isDrawingSquare = true;
@@ -151,6 +161,11 @@ canvas.addEventListener('mousedown', (e) => {
         else if (drawnShape == 'rectangle') {
             if (isDrawingRectangle) {
                 isDrawingRectangle = false;
+
+                const selectButton = document.getElementById("select-button");
+                selectButton.dispatchEvent(new Event("click"));
+                updateLayer(objects);
+                return;
             }
             else {
                 isDrawingRectangle = true;
