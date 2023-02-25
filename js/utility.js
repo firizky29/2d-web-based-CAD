@@ -69,7 +69,7 @@ function drawHitbox(object) {
     ];
 
     let hitbox = new Hitbox(gl, hitBoxVertices);
-    // console.log(hitbox)
+
     return hitbox;
 }
 
@@ -94,7 +94,7 @@ function drawVertexHitbox(object, selectedVertexId) {
     ];
 
     let hitbox = new Rectangle(gl, hitBoxVertices);
-    // console.log(hitbox)
+
     return hitbox;
 }
 
@@ -139,7 +139,6 @@ function hoverVertex(e, object) {
         }
     }
 }
-
 
 function hexToRGB(hexColor) {
     const r = parseInt(hexColor.substr(1, 2), 16);
@@ -239,13 +238,10 @@ function updateLayer(objects) {
         </svg>
     `
 
-
-
     let layerContainer = document.getElementById("left-sidebar");
     const itemLayerHeader = document.getElementById("item-layer-header");
     layerContainer.innerHTML = "";
     layerContainer.appendChild(itemLayerHeader);
-
 
     const parser = new DOMParser();
 
@@ -254,7 +250,6 @@ function updateLayer(objects) {
     let cntLines = 0;
     let cntPolygons = 0;
     let curVertex = 0;
-
 
     for (let i = 0; i < objects.length; i++) {
         layerContainer.insertAdjacentHTML('beforeend', `
@@ -330,7 +325,6 @@ function updateLayer(objects) {
     }
 }
 
-
 function updateDetailItemShape(object){
     let detailItemContainer = document.getElementById("right-sidebar");
     const itemDetailHeader = document.getElementById("detail-item-header");
@@ -348,8 +342,6 @@ function updateDetailItemShape(object){
     deleteItemContainer.addEventListener("click", clickedDeleteContainer);
     deleteButtonContainer.addEventListener("click", clickedDeleteItem);
     convexHullChekbox.addEventListener("change", clickedConvexHull);
-
-
 
     detailItemContainer.insertAdjacentHTML('beforeend', `
         <div class="detail-item" id="size-and-position">
@@ -431,7 +423,6 @@ function updateDetailItemShape(object){
         <input type="range" min="0" max="360" id="rotation" value="` + object.theta + `">
     `);
 
-
     let rotation = document.getElementById("rotation");
     let rotationValue = document.getElementById("rotation-value");
     let color = document.getElementById("color");
@@ -471,6 +462,7 @@ function updateDetailItemShape(object){
             break;
         }
     }
+
     color.value = '#' + RGBToHex(tmpR, tmpG, tmpB);
     colorHex.value = RGBToHex(tmpR, tmpG, tmpB);
     opacity.value = tmpA * 100 + "%";
@@ -490,15 +482,12 @@ function updateDetailItemVertex(object, vertex){
     const deleteButtonContainer = document.getElementById("delete-button-container");
     const convexHullContainer = document.getElementById("convex-hull-container");
 
-
     let deleteItemContainer = document.getElementById("delete-item-container");
-
 
     detailItemContainer.innerHTML = "";
     detailItemContainer.appendChild(itemDetailHeader);
     detailItemContainer.appendChild(deleteButtonContainer);
     detailItemContainer.appendChild(convexHullContainer);
-
 
     if(object instanceof Polygon){
         deleteItemContainer.style.display = "block";
@@ -508,9 +497,6 @@ function updateDetailItemVertex(object, vertex){
     } else{
         deleteItemContainer.style.display = "none";
     }
-
-
-
 
     detailItemContainer.insertAdjacentHTML('beforeend', `
         <div class="detail-item" id="size-and-position">
@@ -526,7 +512,6 @@ function updateDetailItemVertex(object, vertex){
             </div>
         </div>
         <hr>
-
 
         <div class="detail-item" id="color-picker">
             <div class="item-header">
@@ -560,12 +545,9 @@ function updateDetailItemVertex(object, vertex){
     colorHex.value = RGBToHex(vertex.red, vertex.green, vertex.blue);
     opacity.value = vertex.alpha * 100 + "%";
 
-
     color.addEventListener("input", updateColor);
     colorHex.addEventListener("input", updateColorHex);
     opacity.addEventListener("input", updateOpacity);
-
-
 }
 
 function resetDetailItem(){
@@ -580,8 +562,6 @@ function resetDetailItem(){
     detailItemContainer.appendChild(deleteButtonContainer);
     detailItemContainer.appendChild(convexHullContainer);
 
-
     deleteItemContainer.style.display = "none";
     deleteButtonContainer.style.display = "none";
-
 }
