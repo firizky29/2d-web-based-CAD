@@ -5,6 +5,7 @@ var hoveredVertexId = undefined;
 var selectedVertexId = undefined;
 var relativePosition = [];
 var createConvexHull = false;
+var addVertex = false;
 var color = new Color(0.85, 0.85, 0.85, 1); //make it input from user
 
 /* MOUSE INPUT */
@@ -242,6 +243,17 @@ canvas.mouseMoveListener = (e) => {
         else if (hoveredShapeId == undefined) {
             hitboxes = [];
         }
+
+        // let obj = objects[hoveredShapeId];
+        // if (obj instanceof Polygon && hoveredShapeId != undefined) {
+        //     canvas.addEventListener("mousedown", (e) => {
+        //             let pos = getMousePosition(e);
+        //             let point = new Point(pos.x, pos.y);
+        //             obj.addVertex(point);
+        //             obj.convexHull();
+        //             updateLayer(objects);
+        //     })
+        // }
     }
 
     /* MOVING OBJECTS */
@@ -573,6 +585,42 @@ function clickedDeleteItem(e) {
         selectedVertexId = undefined;
         updateLayer(objects);
         resetDetailItem();
+    }
+}
+
+function clickedAddVertexPolygon(e) {
+    if (addVertex) {
+        addVertex = false;
+    } else {
+        addVertex = true;
+    }
+
+    console.log("add vertex clicked", addVertex);
+
+    // only add vertex if addVertex is true
+    if (addVertex) {
+        canvas.addEventListener('mousedown', (e) => {
+            let pos = getMousePosition(e);
+            let point = new Point(pos.x, pos.y);
+            object = objects[selectedShapeId];
+            object.addVertex(point);
+            
+            object.convexHull();
+            
+            updateLayer(objects);
+        })
+    } else {
+        canvas.removeEventListener('mousedown', (e) => {
+            console.log("remove event listener");
+            let pos = getMousePosition(e);
+            let point = new Point(pos.x, pos.y);
+            object = objects[selectedShapeId];
+            object.addVertex(point);
+            
+            object.convexHull();
+            
+            updateLayer(objects);
+        })
     }
 }
 

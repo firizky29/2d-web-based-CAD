@@ -328,9 +328,19 @@ function updateLayer(objects) {
 function updateDetailItemShape(object){
     let detailItemContainer = document.getElementById("right-sidebar");
     const itemDetailHeader = document.getElementById("detail-item-header");
-    const deleteButtonContainer = document.getElementById("delete-button-container");
+    let deleteButtonContainer = document.getElementById("delete-button-container");
     const convexHullContainer = document.getElementById("convex-hull-container");
     const convexHullChekbox = document.getElementById("convex-hull");
+
+    const deleteButton = document.getElementById("delete-button");
+    const addVertex = document.getElementById("add-vertex-button")
+
+    deleteButtonContainer.innerHTML = "";
+    deleteButtonContainer.appendChild(deleteButton);
+    if (object instanceof Polygon) {
+        deleteButtonContainer.appendChild(addVertex);
+        addVertex.addEventListener("click", clickedAddVertexPolygon);
+    }
 
     let deleteItemContainer = document.getElementById("delete-item-container");
     detailItemContainer.innerHTML = "";
@@ -340,7 +350,7 @@ function updateDetailItemShape(object){
 
     deleteItemContainer.style.display = "block";
     deleteItemContainer.addEventListener("click", clickedDeleteContainer);
-    deleteButtonContainer.addEventListener("click", clickedDeleteItem);
+    deleteButton.addEventListener("click", clickedDeleteItem);
     convexHullChekbox.addEventListener("change", clickedConvexHull);
 
     detailItemContainer.insertAdjacentHTML('beforeend', `

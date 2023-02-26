@@ -225,15 +225,25 @@ hr {
     display: none;
 }
 
-
-
 .delete-button{
     width: 100%;
     padding: 2px 0 2px 8px;
     color: rgb(208, 1, 1);
 }
 
+.add-vertex-button{
+    width: 100%;
+    padding: 2px 0 2px 8px;
+    color: rgb(208, 1, 1);
+}
+
 .delete-button:hover{
+    cursor: pointer;
+    background-color: #0C8CE9;
+    color: white;
+}
+
+.add-vertex-button:hover{
     cursor: pointer;
     background-color: #0C8CE9;
     color: white;
