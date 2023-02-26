@@ -652,6 +652,9 @@ class Rectangle extends Shape {
 
     stretchX(w){
         // calculate theta by horizontal line
+        let theta0 = this.theta
+        this.theta = 0
+
         let tempVertice1 = canvasToScreen(this.vertices[3]);
         let tempVertice2 = canvasToScreen(this.vertices[1]);
 
@@ -662,12 +665,16 @@ class Rectangle extends Shape {
         super.stretchX(w);
         this.calculateInitialTheta();
         this.rotate(theta);
-        this.theta = 0;
 
+        this.theta = theta0
 
     }
 
     stretchY(h){
+        // calculate theta by horizontal line
+        let theta0 = this.theta
+        this.theta = 0
+
         // calculate theta by horizontal line
         let tempVertice1 = canvasToScreen(this.vertices[3]);
         let tempVertice2 = canvasToScreen(this.vertices[1]);
@@ -679,7 +686,8 @@ class Rectangle extends Shape {
         super.stretchY(h);
         this.calculateInitialTheta();
         this.rotate(theta);
-        this.theta = 0;
+        
+        this.theta = theta0
 
     }
 
