@@ -243,17 +243,6 @@ canvas.mouseMoveListener = (e) => {
         else if (hoveredShapeId == undefined) {
             hitboxes = [];
         }
-
-        // let obj = objects[hoveredShapeId];
-        // if (obj instanceof Polygon && hoveredShapeId != undefined) {
-        //     canvas.addEventListener("mousedown", (e) => {
-        //             let pos = getMousePosition(e);
-        //             let point = new Point(pos.x, pos.y);
-        //             obj.addVertex(point);
-        //             obj.convexHull();
-        //             updateLayer(objects);
-        //     })
-        // }
     }
 
     /* MOVING OBJECTS */
@@ -589,30 +578,37 @@ function clickedDeleteItem(e) {
 }
 
 function addVertexPolygon(e) {
+    
     let pos = getMousePosition(e);
     let point = new Point(pos.x, pos.y);
     object = objects[selectedShapeId];
     object.addVertex(point);
     
-    object.convexHull();
     
+    // object.convexHull();
+    addVertexButton = document.getElementById("add-vertex-button");
+    addVertexButton.classList.remove("touched");
+    addingVertex = false;
+
+    canvas.removeEventListener('mousedown', addVertexPolygon)
     updateLayer(objects);
 }
 
 function clickedAddVertexPolygon(e) {
     if (addingVertex) {
         addingVertex = false;
+        e.target.classList.remove("touched");
     } else {
         addingVertex = true;
+        e.target.classList.add("touched");
     }
 
-    console.log("add vertex clicked", addingVertex);
+    // console.log("add vertex clicked", addingVertex);
+
 
     // only add vertex if addingVertex is true
     if (addingVertex) {
         canvas.addEventListener('mousedown', addVertexPolygon)
-    } else {
-        canvas.removeEventListener('mousedown', addVertexPolygon)
     }
 }
 
