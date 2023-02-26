@@ -328,19 +328,9 @@ function updateLayer(objects) {
 function updateDetailItemShape(object){
     let detailItemContainer = document.getElementById("right-sidebar");
     const itemDetailHeader = document.getElementById("detail-item-header");
-    let deleteButtonContainer = document.getElementById("delete-button-container");
+    const deleteButtonContainer = document.getElementById("delete-button-container");
     const convexHullContainer = document.getElementById("convex-hull-container");
     const convexHullChekbox = document.getElementById("convex-hull");
-
-    const deleteButton = document.getElementById("delete-button");
-    const addVertex = document.getElementById("add-vertex-button")
-
-    deleteButtonContainer.innerHTML = "";
-    deleteButtonContainer.appendChild(deleteButton);
-    if (object instanceof Polygon) {
-        deleteButtonContainer.appendChild(addVertex);
-        addVertex.addEventListener("click", clickedAddVertexPolygon);
-    }
 
     let deleteItemContainer = document.getElementById("delete-item-container");
     detailItemContainer.innerHTML = "";
@@ -350,7 +340,7 @@ function updateDetailItemShape(object){
 
     deleteItemContainer.style.display = "block";
     deleteItemContainer.addEventListener("click", clickedDeleteContainer);
-    deleteButton.addEventListener("click", clickedDeleteItem);
+    deleteButtonContainer.addEventListener("click", clickedDeleteItem);
     convexHullChekbox.addEventListener("change", clickedConvexHull);
 
     detailItemContainer.insertAdjacentHTML('beforeend', `
@@ -421,6 +411,17 @@ function updateDetailItemShape(object){
                 </div>
             </div>
         </div>
+
+        <div class="detail-item" id="add-vertex">
+            <div class="item-header">
+                Add Vertex
+            </div>
+            <div class="item-container">
+                <div class="add-vertex-button" id="add-vertex-button">
+                    + Add Vertex
+                </div>
+            </div>
+        </div>
     `);
 
     let x = document.getElementById("x");
@@ -439,6 +440,14 @@ function updateDetailItemShape(object){
     let colorHex = document.getElementById("color-hex");
     let opacity = document.getElementById("opacity");
     let dilate = document.getElementById("dilate");
+    let addVertexButton = document.getElementById("add-vertex");
+
+    if(object instanceof Polygon){
+        addVertexButton.style.display = "block";
+        addVertexButton.addEventListener("click", clickedAddVertexPolygon);
+    } else{
+        addVertexButton.style.display = "none";
+    }
 
     let minVertex = canvasToScreen(object.findMin());
     let maxVertex = canvasToScreen(object.findMax());

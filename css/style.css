@@ -231,11 +231,6 @@ hr {
     color: rgb(208, 1, 1);
 }
 
-.add-vertex-button{
-    width: 100%;
-    padding: 2px 0 2px 8px;
-    color: rgb(208, 1, 1);
-}
 
 .delete-button:hover{
     cursor: pointer;
@@ -243,8 +238,21 @@ hr {
     color: white;
 }
 
+.add-vertex-button{
+    width: 100%;
+    padding: 5px 0 5px 8px;
+    background-color: #444444;
+    color: white;
+    border-radius: 5px;
+}
+
 .add-vertex-button:hover{
     cursor: pointer;
+    background-color: #0C8CE9;
+    color: white;
+}
+
+.add-vertex-button.touched{
     background-color: #0C8CE9;
     color: white;
 }

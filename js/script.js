@@ -607,6 +607,12 @@ function clickedAddVertexPolygon(e) {
     }
 
     console.log("add vertex clicked", addVertex);
+    // const addVertexButton = document.getElementById("add-vertex-button");
+    // if(addVertexButton.classList.contains("touched") && !addVertex){
+    //     addVertexButton.classList.remove("touched");
+    // } else if(!addVertex.classList.contains("touched") && addVertex) {
+    //     addVertexButton.classList.add("touched");
+    // }
 
     // only add vertex if addVertex is true
     if (addVertex) {
