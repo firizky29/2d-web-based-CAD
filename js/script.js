@@ -588,6 +588,17 @@ function clickedDeleteItem(e) {
     }
 }
 
+function addVertexPolygon(e) {
+    let pos = getMousePosition(e);
+    let point = new Point(pos.x, pos.y);
+    object = objects[selectedShapeId];
+    object.addVertex(point);
+    
+    object.convexHull();
+    
+    updateLayer(objects);
+}
+
 function clickedAddVertexPolygon(e) {
     if (addVertex) {
         addVertex = false;
@@ -599,28 +610,9 @@ function clickedAddVertexPolygon(e) {
 
     // only add vertex if addVertex is true
     if (addVertex) {
-        canvas.addEventListener('mousedown', (e) => {
-            let pos = getMousePosition(e);
-            let point = new Point(pos.x, pos.y);
-            object = objects[selectedShapeId];
-            object.addVertex(point);
-            
-            object.convexHull();
-            
-            updateLayer(objects);
-        })
+        canvas.addEventListener('mousedown', addVertexPolygon)
     } else {
-        canvas.removeEventListener('mousedown', (e) => {
-            console.log("remove event listener");
-            let pos = getMousePosition(e);
-            let point = new Point(pos.x, pos.y);
-            object = objects[selectedShapeId];
-            object.addVertex(point);
-            
-            object.convexHull();
-            
-            updateLayer(objects);
-        })
+        canvas.removeEventListener('mousedown', addVertexPolygon)
     }
 }
 
