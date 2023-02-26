@@ -24,7 +24,6 @@ var hitboxes = [];
 var selectedShapes = [];
 var selectedVertices = [];
 
-
 // Canvas purposes
 const canvas = document.getElementById('gl-canvas');
 const canvasContainer = document.getElementById('canvas-container');
@@ -81,7 +80,6 @@ function render(){
     gl.enableVertexAttribArray(colorAttLoc);
 
     gl.useProgram(program);
-
     
     for (let object of objects) {
         object.draw();

@@ -17,6 +17,7 @@ class Point {
         this.y = y;
     }
 }
+
 class Vertex {
     // Kelas Vertex
     // parameter: x, y
@@ -125,6 +126,7 @@ class Shape {
         return new Point(sum_x / this.vertices.length, sum_y / this.vertices.length);
     }
 
+    // move shape
     moveShape(e, relativePosition) {
         // update vertex
         let client = new Point(e.clientX, e.clientY);
@@ -142,6 +144,7 @@ class Shape {
         }
     }
 
+    // move vertex
     moveVertex(e, relativePosition, vertexId) {
         // update vertex
         let client = new Point(e.clientX, e.clientY);
@@ -157,82 +160,7 @@ class Shape {
         this.vertices[vertexId].y += y;
     }
 
-    resizeSquare(e, relativePosition, vertexId) {
-        // update vertex
-        let client = new Point(e.clientX, e.clientY);
-        client = screenToCanvas(client);
-        relativePosition[0] = screenToCanvasX(relativePosition[0]);
-        relativePosition[1] = screenToCanvasY(relativePosition[1]);
-
-        let x = client.x - relativePosition[0];
-        let y = client.y - relativePosition[1];
-
-        // update vertex
-        if (vertexId === 0) {
-            this.vertices[0].x += x;
-            this.vertices[0].y += x;
-
-            this.vertices[1].x += x;
-            this.vertices[2].y += x;
-        } else if (vertexId === 1) {
-            this.vertices[1].x -= y;
-            this.vertices[1].y += y;
-
-            this.vertices[0].x -= y;
-            this.vertices[3].y += y;
-        } else if (vertexId === 2) {
-            this.vertices[2].x -= y;
-            this.vertices[2].y += y;
-
-            this.vertices[3].x -= y;
-            this.vertices[0].y += y;
-        } else if (vertexId === 3) {
-            this.vertices[3].x += x;
-            this.vertices[3].y += x;
-
-            this.vertices[2].x += x;
-            this.vertices[1].y += x;
-        }
-    }
-
-    resizeRectangle(e, relativePosition, vertexId) {
-        // update vertex
-        let client = new Point(e.clientX, e.clientY);
-        client = screenToCanvas(client);
-        relativePosition[0] = screenToCanvas(relativePosition[0]);
-        relativePosition[1] = screenToCanvas(relativePosition[1]);
-
-        let x = client.x - relativePosition[0];
-        let y = client.y - relativePosition[1];
-
-        // update vertex
-        if (vertexId === 0) {
-            this.vertices[0].x += x;
-            this.vertices[0].y += y;
-
-            this.vertices[1].x += x;
-            this.vertices[2].y += y;
-        } else if (vertexId === 1) {
-            this.vertices[1].x += x;
-            this.vertices[1].y += y;
-
-            this.vertices[0].x += x;
-            this.vertices[3].y += y;
-        } else if (vertexId === 2) {
-            this.vertices[2].x += x;
-            this.vertices[2].y += y;
-
-            this.vertices[3].x += x;
-            this.vertices[0].y += y;
-        } else if (vertexId === 3) {
-            this.vertices[3].x += x;
-            this.vertices[3].y += y;
-
-            this.vertices[2].x += x;
-            this.vertices[1].y += y;
-        }
-    }
-
+    // rotate shape
     rotate(currRotation) {
         // reverse rotation
         let rotation = -1 * (currRotation - this.theta);
@@ -260,6 +188,7 @@ class Shape {
 
     fill(color) {
         const colorRGB = hexToRGB(color);
+
         for (let vertex of this.vertices) {
             vertex.red = colorRGB.red;
             vertex.green = colorRGB.green;
@@ -275,6 +204,7 @@ class Shape {
 
     translateX(x) {
         const d = screenToCanvasX(x) - this.findMin().x;
+
         for (let vertex of this.vertices) {
             vertex.x += d;
         }
@@ -282,6 +212,7 @@ class Shape {
 
     translateY(y) {
         const d = screenToCanvasY(y) - this.findMax().y;
+
         for (let vertex of this.vertices) {
             vertex.y += d;
         }
@@ -346,6 +277,7 @@ class Line extends Shape {
             this.vertices[i].x = points[i].x;
             this.vertices[i].y = points[i].y;
         }
+
         this.calculateDistance();
     }
 
@@ -372,7 +304,6 @@ class Line extends Shape {
         this.calculateDistance();
     }
 }
-
 
 class Hitbox extends Shape {
     // Kelas Hitbox
@@ -642,6 +573,7 @@ class Rectangle extends Shape {
     calculateInitialTheta(){
         let tempVertice1 = canvasToScreen(this.vertices[0]);
         let tempVertice2 = canvasToScreen(this.vertices[3]);
+
         let centroid = [
             (tempVertice1.x + tempVertice2.x)/2 ,
             (tempVertice1.y + tempVertice2.y)/2
@@ -667,7 +599,6 @@ class Rectangle extends Shape {
         this.rotate(theta);
 
         this.theta = theta0
-
     }
 
     stretchY(h){
@@ -688,9 +619,7 @@ class Rectangle extends Shape {
         this.rotate(theta);
         
         this.theta = theta0
-
     }
-
 }
 
 class Polygon extends Shape {
@@ -715,6 +644,7 @@ class Polygon extends Shape {
 
     findBottomLeft(temp) {
         let bottomLeft = 0;
+
         for (let i = 1; i < temp.length; i++) {
             if (temp[i].y < temp[bottomLeft].y ||
                 (temp[i].y == temp[bottomLeft].y &&
@@ -722,6 +652,7 @@ class Polygon extends Shape {
                 bottomLeft = i;
             }
         }
+
         return bottomLeft;
     }
 
@@ -729,6 +660,7 @@ class Polygon extends Shape {
         const v = p1.x * (p2.y - p3.y) + p2.x * (p3.y - p1.y) + p3.x * (p1.y - p2.y);
         if (v < 0) return -1;
         if (v > 0) return 1;
+
         return 0;
     }
 
@@ -738,6 +670,7 @@ class Polygon extends Shape {
 
         // Sort the points by polar angle with respect to the bottom-left point
         let tempVertices = [];
+
         for (let i = 0; i < this.vertices.length; i++) {
             tempVertices.push(new Vertex(
                 new Point(this.vertices[i].x, this.vertices[i].y), 
@@ -754,6 +687,7 @@ class Polygon extends Shape {
 
         tempVertices.sort((a, b) => {
             const o = this.orientation(tempVertices[bottomLeft], a, b);
+            
             if (o == 0) {
                 const p0x = tempVertices[bottomLeft].x;
                 const p0y = tempVertices[bottomLeft].y;

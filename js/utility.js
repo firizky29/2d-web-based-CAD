@@ -16,6 +16,7 @@ function loadShader(gl, type, source) {
         gl.deleteShader(shader);
         return -1;
     }
+
     return shader;
 }
 
@@ -97,7 +98,6 @@ function drawVertexHitbox(object, selectedVertexId) {
 
     return hitbox;
 }
-
 
 function hoverObject(e, objects) {
     let mousePosition = getMousePosition(e);
@@ -242,8 +242,6 @@ function updateLayer(objects) {
     const itemLayerHeader = document.getElementById("item-layer-header");
     layerContainer.innerHTML = "";
     layerContainer.appendChild(itemLayerHeader);
-
-    const parser = new DOMParser();
 
     let cntRectangles = 0;
     let cntSquares = 0;
@@ -472,6 +470,7 @@ function updateDetailItemShape(object){
     let tmpG = object.vertices[0].green;
     let tmpB = object.vertices[0].blue;
     let tmpA = object.vertices[0].alpha;
+
     for(let i = 1; i < object.vertices.length; i++){
         if(tmpR != object.vertices[i].red || tmpG != object.vertices[i].green || tmpB != object.vertices[i].blue || tmpA != object.vertices[i].alpha){
             tmpR = 0;
@@ -508,12 +507,12 @@ function updateDetailItemVertex(object, vertex){
     detailItemContainer.appendChild(deleteButtonContainer);
     detailItemContainer.appendChild(convexHullContainer);
 
-    if(object instanceof Polygon){
+    if (object instanceof Polygon) {
         deleteItemContainer.style.display = "block";
         deleteItemContainer.addEventListener("click", clickedDeleteContainer);
 
         deleteButtonContainer.addEventListener("click", clickedDeleteItem);
-    } else{
+    } else {
         deleteItemContainer.style.display = "none";
     }
 

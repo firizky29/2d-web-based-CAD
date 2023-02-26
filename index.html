@@ -1,222 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<link rel="stylesheet" href="css/style.css" />
-	<script type="text/javascript" src="js/utility.js"></script>
-	<script type="text/javascript" src="js/shape.js"></script>
-	<!-- favicon -->
-	<link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
-		rel="stylesheet">
-	<title>WebGL Keren Abiez</title>
-</head>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="css/style.css" />
+		<script type="text/javascript" src="js/utility.js"></script>
+		<script type="text/javascript" src="js/shape.js"></script>
+		<!-- favicon -->
+		<link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+			rel="stylesheet">
+		<title>WebGL Keren Abiez</title>
+	</head>
 
-<header>
-	<nav class="nav-content">
-		<ul>
-			<li class="tools" onclick="mainMenuButton()" onmouseenter="mainMenuHovered()"
-				onmouseleave="mainMenuUnhovered()" id="main-menu-button">
-				<a>
-					<!-- logo -->
-					<svg class="svg" width="19" height="25" viewBox="0 0 19 25" fill="none"
-						xmlns="http://www.w3.org/2000/svg">
-						<path
-							d="M10.9858 3.13413C18.1858 2.33413 17.3192 7.13413 15.9859 9.63413M10.9858 3.13413V9.63413M10.9858 3.13413C3.98593 2.13406 5.31899 6.96743 5.98567 9.63411M15.9859 15.6341C17.4859 16.1341 17.5 21.5 14.5 21.5C12.1 21.5 11.1525 19.4675 10.9858 18.1341V15.6341M15.9859 15.6341H10.9858M15.9859 15.6341C16.8192 14.8008 17.9859 12.4341 15.9859 9.63413M10.9858 15.6341V9.63413M10.9858 15.6341L6.48601 15.6341C5.48601 14.4675 3.98579 11.634 5.98567 9.63411M15.9859 9.63413H10.9858M10.9858 9.63413L5.98567 9.63411"
-							stroke="white" />
-					</svg>
-
-					<!-- dropdown icon -->
-					<svg class="svg" width="8" height="16" viewBox="0 0 8 16" fill="none"
-						xmlns="http://www.w3.org/2000/svg" id="dropdown-icon">
-						<path d="M1.33333 7L4.17778 9L6.66667 7" stroke="white" stroke-width="1.3px" />
-					</svg>
-
-				</a>
-			</li>
-			<li class="tools active" onclick="selectButton()" id="select-button">
-				<a>
-					<!-- select -->
-					<svg class="svg" width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
-						<path d="M6 5L9.5 21L13.5 15L20.5 13.5L6 5z" fill-rule="nonzero" fill-opacity="1" fill="none"
-							stroke="white" stroke-width="1.3px"></path>
-					</svg>
-				</a>
-			</li>
-			<li class="tools" onclick="lineShape()" id="line-shape">
-				<a>
-					<!-- line -->
-					<svg class="svg" width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
-						<path d="M1 22L22 1z" fill-rule="nonzero" fill-opacity="1" fill="none" stroke="white"
-							stroke-width="1.3px"></path>
-					</svg>
-				</a>
-			</li>
-			<li class="tools" onclick="squareShape()" id="square-shape">
-				<a>
-					<!-- square -->
-					<svg class="svg" width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
-						<path d="M1 1H24V24H1V1z" fill-rule="nonzero" fill-opacity="1" fill="none" stroke="white"
-							stroke-width="1.3px">
-						</path>
-					</svg>
-				</a>
-			</li>
-			<li class="tools" onclick="rectangleShape()" id="rectangle-shape">
-				<a>
-					<!-- rectangle -->
-					<svg class="svg" width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
-						<path d="M1 5H24V20H1V5z" fill-rule="nonzero" fill-opacity="1" fill="none" stroke="white"
-							stroke-width="1.3px"></path>
-					</svg>
-				</a>
-			</li>
-			<li class="tools" onclick="polygonShape()" id="polygon-shape">
-				<a>
-					<!-- polygon -->
-					<svg class="svg" width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
-						<path
-							d="M6.75 2.540707L18.25 2.540707L24 12.5L18.25 22.459292L6.75 22.4592921L1 12.5L6.75 2.540707z"
-							fill-rule="nonzero" fill-opacity="1" fill="none" stroke="white" stroke-width="1.3px"></path>
-					</svg>
-				</a>
-			</li>
-		</ul>
-	</nav>
-
-	<div id="mainmenu">
-		<div class="mainmenu-item">
+	<header>
+		<nav class="nav-content">
 			<ul>
-				<li id="new-design" onclick="newDesign()">
-					New Design File
+				<li class="tools" onclick="mainMenuButton()" onmouseenter="mainMenuHovered()"
+					onmouseleave="mainMenuUnhovered()" id="main-menu-button">
+					<a>
+						<!-- logo -->
+						<svg class="svg" width="19" height="25" viewBox="0 0 19 25" fill="none"
+							xmlns="http://www.w3.org/2000/svg">
+							<path
+								d="M10.9858 3.13413C18.1858 2.33413 17.3192 7.13413 15.9859 9.63413M10.9858 3.13413V9.63413M10.9858 3.13413C3.98593 2.13406 5.31899 6.96743 5.98567 9.63411M15.9859 15.6341C17.4859 16.1341 17.5 21.5 14.5 21.5C12.1 21.5 11.1525 19.4675 10.9858 18.1341V15.6341M15.9859 15.6341H10.9858M15.9859 15.6341C16.8192 14.8008 17.9859 12.4341 15.9859 9.63413M10.9858 15.6341V9.63413M10.9858 15.6341L6.48601 15.6341C5.48601 14.4675 3.98579 11.634 5.98567 9.63411M15.9859 9.63413H10.9858M10.9858 9.63413L5.98567 9.63411"
+								stroke="white" />
+						</svg>
+
+						<!-- dropdown icon -->
+						<svg class="svg" width="8" height="16" viewBox="0 0 8 16" fill="none"
+							xmlns="http://www.w3.org/2000/svg" id="dropdown-icon">
+							<path d="M1.33333 7L4.17778 9L6.66667 7" stroke="white" stroke-width="1.3px" />
+						</svg>
+
+					</a>
 				</li>
-				<li id="open-design" onclick="openDesign()">
-					Open Design File
+				<li class="tools active" onclick="selectButton()" id="select-button">
+					<a>
+						<!-- select -->
+						<svg class="svg" width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
+							<path d="M6 5L9.5 21L13.5 15L20.5 13.5L6 5z" fill-rule="nonzero" fill-opacity="1" fill="none"
+								stroke="white" stroke-width="1.3px"></path>
+						</svg>
+					</a>
+				</li>
+				<li class="tools" onclick="lineShape()" id="line-shape">
+					<a>
+						<!-- line -->
+						<svg class="svg" width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
+							<path d="M1 22L22 1z" fill-rule="nonzero" fill-opacity="1" fill="none" stroke="white"
+								stroke-width="1.3px"></path>
+						</svg>
+					</a>
+				</li>
+				<li class="tools" onclick="squareShape()" id="square-shape">
+					<a>
+						<!-- square -->
+						<svg class="svg" width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
+							<path d="M1 1H24V24H1V1z" fill-rule="nonzero" fill-opacity="1" fill="none" stroke="white"
+								stroke-width="1.3px">
+							</path>
+						</svg>
+					</a>
+				</li>
+				<li class="tools" onclick="rectangleShape()" id="rectangle-shape">
+					<a>
+						<!-- rectangle -->
+						<svg class="svg" width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
+							<path d="M1 5H24V20H1V5z" fill-rule="nonzero" fill-opacity="1" fill="none" stroke="white"
+								stroke-width="1.3px"></path>
+						</svg>
+					</a>
+				</li>
+				<li class="tools" onclick="polygonShape()" id="polygon-shape">
+					<a>
+						<!-- polygon -->
+						<svg class="svg" width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
+							<path
+								d="M6.75 2.540707L18.25 2.540707L24 12.5L18.25 22.459292L6.75 22.4592921L1 12.5L6.75 2.540707z"
+								fill-rule="nonzero" fill-opacity="1" fill="none" stroke="white" stroke-width="1.3px"></path>
+						</svg>
+					</a>
 				</li>
 			</ul>
-		</div>
-		<hr>
-		<div class="mainmenu-item">
-			<ul>
-				<li id="export-design" onclick="exportDesign()">
-					Export Design
-				</li>
-			</ul>
-		</div>
-		<hr>
-		<div class="mainmenu-item">
-			<ul>
-				<li id="help-menu" onclick="helpMenu()">
+		</nav>
+
+		<div id="mainmenu">
+			<div class="mainmenu-item">
+				<ul>
+					<li id="new-design" onclick="newDesign()">
+						New Design File
+					</li>
+					<li id="open-design" onclick="openDesign()">
+						Open Design File
+					</li>
+				</ul>
+			</div>
+			<hr>
+			<div class="mainmenu-item">
+				<ul>
+					<li id="export-design" onclick="exportDesign()">
+						Export Design
+					</li>
+				</ul>
+			</div>
+			<hr>
+			<div class="mainmenu-item">
+				<ul>
+					<li id="help-menu" onclick="helpMenu()">
+						Help
+					</li>
+				</ul>
+			</div>
+	</header>
+
+	<body>
+		<div class="help" id="help-container">
+			<div class="help-menu-header">
+				<div class="help-menu-title">
 					Help
-				</li>
-			</ul>
-		</div>
-</header>
-
-<body>
-	<div class="help" id="help-container">
-		<div class="help-menu-header">
-			<div class="help-menu-title">
-				Help
-			</div>
-			<div class="close-button" onclick="closeHelpMenu()">
-				X
-			</div>
-		</div>
-		<hr>
-		<div class="help-menu-content">
-			<div class="help-menu-item">
-				<div class="help-menu-item-header">
-					How to use the tool?
 				</div>
-				<div class="help-menu-item-content">
-					<ul>
-						<li>
-							Click on the <b>new design file</b> button to create a new design file.
-						</li>
-						<li>
-							Click on the <b>open design file</b> button to open an existing design file.
-						</li>
-						<li>
-							Click on the <b>export design</b> button to export the design file.
-						</li>
-						<li>
-							Click on the <b>help</b> button to open the help menu.
-						</li>
-						<li>
-							Click on the <b>layer</b> to select object from canvas.
-						</li>
-						<li>
-							Click on any <b>object</b> in canvas to open the design menu.
-						</li>
-						<li>
-							Click on the <b>square</b> button to create a square.
-						</li>
-						<li>
-							Click on the <b>rectangle</b> button to create a rectangle.
-						</li>
-						<li>
-							Click on the <b>polygon</b> button to create a polygon.
-						</li>
-						<li>
-							Click on the <b>three dots</b> button (if exists) in design menu and <b>delete</b> button to delete the selected item.
-						</li>
-						<li>
-							Click on the <b>create only convex hull vertices</b> checkbox to create only convex hull vertices.
-						</li>
-						<li>
-							To draw a polygon, click on the canvas to create a vertex and then click on the canvas again to create another vertex. To finish the polygon, right click on the canvas.
-						</li>
-					</ul>
+				<div class="close-button" onclick="closeHelpMenu()">
+					X
+				</div>
+			</div>
+			<hr>
+			<div class="help-menu-content">
+				<div class="help-menu-item">
+					<div class="help-menu-item-header">
+						How to use the tool?
+					</div>
+					<div class="help-menu-item-content">
+						<ul>
+							<li>
+								Click on the <b>new design file</b> button to create a new design file.
+							</li>
+							<li>
+								Click on the <b>open design file</b> button to open an existing design file.
+							</li>
+							<li>
+								Click on the <b>export design</b> button to export the design file.
+							</li>
+							<li>
+								Click on the <b>help</b> button to open the help menu.
+							</li>
+							<li>
+								Click on the <b>layer</b> to select object from canvas.
+							</li>
+							<li>
+								Click on any <b>object</b> in canvas to open the design menu.
+							</li>
+							<li>
+								Click on the <b>square</b> button to create a square.
+							</li>
+							<li>
+								Click on the <b>rectangle</b> button to create a rectangle.
+							</li>
+							<li>
+								Click on the <b>polygon</b> button to create a polygon.
+							</li>
+							<li>
+								Click on the <b>three dots</b> button (if exists) in design menu and <b>delete</b> button to delete the selected item.
+							</li>
+							<li>
+								Click on the <b>create only convex hull vertices</b> checkbox to create only convex hull vertices.
+							</li>
+							<li>
+								To draw a polygon, click on the canvas to create a vertex and then click on the canvas again to create another vertex. To finish the polygon, right click on the canvas.
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<div class="left-sidebar" id = "left-sidebar">
-		<div class="item-header" id="item-layer-header">
-			Layer
+		<div class="left-sidebar" id = "left-sidebar">
+			<div class="item-header" id="item-layer-header">
+				Layer
+			</div>
+			<hr>
 		</div>
-		<hr>
-	</div>
 
-	<div class="right-sidebar" id="right-sidebar">
-		<div class="detail-item item-header" id="detail-item-header">
-			Design
-			<div class="delete-item-container" id="delete-item-container">
-				<svg class="svg delete-item" width="16" height="6" viewBox="0 0 16 6" xmlns="http://www.w3.org/2000/svg">
-					<path
-						d="M3 2.5C3 3.328 2.328 4 1.5 4 .672 4 0 3.328 0 2.5 0 1.672.672 1 1.5 1 2.328 1 3 1.672 3 2.5zm6 0C9 3.328 8.328 4 7.5 4 6.672 4 6 3.328 6 2.5 6 1.672 6.672 1 7.5 1 8.328 1 9 1.672 9 2.5zM13.5 4c.828 0 1.5-.672 1.5-1.5 0-.828-.672-1.5-1.5-1.5-.828 0-1.5.672-1.5 1.5 0 .828.672 1.5 1.5 1.5z"
-						fill-rule="evenodd" fill-opacity="1" fill="white" stroke="none"></path>
-				</svg>
+		<div class="right-sidebar" id="right-sidebar">
+			<div class="detail-item item-header" id="detail-item-header">
+				Design
+				<div class="delete-item-container" id="delete-item-container">
+					<svg class="svg delete-item" width="16" height="6" viewBox="0 0 16 6" xmlns="http://www.w3.org/2000/svg">
+						<path
+							d="M3 2.5C3 3.328 2.328 4 1.5 4 .672 4 0 3.328 0 2.5 0 1.672.672 1 1.5 1 2.328 1 3 1.672 3 2.5zm6 0C9 3.328 8.328 4 7.5 4 6.672 4 6 3.328 6 2.5 6 1.672 6.672 1 7.5 1 8.328 1 9 1.672 9 2.5zM13.5 4c.828 0 1.5-.672 1.5-1.5 0-.828-.672-1.5-1.5-1.5-.828 0-1.5.672-1.5 1.5 0 .828.672 1.5 1.5 1.5z"
+							fill-rule="evenodd" fill-opacity="1" fill="white" stroke="none"></path>
+					</svg>
+				</div>
+			</div>
+			<div class="delete-button-container" id="delete-button-container">
+				<div class="delete-button" id="delete-button">
+					Delete
+				</div>
+			</div>
+			<div class="detail-item" id="convex-hull-container">
+				<div class="item-container">
+					<input type="checkbox" id="convex-hull" name="convex-hull" value="0">
+					<label for="convex-hull">Create only convex hull vertices</label>
+				</div>
 			</div>
 		</div>
-		<div class="delete-button-container" id="delete-button-container">
-			<div class="delete-button" id="delete-button">
-				Delete
-			</div>
+
+		<div class="canvas-container" id="canvas-container">
+			<canvas id="gl-canvas" onmousemove="mouseMoveListener(event)">
+				Your browser does not support the HTML5 canvas element.
+			</canvas>
 		</div>
-		<div class="detail-item" id="convex-hull-container">
-            <div class="item-container">
-                <input type="checkbox" id="convex-hull" name="convex-hull" value="0">
-				<label for="convex-hull">Create only convex hull vertices</label>
-            </div>
-        </div>
-	</div>
+	</body>
 
-	<div class="canvas-container" id="canvas-container">
-		<canvas id="gl-canvas" onmousemove="mouseMoveListener(event)">
-			Your browser does not support the HTML5 canvas element.
-		</canvas>
-	</div>
-</body>
-
-<script type="text/javascript" src="js/engine.js"></script>
-<script type="text/javascript" src="js/script.js"></script>
+	<script type="text/javascript" src="js/engine.js"></script>
+	<script type="text/javascript" src="js/script.js"></script>
 
 </html>

@@ -6,7 +6,7 @@ var selectedVertexId = undefined;
 var relativePosition = [];
 var createConvexHull = false;
 var addingVertex = false;
-var color = new Color(0.85, 0.85, 0.85, 1); //make it input from user
+var color = new Color(0.85, 0.85, 0.85, 1);
 
 /* MOUSE INPUT */
 var isDown = false;
@@ -80,12 +80,12 @@ canvas.addEventListener('mousedown', (e) => {
     /* DRAWING OBJECTS */
     if (isUsingDrawTools) {
         // New object
-        // Input startitng point
+        // Input starting point
         let mousePosition = getMousePosition(e);
         let point = new Point(mousePosition.x, mousePosition.y);
         let vertices = [];
 
-        // Menggambar line
+        // draw line
         if (drawnShape == 'line') {
             if (isDrawing) {
                 isDrawing = false;
@@ -107,6 +107,7 @@ canvas.addEventListener('mousedown', (e) => {
                 objects.push(new Line(gl, vertices));
             }
         }
+        // draw polygon
         else if (drawnShape == 'polygon') {
             if (e.button == 2) {
                 isDrawingPolygon = false;
@@ -139,6 +140,7 @@ canvas.addEventListener('mousedown', (e) => {
                 hideConvexHullController();
             }
         }
+        // draw square
         else if (drawnShape == 'square') {
             if (isDrawingSquare) {
                 isDrawingSquare = false;
@@ -159,6 +161,7 @@ canvas.addEventListener('mousedown', (e) => {
                 objects.push(new Square(gl, vertices));
             }
         }
+        // draw rectangle
         else if (drawnShape == 'rectangle') {
             if (isDrawingRectangle) {
                 isDrawingRectangle = false;
@@ -181,8 +184,10 @@ canvas.addEventListener('mousedown', (e) => {
         }
         updateLayer(objects);
     }
+
     isDown = true;
     relativePosition = [e.clientX, e.clientY]
+
     console.log(objects);
 })
 
@@ -254,6 +259,7 @@ canvas.mouseMoveListener = (e) => {
         selectedShapes[0] = drawHitbox(object);
         hitboxes = [];
         relativePosition = [e.clientX, e.clientY];
+
         updateDetailItemVertex(object, object.vertices[selectedVertexId]);
     }
 
@@ -264,6 +270,7 @@ canvas.mouseMoveListener = (e) => {
         selectedShapes[0] = drawHitbox(object);
         hitboxes = [];
         relativePosition = [e.clientX, e.clientY];
+
         updateDetailItemShape(object);
     }
 }
@@ -299,7 +306,7 @@ selectButton.selectButton = (e) => {
 }
 
 // TOOLS
-// Line Tool
+// line Tool
 const lineShapeButton = document.getElementById('line-shape');
 lineShapeButton.lineShape = (e) => {
     console.log("line tool activated")
@@ -371,9 +378,7 @@ function updateRotation(e) {
         document.getElementById("rotation-value").innerHTML = e.target.value + "<span>&deg</span>";
     }
 }
-// Color Tool
 
-// UTILS
 // Reset Selection Variables
 function resetSelectionTools() {
     console.log("selection tool deactivated")
@@ -535,6 +540,7 @@ document.body.addEventListener('click', (e) => {
     }
 });
 
+// remove the container
 function clickedDeleteContainer(e) {
     let deleteButtonContainer = document.getElementById("delete-button-container");
     let deleteItemContainer = document.getElementById("delete-item-container");
@@ -548,6 +554,7 @@ function clickedDeleteContainer(e) {
     }
 }
 
+// delete shape or vertex
 function clickedDeleteItem(e) {
     let deleteButtonContainer = document.getElementById("delete-button-container");
     let deleteItemContainer = document.getElementById("delete-item-container");
@@ -577,6 +584,7 @@ function clickedDeleteItem(e) {
     }
 }
 
+// add vertex to polygon
 function addVertexPolygon(e) {
     // get mouse position
     let pos = getMousePosition(e);
@@ -608,6 +616,7 @@ function clickedAddVertexPolygon(e) {
     }
 }
 
+// change x value of shape
 function updateX(e) {
     if (selectedShapeId != undefined) {
         let object = objects[selectedShapeId];
@@ -620,6 +629,7 @@ function updateX(e) {
     resetHitBox();
 }
 
+// change y value of shape
 function updateY(e) {
     if (selectedShapeId != undefined) {
         let object = objects[selectedShapeId];
@@ -632,6 +642,7 @@ function updateY(e) {
     resetHitBox();
 }
 
+// change width value of shape
 function updateWidth(e) {
     if (selectedShapeId != undefined) {
         e.target.value = Math.max(1, e.target.value);
@@ -647,6 +658,7 @@ function updateWidth(e) {
     resetHitBox();
 }
 
+// change height value of shape
 function updateHeight(e) {
     if (selectedShapeId != undefined) {
         e.target.value = Math.max(1, e.target.value);
@@ -662,6 +674,7 @@ function updateHeight(e) {
     resetHitBox();
 }
 
+// change the color
 function updateColor(e) {
     if (selectedShapeId != undefined) {
         object = objects[selectedShapeId];
@@ -712,6 +725,7 @@ function updateOpacity(e) {
     resetHitBox();
 }
 
+// update with the dilate value
 function updateDilate(e) {
     if (selectedShapeId != undefined) {
         object = objects[selectedShapeId];
@@ -781,11 +795,13 @@ function resetSelectedLayer() {
     }
 }
 
+// hide the convex hull checkbox
 function hideConvexHullController(){
     const convexHullContainer = document.getElementById("convex-hull-container");
     convexHullContainer.style.display = "none";
 }
 
+// show the convex hull checkbox
 function showConvexHullController(){
     const convexHullContainer = document.getElementById("convex-hull-container");
     convexHullContainer.style.display = "block";
@@ -793,6 +809,7 @@ function showConvexHullController(){
 
 document.getElementById("convex-hull").addEventListener("change", clickedConvexHull);
 
+// handle the convex hull checkbox
 function clickedConvexHull(e){
     if(e.target.checked){
         createConvexHull = true;
@@ -801,6 +818,7 @@ function clickedConvexHull(e){
     }
 }
 
+// help menu
 function helpMenu(e){
     const helpMenu = document.getElementById("help-container");
     helpMenu.style.display = "flex";
