@@ -578,14 +578,13 @@ function clickedDeleteItem(e) {
 }
 
 function addVertexPolygon(e) {
-    
+    // get mouse position
     let pos = getMousePosition(e);
     let point = new Point(pos.x, pos.y);
     object = objects[selectedShapeId];
     object.addVertex(point);
     
-    
-    // object.convexHull();
+    object.convexHull();
     addVertexButton = document.getElementById("add-vertex-button");
     addVertexButton.classList.remove("touched");
     addingVertex = false;
@@ -602,9 +601,6 @@ function clickedAddVertexPolygon(e) {
         addingVertex = true;
         e.target.classList.add("touched");
     }
-
-    // console.log("add vertex clicked", addingVertex);
-
 
     // only add vertex if addingVertex is true
     if (addingVertex) {
