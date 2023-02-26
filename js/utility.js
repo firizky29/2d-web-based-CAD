@@ -411,6 +411,17 @@ function updateDetailItemShape(object){
                 </div>
             </div>
         </div>
+
+        <div class="detail-item" id="add-vertex">
+            <div class="item-header">
+                Add Vertex
+            </div>
+            <div class="item-container">
+                <div class="add-vertex-button" id="add-vertex-button">
+                    + Add Vertex
+                </div>
+            </div>
+        </div>
     `);
 
     let x = document.getElementById("x");
@@ -429,6 +440,14 @@ function updateDetailItemShape(object){
     let colorHex = document.getElementById("color-hex");
     let opacity = document.getElementById("opacity");
     let dilate = document.getElementById("dilate");
+    let addVertexButton = document.getElementById("add-vertex");
+
+    if(object instanceof Polygon){
+        addVertexButton.style.display = "block";
+        addVertexButton.addEventListener("click", clickedAddVertexPolygon);
+    } else{
+        addVertexButton.style.display = "none";
+    }
 
     let minVertex = canvasToScreen(object.findMin());
     let maxVertex = canvasToScreen(object.findMax());

@@ -15,8 +15,6 @@
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
 		rel="stylesheet">
 	<title>WebGL Keren Abiez</title>
-
-
 </head>
 
 <header>
@@ -38,7 +36,6 @@
 						xmlns="http://www.w3.org/2000/svg" id="dropdown-icon">
 						<path d="M1.33333 7L4.17778 9L6.66667 7" stroke="white" stroke-width="1.3px" />
 					</svg>
-
 
 				</a>
 			</li>
@@ -119,11 +116,9 @@
 				</li>
 			</ul>
 		</div>
-
 </header>
 
 <body>
-
 	<div class="help" id="help-container">
 		<div class="help-menu-header">
 			<div class="help-menu-title">
@@ -183,7 +178,6 @@
 		</div>
 	</div>
 
-
 	<div class="left-sidebar" id = "left-sidebar">
 		<div class="item-header" id="item-layer-header">
 			Layer
@@ -203,7 +197,7 @@
 			</div>
 		</div>
 		<div class="delete-button-container" id="delete-button-container">
-			<div class="delete-button">
+			<div class="delete-button" id="delete-button">
 				Delete
 			</div>
 		</div>
@@ -215,15 +209,11 @@
         </div>
 	</div>
 
-
 	<div class="canvas-container" id="canvas-container">
 		<canvas id="gl-canvas" onmousemove="mouseMoveListener(event)">
 			Your browser does not support the HTML5 canvas element.
 		</canvas>
 	</div>
-
-	
-
 </body>
 
 <script type="text/javascript" src="js/engine.js"></script>
