@@ -5,7 +5,7 @@ var hoveredVertexId = undefined;
 var selectedVertexId = undefined;
 var relativePosition = [];
 var createConvexHull = false;
-var addVertex = false;
+var addingVertex = false;
 var color = new Color(0.85, 0.85, 0.85, 1); //make it input from user
 
 /* MOUSE INPUT */
@@ -600,22 +600,16 @@ function addVertexPolygon(e) {
 }
 
 function clickedAddVertexPolygon(e) {
-    if (addVertex) {
-        addVertex = false;
+    if (addingVertex) {
+        addingVertex = false;
     } else {
-        addVertex = true;
+        addingVertex = true;
     }
 
-    console.log("add vertex clicked", addVertex);
-    // const addVertexButton = document.getElementById("add-vertex-button");
-    // if(addVertexButton.classList.contains("touched") && !addVertex){
-    //     addVertexButton.classList.remove("touched");
-    // } else if(!addVertex.classList.contains("touched") && addVertex) {
-    //     addVertexButton.classList.add("touched");
-    // }
+    console.log("add vertex clicked", addingVertex);
 
-    // only add vertex if addVertex is true
-    if (addVertex) {
+    // only add vertex if addingVertex is true
+    if (addingVertex) {
         canvas.addEventListener('mousedown', addVertexPolygon)
     } else {
         canvas.removeEventListener('mousedown', addVertexPolygon)

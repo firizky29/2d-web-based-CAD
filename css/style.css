@@ -38,7 +38,6 @@ nav {
     /* Standard syntax */
 }
 
-
 .nav-content {
     display: flex;
     justify-content: space-between;
@@ -88,11 +87,8 @@ nav {
     vertical-align: middle;
 }
 
-
-
 #dropdown-icon {
     transition: margin-top 0.2s ease-in;
-
 }
 
 #dropdown-icon:hover {
@@ -153,9 +149,6 @@ hr {
     border-radius: 5px;
 }
 
-
-
-
 .left-sidebar {
     background-color: #2C2C2C;
     height: calc(100% - 50px);
@@ -181,7 +174,6 @@ hr {
     overflow: auto;
     padding-bottom: 50px;
 }
-
 
 .detail-item{
     padding: 10px 15px;
@@ -231,7 +223,6 @@ hr {
     color: rgb(208, 1, 1);
 }
 
-
 .delete-button:hover{
     cursor: pointer;
     background-color: #0C8CE9;
@@ -269,16 +260,12 @@ hr {
     display: none;
 }
 
-
-
 .item-container {
     display: flex;
     width: 100%;
     justify-content: space-between;
     margin-bottom: 5px;
 }
-
-
 
 #size-and-position .item{
     /* max-width: 50%; */
@@ -288,7 +275,6 @@ hr {
     margin-bottom: 2px;
     margin-top: 2px;
 }
-
 
 #size-and-position .item label {
     width: 25px;
@@ -311,12 +297,9 @@ hr {
     font-size: 0.7rem;
 }
 
-
-
 #size-and-position input:focus{
     outline: none;
 }
-
 
 #rotation-value {
     /* flex: 0 0 25px; */
@@ -341,7 +324,6 @@ hr {
     vertical-align: middle;
     /* background-color: blue; */
     padding: 5px 0;
-
 }
 
 #rotation .item .rotation-container input {
@@ -408,7 +390,6 @@ hr {
     padding: 5px 5px;
 }
 
-
 .color-wrapper{
     display: flex;
     align-items: center;
@@ -460,7 +441,6 @@ hr {
 .opacity{
     flex-grow: 1;
     width: 100%;
-    /* width: 20px; */
     background-color: inherit;
     border: none !important;
     color: white;
@@ -490,7 +470,6 @@ hr {
 
 #line-width{
     background-color: inherit;
-    /* border: none !important; */
     color: white;
     font-weight: 400;
     font-family: 'Inter', sans-serif;
@@ -512,7 +491,6 @@ hr {
 #size-and-position .item:hover, #color-picker .item:hover, #line-width:hover{
     outline: 1px solid #444444;
 }
-
 
 #item-layer-header{
     padding: 10px 15px 6px 15px;
@@ -557,21 +535,13 @@ hr {
     /* background-color: red; */
 }
 
-
 .item-layer{
     padding: 10px 0px 0px 0px;
 }
 
-
 #item-layer-header{
     margin-bottom: 0;
 }
-
-
-
-
-
-
 
 .canvas-container {
     margin: 0;
@@ -620,9 +590,7 @@ hr {
     /* set object on to the lefmost corner and one to the rightmost */
     justify-content: space-between;
     width: 100%;
-
 }
-
 
 .close-button{
     color: rgb(208, 1, 1);
